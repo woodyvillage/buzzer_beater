@@ -5,12 +5,12 @@ import 'package:buzzer_beater/common/bloc.dart';
 import 'package:buzzer_beater/view/team/form.dart';
 import 'package:buzzer_beater/view/team/listitems.dart';
 
-class TeamList extends StatefulWidget {
+class TeamsList extends StatefulWidget {
   @override
-  _TeamListState createState() => _TeamListState();
+  _TeamsListState createState() => _TeamsListState();
 }
 
-class _TeamListState extends State<TeamList> {
+class _TeamsListState extends State<TeamsList> {
   ApplicationBloc _bloc;
   List<GlobalKey> _keylist = [];
 
@@ -68,12 +68,12 @@ class _TeamListState extends State<TeamList> {
                   //   },
                   // ),
                   onTap: () {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => TeamForm(
-          dto: snapshot.data[index]
-        )),
-      );
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => TeamForm(
+                        dto: snapshot.data[index]
+                      )),
+                    );
                   }
                 ),
               );

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'package:buzzer_beater/view/member/list.dart';
+
 class MemberList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -7,7 +9,7 @@ class MemberList extends StatelessWidget {
       child: Container(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
-        child: Text('メンバー'),
+        child: MembersList(),
       ),
     );
   }

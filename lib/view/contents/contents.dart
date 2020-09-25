@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:buzzer_beater/util/routeset.dart';
-import 'package:buzzer_beater/view/contents/float.dart';
+import 'package:buzzer_beater/view/contents/button.dart';
 import 'package:buzzer_beater/view/contents/header.dart';
 
 class ApplicationContents extends StatefulWidget {

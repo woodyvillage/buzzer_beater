@@ -7,7 +7,7 @@ import 'package:buzzer_beater/dto/form.dart';
 import 'package:buzzer_beater/dto/team.dart';
 import 'package:buzzer_beater/model/teamedit.dart';
 import 'package:buzzer_beater/util/routeset.dart';
-import 'package:buzzer_beater/util/team.dart';
+import 'package:buzzer_beater/util/form.dart';
 
 class TeamForm extends StatefulWidget {
   TeamForm({Key key, this.dto}) : super(key: key);
@@ -20,10 +20,9 @@ class TeamForm extends StatefulWidget {
 class _TeamFormState extends State<TeamForm> {
   ApplicationBloc _bloc;
   List<FormDto> _form = List<FormDto>();
+  String errorText = '';
   ColorSwatch _tempMainColor;
   Color _tempShadeColor;
-  String errorText = '';
-  final _teamForm = GlobalKey<FormState>();
 
   @override
   void didChangeDependencies() {
@@ -35,34 +34,7 @@ class _TeamFormState extends State<TeamForm> {
   @override
   void initState() {
     super.initState();
-
-    for (int i = 0; i < teams.length; i++) {
-      if (teams[i][teamDefault1] is Color) {
-        var _dto = FormDto()
-          ..node = FocusNode()
-          ..controller = TextEditingController()
-          ..icon = teams[i][teamIcon]
-          ..value = teams[i][teamTitle]
-          ..color = teams[i][teamDefault1]
-          ..border = teams[i][teamDefault2];
-        _form.add(_dto);
-      } else {
-        var _dto = FormDto()
-          ..node = FocusNode()
-          ..controller = TextEditingController()
-          ..icon = teams[i][teamIcon]
-          ..hint = teams[i][teamHint]
-          ..value = teams[i][teamTitle];
-        _form.add(_dto);
-      }
-    }
-    if (widget.dto != null) {
-      _form[0].controller.text = widget.dto.name;
-      _form[1].border = Color(widget.dto.majormain);
-      _form[1].color = Color(widget.dto.majorshade);
-      _form[2].border = Color(widget.dto.minormain);
-      _form[2].color = Color(widget.dto.minorshade);
-    }
+    _form = buildTeamFormValue(widget.dto);
   }
 
   void _openDialog(String title, FormDto _dto, Widget content) {
@@ -75,11 +47,11 @@ class _TeamFormState extends State<TeamForm> {
           content: content,
           actions: [
             FlatButton(
-              child: Text('CANCEL'),
+              child: Text('中止'),
               onPressed: Navigator.of(context).pop,
             ),
             FlatButton(
-              child: Text('SUBMIT'),
+              child: Text('決定'),
               onPressed: () {
                 Navigator.of(context).pop();
                 setState(() => _dto.border = _tempMainColor);
@@ -129,7 +101,6 @@ class _TeamFormState extends State<TeamForm> {
           Container(
             margin: const EdgeInsets.fromLTRB(15, 5, 15, 0),
             child: TextFormField(
-              key: _teamForm,
               enabled: true,
               autofocus: true,
               focusNode: _form[0].node,
@@ -150,9 +121,10 @@ class _TeamFormState extends State<TeamForm> {
           ),
           Container(
             margin: const EdgeInsets.fromLTRB(15, 15, 15, 0),
-            padding: const EdgeInsets.only(left: 40),
             child: Row(
               children: [
+                _form[1].icon,
+                Padding(padding: const EdgeInsets.symmetric(horizontal: 10)),
                 Expanded(
                   child: Text(_form[1].value),
                 ),
@@ -178,9 +150,10 @@ class _TeamFormState extends State<TeamForm> {
           ),
           Container(
             margin: const EdgeInsets.fromLTRB(15, 15, 15, 0),
-            padding: const EdgeInsets.only(left: 40),
             child: Row(
               children: [
+                _form[2].icon,
+                Padding(padding: const EdgeInsets.symmetric(horizontal: 10)),
                 Expanded(
                   child: Text(_form[2].value),
                 ),
@@ -204,46 +177,37 @@ class _TeamFormState extends State<TeamForm> {
               ],
             ),
           ),
-              Padding(padding: const EdgeInsets.symmetric(vertical: 10)),
-        Container(
-          margin: const EdgeInsets.only(right: 15),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              RaisedButton.icon(
-                color: Colors.green,
-                textColor: Colors.white,
-                icon: formIcon[formSubmit],
-                label: formText[formSubmit],
-                onPressed: () async {
-                  TeamDto _dto = TeamDto();
-                  if (widget.dto != null) {
-                    widget.dto.id == null ? _dto.id = null : _dto.id = widget.dto.id;
-                  }
-                  _form[0].controller.text == '' ? _dto.name = null : _dto.name = _form[0].controller.text;
-                  _form[1].border == null ? _dto.majormain = null : _dto.majormain = _form[1].border.value;
-                  _form[1].color == null ? _dto.majorshade = null : _dto.majorshade = _form[1].color.value;
-                  _form[2].border == null ? _dto.minormain = null : _dto.minormain = _form[2].border.value;
-                  _form[2].color == null ? _dto.minorshade = null : _dto.minorshade = _form[2].color.value;
-                  var _result = await insertTeam(_bloc, _dto);
-                  if (_result == 0) {
-                    Navigator.pop(context);
-                  } else {
-                    setState(() => _result < 0 ? errorText = 'チーム名称を入力してください' : errorText = 'すでに同じチームが登録されています');
-                  }
-                },
-              ),
-              Padding(padding: const EdgeInsets.symmetric(horizontal: 5)),
-              RaisedButton.icon(
-                color: Colors.orange,
-                textColor: Colors.white,
-                icon: formIcon[formCancel],
-                label: formText[formCancel],
-                onPressed: () => Navigator.pop(context),
-              ),
-            ],
+          Padding(padding: const EdgeInsets.symmetric(vertical: 10)),
+          Container(
+            margin: const EdgeInsets.only(right: 15),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                RaisedButton.icon(
+                  color: Colors.green,
+                  textColor: Colors.white,
+                  icon: formIcon[formSubmit],
+                  label: formText[formSubmit],
+                  onPressed: () async {
+                    var _result = await confirmTeamValue(_bloc, widget.dto, _form);
+                    if (_result == 0) {
+                      Navigator.pop(context);
+                    } else {
+                      setState(() => _result < 0 ? errorText = 'チーム名称を入力してください' : errorText = 'すでに同じチームが登録されています');
+                    }
+                  },
+                ),
+                Padding(padding: const EdgeInsets.symmetric(horizontal: 5)),
+                RaisedButton.icon(
+                  color: Colors.orange,
+                  textColor: Colors.white,
+                  icon: formIcon[formCancel],
+                  label: formText[formCancel],
+                  onPressed: () => Navigator.pop(context),
+                ),
+              ],
+            ),
           ),
-        ),
         ],
       ),
     );

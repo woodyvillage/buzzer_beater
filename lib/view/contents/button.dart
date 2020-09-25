@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:buzzer_beater/util/routeset.dart';
+import 'package:buzzer_beater/view/member/form.dart';
 import 'package:buzzer_beater/view/team/form.dart';
 
 class ApplicationFloat extends StatelessWidget {
@@ -13,6 +14,12 @@ class ApplicationFloat extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => TeamForm()),
+        );
+        break;
+      case routesetMember:
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => MemberForm()),
         );
         break;
       default:
