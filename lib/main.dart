@@ -1,5 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import 'package:buzzer_beater/common/bloc.dart';
 import 'package:buzzer_beater/view/frame.dart';
 
-void main() => runApp(ApplicationFrame());
+void main() => runApp(
+  MultiProvider(
+    providers: [
+      Provider<ApplicationBloc>(create: (_) => ApplicationBloc()),
+    ],
+    child: ApplicationFrame(),
+  ),
+);

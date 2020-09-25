@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:buzzer_beater/util/routeset.dart';
+import 'package:buzzer_beater/view/team/form.dart';
 
 class ApplicationFloat extends StatelessWidget {
   ApplicationFloat({Key key, this.index}) : super(key: key);
@@ -8,8 +9,13 @@ class ApplicationFloat extends StatelessWidget {
 
   dispatch(BuildContext context, int index) {
     switch (index) {
+      case routesetTeam:
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => TeamForm()),
+        );
+        break;
       default:
-print('push floating $index');
     }
   }
 
