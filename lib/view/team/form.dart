@@ -1,5 +1,7 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_material_color_picker/flutter_material_color_picker.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
 import 'package:buzzer_beater/common/bloc.dart';
@@ -23,6 +25,7 @@ class _TeamFormState extends State<TeamForm> {
   String errorText = '';
   ColorSwatch _tempMainColor;
   Color _tempShadeColor;
+  final picker = ImagePicker();
 
   @override
   void didChangeDependencies() {
@@ -76,6 +79,13 @@ class _TeamFormState extends State<TeamForm> {
     );
   }
 
+  Future _imagePicker() async {
+    var image = await picker.getImage(source: ImageSource.gallery);
+    setState(() {
+      _form[0].image = File(image.path);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -98,8 +108,9 @@ class _TeamFormState extends State<TeamForm> {
               ),
             ),
           ),
+          Padding(padding: const EdgeInsets.symmetric(vertical: 5)),
           Container(
-            margin: const EdgeInsets.fromLTRB(15, 5, 15, 0),
+            margin: const EdgeInsets.fromLTRB(15, 15, 15, 0),
             child: TextFormField(
               enabled: true,
               autofocus: true,
@@ -113,14 +124,38 @@ class _TeamFormState extends State<TeamForm> {
               obscureText: false,
               decoration: InputDecoration(
                 border: OutlineInputBorder(),
-                icon: _form[0].icon,
                 hintText: _form[0].hint,
                 labelText: _form[0].value,
+                icon: Stack(
+                  alignment: AlignmentDirectional.topStart,
+                  children: <Widget> [
+                    Container(
+                      height: 50,
+                      width: 50,
+                      child: (_form[0].image != null)
+                        ? Image.file(
+                          _form[0].image,
+                          fit: BoxFit.cover,
+                        )
+                        : Image.asset(
+                          'images/noimage.png',
+                          fit: BoxFit.cover,
+                        ),
+                    ),
+                    MaterialButton(
+                      height: 50,
+                      minWidth: 50,
+                      color: Colors.white30,
+                      onPressed: () => _imagePicker(),
+                      child: Text('+'),
+                    )
+                  ],
+                ),
               ),
             ),
           ),
           Container(
-            margin: const EdgeInsets.fromLTRB(15, 15, 15, 0),
+            margin: const EdgeInsets.fromLTRB(80, 15, 15, 0),
             child: Row(
               children: [
                 _form[1].icon,
@@ -149,7 +184,7 @@ class _TeamFormState extends State<TeamForm> {
             ),
           ),
           Container(
-            margin: const EdgeInsets.fromLTRB(15, 15, 15, 0),
+            margin: const EdgeInsets.fromLTRB(80, 15, 15, 0),
             child: Row(
               children: [
                 _form[2].icon,

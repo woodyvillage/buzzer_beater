@@ -1,5 +1,7 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:smart_select/smart_select.dart';
 import 'package:provider/provider.dart';
 
@@ -25,6 +27,7 @@ class _MemberFormState extends State<MemberForm> {
   List<FormDto> _form = List<FormDto>();
   String errorText = '';
   List<S2Choice<String>> _teamList = List<S2Choice<String>>();
+  final picker = ImagePicker();
 
   @override
   void didChangeDependencies() {
@@ -45,6 +48,13 @@ class _MemberFormState extends State<MemberForm> {
     setState(() {});
   }
 
+  Future _imagePicker() async {
+    var image = await picker.getImage(source: ImageSource.gallery);
+    setState(() {
+      _form[0].image = File(image.path);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -54,8 +64,9 @@ class _MemberFormState extends State<MemberForm> {
       body: ListView(
         children: <Widget>[
           Container(
-            color: Theme.of(context).canvasColor,
-            height: 20,
+            // color: Theme.of(context).canvasColor,
+            color: Colors.amber,
+            height: 40,
             padding: EdgeInsets.only(left: 25, right: 25),
             alignment: Alignment.centerLeft,
             child: Text(
@@ -83,81 +94,151 @@ class _MemberFormState extends State<MemberForm> {
               );
             },
           ),
-          Container(
-            margin: const EdgeInsets.fromLTRB(15, 5, 15, 0),
-            child: TextFormField(
-              enabled: true,
-              autofocus: true,
-              focusNode: _form[1].node,
-              controller: _form[1].controller,
-              keyboardType: TextInputType.text,
-              textInputAction: TextInputAction.next,
-              maxLines: 1,
-              maxLength: 20,
-              maxLengthEnforced: false,
-              textAlignVertical: TextAlignVertical.center,
-              obscureText: false,
-              decoration: InputDecoration(
-                border: OutlineInputBorder(),
-                hintText: _form[1].hint,
-                labelText: _form[1].value,
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget> [
+              Container(
+                margin: const EdgeInsets.fromLTRB(15, 0, 15, 0),
+                    child: Stack(
+                      alignment: AlignmentDirectional.topStart,
+                      children: <Widget> [
+                        Container(
+                          height: 100,
+                          width: 100,
+                          child: (_form[0].image != null)
+                            ? Image.file(
+                              _form[0].image,
+                              fit: BoxFit.cover,
+                            )
+                            : Image.asset(
+                              'images/noimage.png',
+                              fit: BoxFit.cover,
+                            ),
+                        ),
+                        MaterialButton(
+                          height: 100,
+                          minWidth: 100,
+                          color: Colors.white30,
+                          onPressed: () => _imagePicker(),
+                          child: Text('+'),
+                        )
+                      ],
+                    ),
               ),
-              onFieldSubmitted: (v){
-                FocusScope.of(context).requestFocus(_form[2].node);
-              },
-            ),
-          ),
-          Container(
-            margin: const EdgeInsets.fromLTRB(15, 5, 15, 0),
-            child: TextFormField(
-              enabled: true,
-              focusNode: _form[2].node,
-              controller: _form[2].controller,
-              keyboardType: TextInputType.number,
-              textInputAction: TextInputAction.next,
-              maxLines: 1,
-              maxLength: 2,
-              maxLengthEnforced: true,
-              textAlignVertical: TextAlignVertical.center,
-              obscureText: false,
-              decoration: InputDecoration(
-                border: OutlineInputBorder(),
-                hintText: _form[2].hint,
-                labelText: _form[2].value,
+              Column(
+                children: <Widget> [
+                  Container(
+                    width: MediaQuery.of(context).size.width - 145,
+                    margin: const EdgeInsets.fromLTRB(0, 0, 15, 10),
+                    child: TextFormField(
+                      enabled: true,
+                      autofocus: true,
+                      focusNode: _form[1].node,
+                      controller: _form[1].controller,
+                      keyboardType: TextInputType.text,
+                      textInputAction: TextInputAction.next,
+                      maxLines: 1,
+                      maxLength: 20,
+                      maxLengthEnforced: false,
+                      textAlignVertical: TextAlignVertical.center,
+                      obscureText: false,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(),
+                        hintText: _form[1].hint,
+                        labelText: _form[1].value,
+                      ),
+                      onFieldSubmitted: (v){
+                        FocusScope.of(context).requestFocus(_form[2].node);
+                      },
+                    ),
+                  ),
+                  Container(
+                    width: MediaQuery.of(context).size.width - 145,
+                    margin: const EdgeInsets.fromLTRB(0, 0, 15, 10),
+                    child: TextFormField(
+                      enabled: true,
+                      autofocus: true,
+                      focusNode: _form[2].node,
+                      controller: _form[2].controller,
+                      keyboardType: TextInputType.number,
+                      textInputAction: TextInputAction.next,
+                      maxLines: 1,
+                      maxLength: 2,
+                      maxLengthEnforced: true,
+                      textAlignVertical: TextAlignVertical.center,
+                      obscureText: false,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(),
+                        hintText: _form[2].hint,
+                        labelText: _form[2].value,
+                      ),
+                      inputFormatters: <TextInputFormatter> [
+                        WhitelistingTextInputFormatter.digitsOnly,
+                      ],
+                      onFieldSubmitted: (v){
+                        FocusScope.of(context).requestFocus(_form[3].node);
+                      },
+                    ),
+                  ),
+                  Container(
+                    width: MediaQuery.of(context).size.width - 145,
+                    margin: const EdgeInsets.fromLTRB(0, 0, 15, 10),
+                    child: TextFormField(
+                      enabled: true,
+                      autofocus: true,
+                      focusNode: _form[3].node,
+                      controller: _form[3].controller,
+                      keyboardType: TextInputType.number,
+                      textInputAction: TextInputAction.next,
+                      maxLines: 1,
+                      maxLength: 7,
+                      maxLengthEnforced: true,
+                      textAlignVertical: TextAlignVertical.center,
+                      obscureText: false,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(),
+                        hintText: _form[3].hint,
+                        labelText: _form[3].value,
+                      ),
+                      inputFormatters: <TextInputFormatter> [
+                        WhitelistingTextInputFormatter.digitsOnly,
+                      ],
+                      onFieldSubmitted: (v){
+                        FocusScope.of(context).requestFocus(_form[4].node);
+                      },
+                    ),
+                  ),
+                  Container(
+                    width: MediaQuery.of(context).size.width - 145,
+                    margin: const EdgeInsets.fromLTRB(0, 0, 15, 10),
+                    child: TextFormField(
+                      enabled: true,
+                      autofocus: true,
+                      focusNode: _form[4].node,
+                      controller: _form[4].controller,
+                      keyboardType: TextInputType.number,
+                      textInputAction: TextInputAction.next,
+                      maxLines: 1,
+                      maxLength: 2,
+                      maxLengthEnforced: true,
+                      textAlignVertical: TextAlignVertical.center,
+                      obscureText: false,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(),
+                        hintText: _form[4].hint,
+                        labelText: _form[4].value,
+                      ),
+                      inputFormatters: <TextInputFormatter> [
+                        WhitelistingTextInputFormatter.digitsOnly,
+                      ],
+                      onFieldSubmitted: (v){
+                        FocusScope.of(context).requestFocus(_form[1].node);
+                      },
+                    ),
+                  ),
+                ],
               ),
-              inputFormatters: <TextInputFormatter> [
-                WhitelistingTextInputFormatter.digitsOnly,
-              ],
-              onFieldSubmitted: (v){
-                FocusScope.of(context).requestFocus(_form[3].node);
-              },
-            ),
-          ),
-          Container(
-            margin: const EdgeInsets.fromLTRB(15, 5, 15, 0),
-            child: TextFormField(
-              enabled: true,
-              focusNode: _form[3].node,
-              controller: _form[3].controller,
-              keyboardType: TextInputType.number,
-              textInputAction: TextInputAction.next,
-              maxLines: 1,
-              maxLength: 7,
-              maxLengthEnforced: true,
-              textAlignVertical: TextAlignVertical.center,
-              obscureText: false,
-              decoration: InputDecoration(
-                border: OutlineInputBorder(),
-                hintText: _form[3].hint,
-                labelText: _form[3].value,
-              ),
-              inputFormatters: <TextInputFormatter> [
-                WhitelistingTextInputFormatter.digitsOnly,
-              ],
-              onFieldSubmitted: (v){
-                FocusScope.of(context).requestFocus(_form[1].node);
-              },
-            ),
+            ],
           ),
           Padding(padding: const EdgeInsets.symmetric(vertical: 10)),
           Container(

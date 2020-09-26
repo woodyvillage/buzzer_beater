@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:smart_select/smart_select.dart';
 
@@ -33,6 +34,11 @@ List<FormDto> buildTeamFormValue(TeamDto _team) {
   }
   if (_team != null) {
     _form[0].controller.text = _team.name;
+    if (_team.image == null) {
+      _form[0].image = null;
+    } else {
+      _form[0].image = File(_team.image);
+    }
     _form[1].border = Color(_team.majormain);
     _form[1].color = Color(_team.majorshade);
     _form[2].border = Color(_team.minormain);
@@ -62,6 +68,7 @@ Future confirmTeamValue(ApplicationBloc _bloc, TeamDto _selected, List<FormDto> 
     _selected.id == null ? _dto.id = null : _dto.id = _selected.id;
   }
   _form[0].controller.text == '' ? _dto.name = null : _dto.name = _form[0].controller.text;
+  _form[0].image == null ? _dto.image = null : _dto.image = _form[0].image.path;
   _form[1].border == null ? _dto.majormain = null : _dto.majormain = _form[1].border.value;
   _form[1].color == null ? _dto.majorshade = null : _dto.majorshade = _form[1].color.value;
   _form[2].border == null ? _dto.minormain = null : _dto.minormain = _form[2].border.value;

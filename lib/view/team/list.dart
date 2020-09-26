@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'package:buzzer_beater/common/bloc.dart';
+import 'package:buzzer_beater/view/common/listitems.dart';
 import 'package:buzzer_beater/view/team/form.dart';
-import 'package:buzzer_beater/view/team/listitems.dart';
 
 class TeamsList extends StatefulWidget {
   @override
@@ -46,38 +46,46 @@ class _TeamsListState extends State<TeamsList> {
           return ListView.builder(
             itemCount: snapshot.data.length,
             itemBuilder: (context, index) {
-              return Card(
-                child: ListTile(
-                  // leading: circleAvatarItem(context: context, data: snapshot.data[index]),
-                  title: titleItem(data: snapshot.data[index]),
-                  // subtitle: subTitleItem(data: snapshot.data[index]),
-                  // trailing: MaterialButton(
-                  //   key: _keylist[index],
-                  //   padding: const EdgeInsets.all(0),
-                  //   minWidth: 5,
-                  //   child: Icon(Icons.more_vert),
-                  //   onPressed: () {
-                  //     TeamDto _dto = TeamDto(
-                  //       id: snapshot.data[index].id,
-                  //       name: snapshot.data[index].name,
-                  //       // date: snapshot.data[index].date,
-                  //       // price: snapshot.data[index].price,
-                  //       // mode: snapshot.data[index].mode,
-                  //     );
-                  //     showPopup(context, _bloc, _keylist[index], _dto);
-                  //   },
-                  // ),
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => TeamForm(
-                        dto: snapshot.data[index]
-                      )),
-                    );
-                  }
+              return GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => TeamForm(
+                      dto: snapshot.data[index]
+                    )),
+                  );
+                },
+                child: Card(
+                  elevation: 8,
+                  color: Theme.of(context).cardColor,
+                  margin: EdgeInsets.fromLTRB(10, 15, 10, 0),
+                  child: SizedBox(
+                    height: 110,
+                    child: Padding(
+                      padding: EdgeInsets.fromLTRB(15, 15, 15, 0),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          imageItem(data: snapshot.data[index]),
+                          Expanded(
+                            child: Padding(
+                              padding: const EdgeInsets.only(left: 20),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  titleItem(data: snapshot.data[index]),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
                 ),
               );
-            }
+            },
           );
         } else {
           return ListView();

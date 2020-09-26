@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sticky_and_expandable_list/sticky_and_expandable_list.dart';
@@ -6,6 +7,8 @@ import 'package:buzzer_beater/common/bloc.dart';
 import 'package:buzzer_beater/common/notifier.dart';
 import 'package:buzzer_beater/dto/teammate.dart';
 import 'package:buzzer_beater/dto/member.dart';
+import 'package:buzzer_beater/view/common/listitems.dart';
+import 'package:buzzer_beater/view/member/form.dart';
 
 class MembersList extends StatefulWidget {
   @override
@@ -51,41 +54,19 @@ class _MembersListState extends State<MembersList> {
                     leading: Container(
                       width: 50,
                       height: 50,
-                      // child: (_teammateList[sectionIndex].members[itemIndex].icon != null)
-                      //   ? Image.file(
-                      //     File(_teammateList[sectionIndex].members[itemIndex].icon),
-                      //     fit: BoxFit.cover,
-                      //   )
-                      //   : Image.asset(
-                      //     'images/noimage.png',
-                      //     fit: BoxFit.cover,
-                      //   ),
+                      child: imageItem(data: _teammateList[sectionIndex].members[itemIndex]),
                     ),
-                    title: Text(_teammateList[sectionIndex].members[itemIndex].name),
-                    subtitle: Text(_teammateList[sectionIndex].members[itemIndex].age.toString()),
-                    trailing: CircleAvatar(
-                      radius: 30,
-                      child: Text(_teammateList[sectionIndex].members[itemIndex].regist.toString()),
-                    ),
-                    // onTap: () async {
-                    //   // 登録画面
-                    //   slideDialog.showSlideDialog(
-                    //     context: context,
-                    //     child: CatalogPalette(
-                    //       id: _teammateList[sectionIndex].members[itemIndex].id,
-                    //       shop: _teammateList[sectionIndex].members[itemIndex].shop,
-                    //       name: _teammateList[sectionIndex].members[itemIndex].name,
-                    //       note: _teammateList[sectionIndex].members[itemIndex].note,
-                    //       price: _teammateList[sectionIndex].members[itemIndex].price,
-                    //       icon: _teammateList[sectionIndex].members[itemIndex].icon,
-                    //     ),
-                    //     barrierColor: Colors.black.withOpacity(0.7),
-                    //     backgroundColor: Theme.of(context).canvasColor,
-                    //   );
-                    // },
-                    // onLongPress: () async {
-                    //   await catalogPayment(context, _bloc, _teammateList[sectionIndex].members[itemIndex]);
-                    // }
+                    title: titleItem(data: _teammateList[sectionIndex].members[itemIndex]),
+                    subtitle: Text(_teammateList[sectionIndex].members[itemIndex].regist.toString()),
+                    trailing: roundNumberItem(context: context, team: _teammateList[sectionIndex].team, member: _teammateList[sectionIndex].members[itemIndex]),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => MemberForm(
+                          dto: _teammateList[sectionIndex].members[itemIndex]
+                        )),
+                      );
+                    },
                   );
                 },
               ),

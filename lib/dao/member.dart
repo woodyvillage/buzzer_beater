@@ -19,7 +19,7 @@ class MemberDao {
 
   Future<List<MemberDto>> selectByTeam(TeamDto _dto, String _column) async {
     Database _db = await instance.database;
-    List<Map<String, dynamic>> _result = await _db.query(TableUtil.memberTable, orderBy: _column, where: '${TableUtil.cTeam} = ?', whereArgs: [_dto.id]);
+    List<Map<String, dynamic>> _result = await _db.query(TableUtil.memberTable, orderBy: _column + ' desc', where: '${TableUtil.cTeam} = ?', whereArgs: [_dto.id]);
     List<MemberDto> _menu = _result.isNotEmpty
       ? _result.map((item) => MemberDto.parse(item)).toList()
       : [];

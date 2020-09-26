@@ -23,6 +23,7 @@ class TeamDao {
 
   Future<int> insert(TeamDto _dto) async {
     Database _db = await instance.database;
+    print('team.insert: ${_dto.toMap()}');
     return await _db.insert(TableUtil.teamTable, _dto.toMap());
   }
 

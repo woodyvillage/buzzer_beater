@@ -1,4 +1,25 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
+
+Widget imageItem({
+  @required data,
+}) {
+  if (data.image != null) {
+    return Image.file(
+      File(data.image),
+      width: 80,
+      height: 80,
+      fit: BoxFit.cover,
+    );
+  } else {
+    return Image.asset(
+      'images/noimage.png',
+      width: 80,
+      height: 80,
+      fit: BoxFit.cover,
+    );
+  }
+}
 
 Widget titleItem({
   @required data,
@@ -8,7 +29,7 @@ Widget titleItem({
     children: [
       Text(
         data.name,
-        style: TextStyle(fontSize: 16),
+        style: TextStyle(fontSize: 22),
       ),
     ],
   );
