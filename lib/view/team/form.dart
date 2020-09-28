@@ -22,10 +22,10 @@ class TeamForm extends StatefulWidget {
 class _TeamFormState extends State<TeamForm> {
   ApplicationBloc _bloc;
   List<FormDto> _form = List<FormDto>();
-  String errorText = '';
+  String _error = '';
   ColorSwatch _tempMainColor;
   Color _tempShadeColor;
-  final picker = ImagePicker();
+  final _picker = ImagePicker();
 
   @override
   void didChangeDependencies() {
@@ -80,7 +80,7 @@ class _TeamFormState extends State<TeamForm> {
   }
 
   Future _imagePicker() async {
-    var image = await picker.getImage(source: ImageSource.gallery);
+    var image = await _picker.getImage(source: ImageSource.gallery);
     setState(() {
       _form[0].image = File(image.path);
     });
@@ -100,7 +100,7 @@ class _TeamFormState extends State<TeamForm> {
             padding: EdgeInsets.only(left: 25, right: 25),
             alignment: Alignment.centerLeft,
             child: Text(
-              errorText,
+              _error,
               style: TextStyle(
                 color: Theme.of(context).errorColor,
                 fontWeight: FontWeight.w500,
@@ -228,7 +228,7 @@ class _TeamFormState extends State<TeamForm> {
                     if (_result == 0) {
                       Navigator.pop(context);
                     } else {
-                      setState(() => _result < 0 ? errorText = 'チーム名称を入力してください' : errorText = 'すでに同じチームが登録されています');
+                      setState(() => _result < 0 ? _error = 'チーム名称を入力してください' : _error = 'すでに同じチームが登録されています');
                     }
                   },
                 ),

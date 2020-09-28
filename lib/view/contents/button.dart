@@ -4,6 +4,8 @@ import 'package:buzzer_beater/util/routeset.dart';
 import 'package:buzzer_beater/view/member/form.dart';
 import 'package:buzzer_beater/view/team/form.dart';
 
+import 'package:buzzer_beater/model/resultedit.dart';
+
 class ApplicationFloat extends StatelessWidget {
   ApplicationFloat({Key key, this.index}) : super(key: key);
   final int index;
@@ -21,6 +23,9 @@ class ApplicationFloat extends StatelessWidget {
           context,
           MaterialPageRoute(builder: (context) => MemberForm()),
         );
+        break;
+      case routesetConfig:
+        test();
         break;
       default:
     }

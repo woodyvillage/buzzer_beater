@@ -52,7 +52,7 @@ Future confirmMemberValue(ApplicationBloc _bloc, MemberDto _selected, List<FormD
     return -1;
   }
 
-  if (_dto.id == null && await _dao.selectCount(_dto) > 0) {
+  if (_dto.id == null && await _dao.selectDuplicateCount(_dto) > 0) {
     // 重複あり
     return 1;
   }

@@ -25,9 +25,9 @@ class MemberForm extends StatefulWidget {
 class _MemberFormState extends State<MemberForm> {
   ApplicationBloc _bloc;
   List<FormDto> _form = List<FormDto>();
-  String errorText = '';
+  String _error = '';
   List<S2Choice<String>> _teamList = List<S2Choice<String>>();
-  final picker = ImagePicker();
+  final _picker = ImagePicker();
 
   @override
   void didChangeDependencies() {
@@ -49,7 +49,7 @@ class _MemberFormState extends State<MemberForm> {
   }
 
   Future _imagePicker() async {
-    var image = await picker.getImage(source: ImageSource.gallery);
+    var image = await _picker.getImage(source: ImageSource.gallery);
     setState(() {
       _form[0].image = File(image.path);
     });
@@ -70,7 +70,7 @@ class _MemberFormState extends State<MemberForm> {
             padding: EdgeInsets.only(left: 25, right: 25),
             alignment: Alignment.centerLeft,
             child: Text(
-              errorText,
+              _error,
               style: TextStyle(
                 color: Theme.of(context).errorColor,
                 fontWeight: FontWeight.w500,
@@ -257,7 +257,7 @@ class _MemberFormState extends State<MemberForm> {
                     if (_result == 0) {
                       Navigator.pop(context);
                     } else {
-                      setState(() => _result < 0 ? errorText = '全ての項目を入力してください' : errorText = 'すでに同じメンバーが登録されています');
+                      setState(() => _result < 0 ? _error = '全ての項目を入力してください' : _error = 'すでに同じメンバーが登録されています');
                     }
                   },
                 ),

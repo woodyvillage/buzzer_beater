@@ -14,7 +14,7 @@ class TeamMateDao {
 
     MemberDao _mdao = MemberDao();
     for (int i = 0; i < _tdto.length; i++) {
-      List<MemberDto> _mdto = await _mdao.selectByTeam(_tdto[i], TableUtil.cAge);
+      List<MemberDto> _mdto = await _mdao.selectByTeamId(_tdto[i], TableUtil.cAge);
       var _teammate = TeamMateDto()
         ..team = _tdto[i]
         ..members = _mdto

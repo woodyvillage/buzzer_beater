@@ -12,7 +12,6 @@ class TeamsList extends StatefulWidget {
 
 class _TeamsListState extends State<TeamsList> {
   ApplicationBloc _bloc;
-  List<GlobalKey> _keylist = [];
 
   @override
   void didChangeDependencies() {
@@ -40,9 +39,6 @@ class _TeamsListState extends State<TeamsList> {
       stream: _bloc.teams,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          for (int i = 0; i < snapshot.data.length; i++) {
-            _keylist.add(GlobalKey());
-          }
           return ListView.builder(
             itemCount: snapshot.data.length,
             itemBuilder: (context, index) {
@@ -66,7 +62,7 @@ class _TeamsListState extends State<TeamsList> {
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          imageItem(data: snapshot.data[index]),
+                          imageItem(data: snapshot.data[index], size: 80),
                           Expanded(
                             child: Padding(
                               padding: const EdgeInsets.only(left: 20),

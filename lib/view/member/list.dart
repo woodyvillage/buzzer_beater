@@ -16,14 +16,14 @@ class MembersList extends StatefulWidget {
 }
 
 class _MembersListState extends State<MembersList> {
-  ApplicationBloc _bloc;
+  // ApplicationBloc _bloc;
   List<TeamMateDto> _teammateList;
 
   @override
   void didChangeDependencies() {
     // 起動時の最初の一回
     super.didChangeDependencies();
-    _bloc = Provider.of<ApplicationBloc>(context);
+    // _bloc = Provider.of<ApplicationBloc>(context);
   }
 
   @override
@@ -52,9 +52,7 @@ class _MembersListState extends State<MembersList> {
                 itemBuilder: (context, sectionIndex, itemIndex, index) {
                   return ListTile(
                     leading: Container(
-                      width: 50,
-                      height: 50,
-                      child: imageItem(data: _teammateList[sectionIndex].members[itemIndex]),
+                      child: imageItem(data: _teammateList[sectionIndex].members[itemIndex], size: 50),
                     ),
                     title: titleItem(data: _teammateList[sectionIndex].members[itemIndex]),
                     subtitle: Text(_teammateList[sectionIndex].members[itemIndex].regist.toString()),

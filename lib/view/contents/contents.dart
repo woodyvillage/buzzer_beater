@@ -36,18 +36,31 @@ class _ApplicationContentsState extends State<ApplicationContents> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: ApplicationHeader(),
-      body: routesetClass.elementAt(_selectedIndex),
-      floatingActionButton: ApplicationFloat(
-        index: _selectedIndex
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        items: _bottomNavigationBarItems,
-        currentIndex: _selectedIndex,
-        onTap: _onItemTapped,
-      ),
-    );
+    if (routesetFloatIcon[_selectedIndex] == null) {
+      return Scaffold(
+        appBar: ApplicationHeader(),
+        body: routesetClass.elementAt(_selectedIndex),
+        bottomNavigationBar: BottomNavigationBar(
+          type: BottomNavigationBarType.fixed,
+          items: _bottomNavigationBarItems,
+          currentIndex: _selectedIndex,
+          onTap: _onItemTapped,
+        ),
+      );
+    } else {
+      return Scaffold(
+        appBar: ApplicationHeader(),
+        body: routesetClass.elementAt(_selectedIndex),
+        floatingActionButton: ApplicationFloat(
+          index: _selectedIndex
+        ),
+        bottomNavigationBar: BottomNavigationBar(
+          type: BottomNavigationBarType.fixed,
+          items: _bottomNavigationBarItems,
+          currentIndex: _selectedIndex,
+          onTap: _onItemTapped,
+        ),
+      );
+    }
   }
 }
