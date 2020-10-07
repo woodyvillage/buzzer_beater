@@ -1,262 +1,116 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 
-import 'package:buzzer_beater/dto/member.dart';
 import 'package:buzzer_beater/dto/result.dart';
 import 'package:buzzer_beater/dto/team.dart';
+import 'package:buzzer_beater/model/resultedit.dart';
+import 'package:buzzer_beater/util/result.dart';
 
-Widget imageItem({
-  @required data,
-  @required size,
-}) {
-  if (data.image != null) {
-    return Image.file(
-      File(data.image),
-      width: size.toDouble(),
-      height: size.toDouble(),
-      fit: BoxFit.cover,
-    );
-  } else {
-    return Image.asset(
-      'images/noimage.png',
-      width: size.toDouble(),
-      height: size.toDouble(),
-      fit: BoxFit.cover,
-    );
-  }
+Widget _filler(int _flex) {
+  return Expanded(
+    flex: _flex,
+    child: SizedBox(),
+  );
 }
 
-Widget titleItem({
-  @required data,
+Widget matchPanelTeamSubSet({
+  @required ResultDto data,
 }) {
-  if (data is TeamDto) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          data.name,
-          style: TextStyle(fontSize: 22),
-        ),
-      ],
-    );
-  } else if (data is MemberDto) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: <Widget> [
-            Text(
-              data.name,
-              style: TextStyle(fontSize: 20),
-            ),
-            Text(
-              '  (' + data.age.toString() + ')',
-              style: TextStyle(fontSize: 15),
-            ),
-          ],
-        ),
-      ],
-    );
-  } else if (data is ResultDto) {
-    var _place;
-    data.match.place == null ? _place = '' : _place = ' - ' + data.match.place;
-    return SizedBox(
-      height: 50,
-      child: Padding(
-        padding: EdgeInsets.only(left: 10),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget> [
-            Text(
-              data.match.name,
-              style: TextStyle(fontSize: 20),
-            ),
-            Text(
-              data.match.date + _place,
-              style: TextStyle(fontSize: 14),
-            ),
-          ],
-        ),
-      ),
-    );
-  } else {
-    return null;
-  }
-}
-
-Widget roundNumberItem({
-  @required context,
-  @required team,
-  @required member,
-}) {
-  if (member.number == null) {
-    return CircleAvatar(
-      backgroundColor: Color(team.majormain),
-      radius: 30,
-      child: CircleAvatar(
-        backgroundColor: Theme.of(context).canvasColor,
-        radius: 25,
-        child: Text(''),
-      ),
-    );
-  } else {
-    return CircleAvatar(
-      backgroundColor: Color(team.majormain),
-      radius: 30,
-      child: CircleAvatar(
-        backgroundColor: Color(team.majorshade),
-        radius: 25,
-        child: Text(
-          member.number.toString(),
-          style: TextStyle(color: Color(team.majormain)),
-        ),
-      ),
-    );
-  }
-}
-
-Widget teamPanelItem({
-  @required data,
-}) {
+  var _hometeam = getHomeAway(data, ResultUtil.home, ResultUtil.team);
+  var _awayteam = getHomeAway(data, ResultUtil.away, ResultUtil.team);
   return Row(
-    children: <Widget> [
-      Expanded(
-        flex: 2,
-        child: SizedBox(
-          // height: 50,
-        ),
-      ),
-      Expanded(
-        flex: 2,
-        child: SizedBox(
-          height: 50,
-          child: Container(
-            decoration: BoxDecoration(
-              border: Border.all(color: Color(data.home.majormain)),
-              color: Color(data.home.majorshade),
-            ),
-          ),
-        ),
-      ),
-      Expanded(
-        flex: 1,
-        child: SizedBox(
-          // height: 50,
-        ),
-      ),
-      Expanded(
-        flex: 45,
-        child: Container(
-          alignment: Alignment.centerLeft,
-          // height: 50,
-          child: teamNameItem(data: data.home),
-        ),
-      ),
-      Expanded(
-        flex: 45,
-        child: Container(
-          height: 50,
-          child: teamNameItem(data: data.away),
-        ),
-      ),
-      Expanded(
-        flex: 1,
-        child: SizedBox(
-          height: 50,
-        ),
-      ),
-      Expanded(
-        flex: 2,
-        child: SizedBox(
-          height: 50,
-          child: Container(
-            decoration: BoxDecoration(
-              border: Border.all(color: Color(data.away.majormain)),
-              color: Color(data.away.majorshade),
-            ),
-          ),
-        ),
-      ),
-      Expanded(
-        flex: 2,
-        child: SizedBox(
-          height: 50,
-        ),
-      ),
+    children: <Widget>[
+      _filler(2),
+      _teamColorItem(data.match.homemain, data.match.homeshade),
+      _filler(2),
+      _teamNameItem(_hometeam, Alignment.centerLeft),
+      _teamNameItem(_awayteam, Alignment.centerRight),
+      _filler(2),
+      _teamColorItem(data.match.awaymain, data.match.awayshade),
+      _filler(2),
     ],
   );
 }
 
-Widget teamNameItem({
-  @required data,
-}) {
-  return Text(
-    data.name,
-    style: TextStyle(fontSize: 16),
+Widget _teamColorItem(int _main, int _shade) {
+  return Expanded(
+    flex: 2,
+    child: SizedBox(
+      height: 50,
+      child: Container(
+        decoration: BoxDecoration(
+          border: Border.all(color: Color(_main)),
+          color: Color(_shade),
+        ),
+      ),
+    ),
   );
 }
 
-Widget teamScoreItem({
-  @required data,
+Widget _teamNameItem(TeamDto _team, Alignment _align) {
+  return Expanded(
+    flex: 45,
+    child: Container(
+      alignment: _align,
+      child: Text(
+        _team.name,
+        style: TextStyle(fontSize: 16),
+      ),
+    ),
+  );
+}
+
+Widget matchPanelScoreSubSet({
+  @required ResultDto data,
 }) {
   return Row(
-    children: <Widget> [
-      Expanded(
-        flex: 35,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget> [
-            Text(
-              data.homescore.toString(),
-              style: TextStyle(fontSize: 45),
-            ),
-          ],
-        ),
-      ),
+    children: <Widget>[
+      _teamTotalScoreItem(data.hometotal),
       Expanded(
         flex: 30,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget> [
-            teamPeriodItem(data: data, index: 0),
-            teamPeriodItem(data: data, index: 1),
-            teamPeriodItem(data: data, index: 2),
-            teamPeriodItem(data: data, index: 3),
-            teamPeriodItem(data: data, index: 4),
+          children: <Widget>[
+            _teamPeriodItem(data, 0),
+            _teamPeriodItem(data, 1),
+            _teamPeriodItem(data, 2),
+            _teamPeriodItem(data, 3),
+            _teamPeriodItem(data, 4),
           ],
         ),
       ),
-      Expanded(
-        flex: 35,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget> [
-            Text(
-              data.awayscore.toString(),
-              style: TextStyle(fontSize: 45),
-            ),
-          ],
-        ),
-      ),
+      _teamTotalScoreItem(data.awaytotal),
     ],
   );
 }
 
-Widget teamPeriodItem({
-  @required data,
-  @required index,
-}) {
-  var _text;
-  if (index == 4) {
+Widget _teamTotalScoreItem(dynamic _total) {
+  return Expanded(
+    flex: 35,
+    child: Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: <Widget>[
+        Text(
+          _total.toString(),
+          style: TextStyle(fontSize: 45),
+        ),
+      ],
+    ),
+  );
+}
+
+Widget _teamPeriodItem(ResultDto _data, int _index) {
+  String _text;
+  if (_index == 4) {
     _text = '(延長)';
   } else {
     _text = '　－　';
   }
-  if (data.homeperiod.length <= index || data.awayperiod.length <= index) {
+
+  var _homeperiod = getHomeAway(_data, ResultUtil.home, ResultUtil.period);
+  var _awayperiod = getHomeAway(_data, ResultUtil.away, ResultUtil.period);
+  if (_homeperiod.length <= _index || _awayperiod.length <= _index) {
     return Text(
       _text,
       style: TextStyle(fontSize: 16),
@@ -264,32 +118,22 @@ Widget teamPeriodItem({
   } else {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget> [
-        Container(
-          alignment: Alignment.center,
-          width: 20,
-          child: Text(
-            data.homeperiod[index].score.toString(),
-            style: TextStyle(fontSize: 16),
-          ),
-        ),
-        Container(
-          alignment: Alignment.center,
-          width: 60,
-          child: Text(
-            _text,
-            style: TextStyle(fontSize: 16),
-          ),
-        ),
-        Container(
-          alignment: Alignment.center,
-          width: 20,
-          child: Text(
-            data.awayperiod[index].score.toString(),
-            style: TextStyle(fontSize: 16),
-          ),
-        ),
+      children: <Widget>[
+        _teamPeriodScoreItem(_homeperiod[_index].score, 20),
+        _teamPeriodScoreItem(_text, 60),
+        _teamPeriodScoreItem(_awayperiod[_index].score, 20),
       ],
     );
   }
+}
+
+Widget _teamPeriodScoreItem(dynamic _text, double _size) {
+  return Container(
+    alignment: Alignment.center,
+    width: _size,
+    child: Text(
+      _text.toString(),
+      style: TextStyle(fontSize: 16),
+    ),
+  );
 }

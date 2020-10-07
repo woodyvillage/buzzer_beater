@@ -11,10 +11,16 @@ class FormDto {
   Color border;
   File image;
 
-  FormDto({this.node, this.controller, this.icon, this.hint, this.value, this.image});
+  FormDto(
+      {this.node,
+      this.controller,
+      this.icon,
+      this.hint,
+      this.value,
+      this.image});
 
   bool isPrepare() {
-    if (this.node == null || this.controller == null) {
+    if (node == null || controller == null) {
       return false;
     } else {
       return true;

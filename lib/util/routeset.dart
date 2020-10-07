@@ -10,7 +10,7 @@ const int routesetTeam = 0;
 const int routesetMember = 1;
 const int routesetMatch = 2;
 const int routesetResult = 3;
-const int routesetConfig = 4;
+const int routesetAnalysis = 4;
 
 final routesetIcon = [
   Icon(Icons.home),
@@ -25,12 +25,12 @@ final routesetText = [
   Text('メンバー'),
   Text('試合'),
   Text('履歴'),
-  Text('設定'),
+  Text('分析'),
 ];
 
 final routesetClass = [
   TeamBoard(),
-  MemberList(),
+  MemberBoard(),
   MatchList(),
   ResultBook(),
   AnalysisList(),
@@ -41,13 +41,13 @@ final routesetFloatIcon = [
   Icon(Icons.person_add),
   Icon(Icons.add),
   null,
-  Icon(Icons.add),
+  null,
 ];
 
 final routesetFloatText = [
-  Text('追加'),
-  Text('追加'),
+  Text('チーム追加'),
+  Text('メンバー追加'),
   Text('入金'),
-  null,
+  Text('試合結果詳細'),
   Text('入金'),
 ];

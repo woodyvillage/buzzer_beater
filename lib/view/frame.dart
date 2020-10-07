@@ -15,11 +15,10 @@ class ApplicationFrame extends StatelessWidget {
       supportedLocales: [Locale('ja', 'JP')],
 
       // テーマ
-      theme: 
-        ThemeData(
-          primarySwatch: Colors.blue,
-          visualDensity: VisualDensity.adaptivePlatformDensity,
-        ),
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+        visualDensity: VisualDensity.adaptivePlatformDensity,
+      ),
       darkTheme: ThemeData.dark(),
 
       // コンテンツ

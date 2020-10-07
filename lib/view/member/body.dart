@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:buzzer_beater/view/member/list.dart';
 
-class MemberList extends StatelessWidget {
+class MemberBoard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SafeArea(

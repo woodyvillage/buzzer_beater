@@ -1,30 +1,35 @@
 import 'package:flutter/material.dart';
 
+import 'package:buzzer_beater/model/resultedit.dart';
 import 'package:buzzer_beater/util/routeset.dart';
 import 'package:buzzer_beater/view/member/form.dart';
 import 'package:buzzer_beater/view/team/form.dart';
-
-import 'package:buzzer_beater/model/resultedit.dart';
 
 class ApplicationFloat extends StatelessWidget {
   ApplicationFloat({Key key, this.index}) : super(key: key);
   final int index;
 
   dispatch(BuildContext context, int index) {
+    MaterialPageRoute teamPageRoute = MaterialPageRoute(
+      builder: (context) => TeamForm(),
+    );
+    MaterialPageRoute memberPageRoute = MaterialPageRoute(
+      builder: (context) => MemberForm(),
+    );
     switch (index) {
       case routesetTeam:
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => TeamForm()),
+          teamPageRoute,
         );
         break;
       case routesetMember:
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => MemberForm()),
+          memberPageRoute,
         );
         break;
-      case routesetConfig:
+      case routesetMatch:
         test();
         break;
       default:

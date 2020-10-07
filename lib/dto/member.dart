@@ -9,30 +9,37 @@ class MemberDto {
   int number;
   String image;
 
-  MemberDto({this.id, this.team, this.name, this.age, this.regist, this.number, this.image});
+  MemberDto(
+      {this.id,
+      this.team,
+      this.name,
+      this.age,
+      this.regist,
+      this.number,
+      this.image});
 
   factory MemberDto.parse(Map<String, dynamic> _record) => MemberDto(
-    id: _record[TableUtil.cId],
-    team: _record[TableUtil.cTeam],
-    name: _record[TableUtil.cName],
-    age: _record[TableUtil.cAge],
-    regist: _record[TableUtil.cRegist],
-    number: _record[TableUtil.cNumber],
-    image: _record[TableUtil.cImage],
-  );
+        id: _record[TableUtil.cId],
+        team: _record[TableUtil.cTeam],
+        name: _record[TableUtil.cName],
+        age: _record[TableUtil.cAge],
+        regist: _record[TableUtil.cRegist],
+        number: _record[TableUtil.cNumber],
+        image: _record[TableUtil.cImage],
+      );
 
   Map<String, dynamic> toMap() => {
-    TableUtil.cId: this.id,
-    TableUtil.cTeam: this.team,
-    TableUtil.cName: this.name,
-    TableUtil.cAge: this.age,
-    TableUtil.cRegist: this.regist,
-    TableUtil.cNumber: this.number,
-    TableUtil.cImage: this.image,
-  };
+        TableUtil.cId: id,
+        TableUtil.cTeam: team,
+        TableUtil.cName: name,
+        TableUtil.cAge: age,
+        TableUtil.cRegist: regist,
+        TableUtil.cNumber: number,
+        TableUtil.cImage: image,
+      };
 
   bool isComplete() {
-    if (this.team == null || this.name == null || this.age == null || this.regist == null) {
+    if (team == null || name == null || age == null || regist == null) {
       return false;
     } else {
       return true;

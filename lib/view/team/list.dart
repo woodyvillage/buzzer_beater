@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'package:buzzer_beater/common/bloc.dart';
-import 'package:buzzer_beater/view/common/listitems.dart';
+import 'package:buzzer_beater/view/common/boarditems.dart';
 import 'package:buzzer_beater/view/team/form.dart';
 
 class TeamsList extends StatefulWidget {
@@ -44,49 +44,22 @@ class _TeamsListState extends State<TeamsList> {
             itemBuilder: (context, index) {
               return GestureDetector(
                 onTap: () {
+                  MaterialPageRoute materialPageRoute = MaterialPageRoute(
+                    builder: (context) => TeamForm(dto: snapshot.data[index]),
+                  );
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => TeamForm(
-                      dto: snapshot.data[index]
-                    )),
+                    materialPageRoute,
                   );
                 },
-                child: Card(
-                  elevation: 8,
-                  color: Theme.of(context).cardColor,
-                  margin: EdgeInsets.fromLTRB(10, 15, 10, 0),
-                  child: SizedBox(
-                    height: 110,
-                    child: Padding(
-                      padding: EdgeInsets.fromLTRB(15, 15, 15, 0),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          imageItem(data: snapshot.data[index], size: 80),
-                          Expanded(
-                            child: Padding(
-                              padding: const EdgeInsets.only(left: 20),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  titleItem(data: snapshot.data[index]),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
+                child: teamBoard(data: snapshot.data[index], context: context),
               );
             },
           );
         } else {
           return ListView();
         }
-      }
+      },
     );
   }
 }

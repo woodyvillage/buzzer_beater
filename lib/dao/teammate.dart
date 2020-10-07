@@ -7,14 +7,15 @@ import 'package:buzzer_beater/util/table.dart';
 
 class TeamMateDao {
   Future<List<TeamMateDto>> getAllMember() async {
-    var teammate = List<TeamMateDto>();
+    var teammate = <TeamMateDto>[];
 
     TeamDao _tdao = TeamDao();
     List<TeamDto> _tdto = await _tdao.select(TableUtil.cName);
 
     MemberDao _mdao = MemberDao();
     for (int i = 0; i < _tdto.length; i++) {
-      List<MemberDto> _mdto = await _mdao.selectByTeamId(_tdto[i], TableUtil.cAge);
+      List<MemberDto> _mdto =
+          await _mdao.selectByTeamId(_tdto[i].id, TableUtil.cAge);
       var _teammate = TeamMateDto()
         ..team = _tdto[i]
         ..members = _mdto

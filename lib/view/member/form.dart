@@ -24,9 +24,9 @@ class MemberForm extends StatefulWidget {
 
 class _MemberFormState extends State<MemberForm> {
   ApplicationBloc _bloc;
-  List<FormDto> _form = List<FormDto>();
+  List<FormDto> _form = <FormDto>[];
   String _error = '';
-  List<S2Choice<String>> _teamList = List<S2Choice<String>>();
+  List<S2Choice<String>> _teamList = <S2Choice<String>>[];
   final _picker = ImagePicker();
 
   @override
@@ -50,9 +50,11 @@ class _MemberFormState extends State<MemberForm> {
 
   Future _imagePicker() async {
     var image = await _picker.getImage(source: ImageSource.gallery);
-    setState(() {
-      _form[0].image = File(image.path);
-    });
+    setState(
+      () {
+        _form[0].image = File(image.path);
+      },
+    );
   }
 
   @override
@@ -64,8 +66,7 @@ class _MemberFormState extends State<MemberForm> {
       body: ListView(
         children: <Widget>[
           Container(
-            // color: Theme.of(context).canvasColor,
-            color: Colors.amber,
+            color: Theme.of(context).canvasColor,
             height: 40,
             padding: EdgeInsets.only(left: 25, right: 25),
             alignment: Alignment.centerLeft,
@@ -82,7 +83,8 @@ class _MemberFormState extends State<MemberForm> {
             title: _form[0].value,
             value: _form[0].controller.text,
             choiceItems: _teamList,
-            onChange: (state) => setState(() => _form[0].controller.text = state.value),
+            onChange: (state) =>
+                setState(() => _form[0].controller.text = state.value),
             modalType: S2ModalType.bottomSheet,
             tileBuilder: (context, state) {
               return S2Tile.fromState(
@@ -96,37 +98,37 @@ class _MemberFormState extends State<MemberForm> {
           ),
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget> [
+            children: <Widget>[
               Container(
                 margin: const EdgeInsets.fromLTRB(15, 0, 15, 0),
-                    child: Stack(
-                      alignment: AlignmentDirectional.topStart,
-                      children: <Widget> [
-                        Container(
-                          height: 100,
-                          width: 100,
-                          child: (_form[0].image != null)
-                            ? Image.file(
+                child: Stack(
+                  alignment: AlignmentDirectional.topStart,
+                  children: <Widget>[
+                    Container(
+                      height: 100,
+                      width: 100,
+                      child: (_form[0].image != null)
+                          ? Image.file(
                               _form[0].image,
                               fit: BoxFit.cover,
                             )
-                            : Image.asset(
+                          : Image.asset(
                               'images/noimage.png',
                               fit: BoxFit.cover,
                             ),
-                        ),
-                        MaterialButton(
-                          height: 100,
-                          minWidth: 100,
-                          color: Colors.white30,
-                          onPressed: () => _imagePicker(),
-                          child: Text('+'),
-                        )
-                      ],
                     ),
+                    MaterialButton(
+                      height: 100,
+                      minWidth: 100,
+                      color: Colors.white30,
+                      onPressed: () => _imagePicker(),
+                      child: Text('+'),
+                    )
+                  ],
+                ),
               ),
               Column(
-                children: <Widget> [
+                children: <Widget>[
                   Container(
                     width: MediaQuery.of(context).size.width - 145,
                     margin: const EdgeInsets.fromLTRB(0, 0, 15, 10),
@@ -147,7 +149,7 @@ class _MemberFormState extends State<MemberForm> {
                         hintText: _form[1].hint,
                         labelText: _form[1].value,
                       ),
-                      onFieldSubmitted: (v){
+                      onFieldSubmitted: (v) {
                         FocusScope.of(context).requestFocus(_form[2].node);
                       },
                     ),
@@ -172,10 +174,10 @@ class _MemberFormState extends State<MemberForm> {
                         hintText: _form[2].hint,
                         labelText: _form[2].value,
                       ),
-                      inputFormatters: <TextInputFormatter> [
+                      inputFormatters: <TextInputFormatter>[
                         WhitelistingTextInputFormatter.digitsOnly,
                       ],
-                      onFieldSubmitted: (v){
+                      onFieldSubmitted: (v) {
                         FocusScope.of(context).requestFocus(_form[3].node);
                       },
                     ),
@@ -200,10 +202,10 @@ class _MemberFormState extends State<MemberForm> {
                         hintText: _form[3].hint,
                         labelText: _form[3].value,
                       ),
-                      inputFormatters: <TextInputFormatter> [
+                      inputFormatters: <TextInputFormatter>[
                         WhitelistingTextInputFormatter.digitsOnly,
                       ],
-                      onFieldSubmitted: (v){
+                      onFieldSubmitted: (v) {
                         FocusScope.of(context).requestFocus(_form[4].node);
                       },
                     ),
@@ -228,10 +230,10 @@ class _MemberFormState extends State<MemberForm> {
                         hintText: _form[4].hint,
                         labelText: _form[4].value,
                       ),
-                      inputFormatters: <TextInputFormatter> [
+                      inputFormatters: <TextInputFormatter>[
                         WhitelistingTextInputFormatter.digitsOnly,
                       ],
-                      onFieldSubmitted: (v){
+                      onFieldSubmitted: (v) {
                         FocusScope.of(context).requestFocus(_form[1].node);
                       },
                     ),
@@ -252,12 +254,15 @@ class _MemberFormState extends State<MemberForm> {
                   icon: formIcon[formSubmit],
                   label: formText[formSubmit],
                   onPressed: () async {
-                    var _result = await confirmMemberValue(_bloc, widget.dto, _form);
+                    var _result =
+                        await confirmMemberValue(_bloc, widget.dto, _form);
                     context.read<TeamMateNotifier>().getAllMembers();
                     if (_result == 0) {
                       Navigator.pop(context);
                     } else {
-                      setState(() => _result < 0 ? _error = '全ての項目を入力してください' : _error = 'すでに同じメンバーが登録されています');
+                      setState(() => _result < 0
+                          ? _error = '全ての項目を入力してください'
+                          : _error = 'すでに同じメンバーが登録されています');
                     }
                   },
                 ),

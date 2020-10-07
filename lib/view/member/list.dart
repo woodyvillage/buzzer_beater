@@ -1,13 +1,11 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sticky_and_expandable_list/sticky_and_expandable_list.dart';
 
-import 'package:buzzer_beater/common/bloc.dart';
 import 'package:buzzer_beater/common/notifier.dart';
 import 'package:buzzer_beater/dto/teammate.dart';
 import 'package:buzzer_beater/dto/member.dart';
-import 'package:buzzer_beater/view/common/listitems.dart';
+import 'package:buzzer_beater/view/common/boarditems.dart';
 import 'package:buzzer_beater/view/member/form.dart';
 
 class MembersList extends StatefulWidget {
@@ -16,14 +14,12 @@ class MembersList extends StatefulWidget {
 }
 
 class _MembersListState extends State<MembersList> {
-  // ApplicationBloc _bloc;
   List<TeamMateDto> _teammateList;
 
   @override
   void didChangeDependencies() {
     // 起動時の最初の一回
     super.didChangeDependencies();
-    // _bloc = Provider.of<ApplicationBloc>(context);
   }
 
   @override
@@ -39,30 +35,48 @@ class _MembersListState extends State<MembersList> {
 
   @override
   Widget build(BuildContext context) {
-    _teammateList = context.select((TeamMateNotifier mate) => mate.teammateList);
+    _teammateList =
+        context.select((TeamMateNotifier mate) => mate.teammateList);
     if (_teammateList != null) {
       return SafeArea(
         child: CustomScrollView(
           slivers: <Widget>[
             SliverExpandableList(
               builder: SliverExpandableChildDelegate<MemberDto, TeamMateDto>(
-              sectionList: _teammateList,
+                sectionList: _teammateList,
                 headerBuilder: _buildHeader,
-                addAutomaticKeepAlives : true,
+                addAutomaticKeepAlives: true,
                 itemBuilder: (context, sectionIndex, itemIndex, index) {
                   return ListTile(
                     leading: Container(
-                      child: imageItem(data: _teammateList[sectionIndex].members[itemIndex], size: 50),
+                      child: imageItem(
+                        data: _teammateList[sectionIndex].members[itemIndex],
+                        size: 50,
+                      ),
                     ),
-                    title: titleItem(data: _teammateList[sectionIndex].members[itemIndex]),
-                    subtitle: Text(_teammateList[sectionIndex].members[itemIndex].regist.toString()),
-                    trailing: roundNumberItem(context: context, team: _teammateList[sectionIndex].team, member: _teammateList[sectionIndex].members[itemIndex]),
+                    title: titleItem(
+                      data: _teammateList[sectionIndex].members[itemIndex],
+                    ),
+                    subtitle: Text(
+                      _teammateList[sectionIndex]
+                          .members[itemIndex]
+                          .regist
+                          .toString(),
+                    ),
+                    trailing: roundNumberItem(
+                      context: context,
+                      team: _teammateList[sectionIndex].team,
+                      member: _teammateList[sectionIndex].members[itemIndex],
+                    ),
                     onTap: () {
+                      MaterialPageRoute materialPageRoute = MaterialPageRoute(
+                        builder: (context) => MemberForm(
+                          dto: _teammateList[sectionIndex].members[itemIndex],
+                        ),
+                      );
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => MemberForm(
-                          dto: _teammateList[sectionIndex].members[itemIndex]
-                        )),
+                        materialPageRoute,
                       );
                     },
                   );
@@ -93,9 +107,11 @@ class _MembersListState extends State<MembersList> {
         ),
       ),
       onTap: () {
-        setState(() {
-          _teammate.setSectionExpanded(!_teammate.isSectionExpanded());
-        });
+        setState(
+          () {
+            _teammate.setSectionExpanded(!_teammate.isSectionExpanded());
+          },
+        );
       },
     );
   }

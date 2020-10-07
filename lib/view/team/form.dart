@@ -21,7 +21,7 @@ class TeamForm extends StatefulWidget {
 
 class _TeamFormState extends State<TeamForm> {
   ApplicationBloc _bloc;
-  List<FormDto> _form = List<FormDto>();
+  List<FormDto> _form = <FormDto>[];
   String _error = '';
   ColorSwatch _tempMainColor;
   Color _tempShadeColor;
@@ -128,19 +128,19 @@ class _TeamFormState extends State<TeamForm> {
                 labelText: _form[0].value,
                 icon: Stack(
                   alignment: AlignmentDirectional.topStart,
-                  children: <Widget> [
+                  children: <Widget>[
                     Container(
                       height: 50,
                       width: 50,
                       child: (_form[0].image != null)
-                        ? Image.file(
-                          _form[0].image,
-                          fit: BoxFit.cover,
-                        )
-                        : Image.asset(
-                          'images/noimage.png',
-                          fit: BoxFit.cover,
-                        ),
+                          ? Image.file(
+                              _form[0].image,
+                              fit: BoxFit.cover,
+                            )
+                          : Image.asset(
+                              'images/noimage.png',
+                              fit: BoxFit.cover,
+                            ),
                     ),
                     MaterialButton(
                       height: 50,
@@ -224,11 +224,14 @@ class _TeamFormState extends State<TeamForm> {
                   icon: formIcon[formSubmit],
                   label: formText[formSubmit],
                   onPressed: () async {
-                    var _result = await confirmTeamValue(_bloc, widget.dto, _form);
+                    var _result =
+                        await confirmTeamValue(_bloc, widget.dto, _form);
                     if (_result == 0) {
                       Navigator.pop(context);
                     } else {
-                      setState(() => _result < 0 ? _error = 'チーム名称を入力してください' : _error = 'すでに同じチームが登録されています');
+                      setState(() => _result < 0
+                          ? _error = 'チーム名称を入力してください'
+                          : _error = 'すでに同じチームが登録されています');
                     }
                   },
                 ),

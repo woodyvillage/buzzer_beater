@@ -6,11 +6,15 @@ import 'package:buzzer_beater/common/notifier.dart';
 import 'package:buzzer_beater/view/frame.dart';
 
 void main() => runApp(
-  MultiProvider(
-    providers: [
-      Provider<ApplicationBloc>(create: (_) => ApplicationBloc()),
-      ChangeNotifierProvider<TeamMateNotifier>(create: (_) => TeamMateNotifier()),
-    ],
-    child: ApplicationFrame(),
-  ),
-);
+      MultiProvider(
+        providers: [
+          Provider<ApplicationBloc>(
+            create: (_) => ApplicationBloc(),
+          ),
+          ChangeNotifierProvider<TeamMateNotifier>(
+            create: (_) => TeamMateNotifier(),
+          ),
+        ],
+        child: ApplicationFrame(),
+      ),
+    );

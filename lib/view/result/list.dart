@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'package:buzzer_beater/common/bloc.dart';
+import 'package:buzzer_beater/view/common/boarditems.dart';
 import 'package:buzzer_beater/view/common/listitems.dart';
+import 'package:buzzer_beater/view/result/detail.dart';
 
 class ResultsList extends StatefulWidget {
   @override
@@ -43,12 +45,14 @@ class _ResultsListState extends State<ResultsList> {
             itemBuilder: (context, index) {
               return GestureDetector(
                 onTap: () {
-                  // Navigator.push(
-                  //   context,
-                  //   MaterialPageRoute(builder: (context) => TeamForm(
-                  //     dto: snapshot.data[index]
-                  //   )),
-                  // );
+                  MaterialPageRoute materialPageRoute = MaterialPageRoute(
+                    builder: (context) =>
+                        ResultDetail(dto: snapshot.data[index]),
+                  );
+                  Navigator.push(
+                    context,
+                    materialPageRoute,
+                  );
                 },
                 child: Card(
                   elevation: 8,
@@ -56,21 +60,27 @@ class _ResultsListState extends State<ResultsList> {
                   margin: EdgeInsets.fromLTRB(10, 15, 10, 0),
                   child: SizedBox(
                     height: 250,
-                    child: Column (
+                    child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget> [
+                      children: <Widget>[
                         titleItem(data: snapshot.data[index]),
                         Center(
                           child: Container(
                             width: MediaQuery.of(context).size.width - 30,
-                            height: 2,
-                            decoration: BoxDecoration(color: Theme.of(context).primaryColorDark),
+                            height: 3,
+                            decoration: BoxDecoration(
+                              color: Theme.of(context).primaryColorDark,
+                            ),
                           ),
                         ),
-                        Padding(padding: const EdgeInsets.symmetric(vertical: 2)),
-                        teamPanelItem(data: snapshot.data[index]),
-                        Padding(padding: const EdgeInsets.symmetric(vertical: 5)),
-                        teamScoreItem(data: snapshot.data[index]),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 2),
+                        ),
+                        matchPanelTeamSubSet(data: snapshot.data[index]),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 5),
+                        ),
+                        matchPanelScoreSubSet(data: snapshot.data[index]),
                       ],
                     ),
                   ),
@@ -81,7 +91,7 @@ class _ResultsListState extends State<ResultsList> {
         } else {
           return ListView();
         }
-      }
+      },
     );
   }
 }

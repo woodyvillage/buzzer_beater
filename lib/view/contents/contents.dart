@@ -38,7 +38,7 @@ class _ApplicationContentsState extends State<ApplicationContents> {
   Widget build(BuildContext context) {
     if (routesetFloatIcon[_selectedIndex] == null) {
       return Scaffold(
-        appBar: ApplicationHeader(),
+        appBar: ApplicationHeader(isView: true),
         body: routesetClass.elementAt(_selectedIndex),
         bottomNavigationBar: BottomNavigationBar(
           type: BottomNavigationBarType.fixed,
@@ -49,11 +49,9 @@ class _ApplicationContentsState extends State<ApplicationContents> {
       );
     } else {
       return Scaffold(
-        appBar: ApplicationHeader(),
+        appBar: ApplicationHeader(isView: true),
         body: routesetClass.elementAt(_selectedIndex),
-        floatingActionButton: ApplicationFloat(
-          index: _selectedIndex
-        ),
+        floatingActionButton: ApplicationFloat(index: _selectedIndex),
         bottomNavigationBar: BottomNavigationBar(
           type: BottomNavigationBarType.fixed,
           items: _bottomNavigationBarItems,
