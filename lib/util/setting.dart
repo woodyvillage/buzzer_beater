@@ -22,7 +22,6 @@ class SettingUtil {
     [true, '', 'ファウル', null, null, null],
     [false, String, 'ファウル', 'ファウルしなかった回数に上書きで表示します', 'foul', '－'],
     [true, '', 'チームメンバー', null, null, null],
-    [false, String, '表示順', 'メンバーの表示順序を指定できます', 'orderby', '選手（背番号）→コーチ'],
     [false, String, '出場', '出場時限に上書きで表示します', 'play', '／'],
     [false, String, '交代', '交代時限に上書きで表示します', 'change', '＼'],
   ];
@@ -43,6 +42,6 @@ class SettingUtil {
   static final teamfoul = 9;
   static final notteamfoul = 10;
   static final notfoul = 12;
-  static final play = 15;
-  static final change = 16;
+  static final play = 14;
+  static final change = 15;
 }

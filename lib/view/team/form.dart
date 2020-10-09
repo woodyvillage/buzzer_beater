@@ -132,7 +132,7 @@ class _TeamFormState extends State<TeamForm> {
                     Container(
                       height: 50,
                       width: 50,
-                      child: (_form[0].image != null)
+                      child: _form[0].image != null
                           ? Image.file(
                               _form[0].image,
                               fit: BoxFit.cover,

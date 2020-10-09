@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import 'package:buzzer_beater/util/setting.dart';
-import 'package:buzzer_beater/view/settings/switchitem.dart';
 import 'package:buzzer_beater/view/settings/textitem.dart';
 
 class SettingItem extends StatelessWidget {
@@ -18,11 +17,7 @@ class SettingItem extends StatelessWidget {
         ),
       );
     } else {
-      if (SettingUtil.settings[index][SettingUtil.settingDefault] is bool) {
-        return SwitchConfig(index: index);
-      } else {
-        return TextConfig(index: index);
-      }
+      return TextConfig(index: index);
     }
   }
 }

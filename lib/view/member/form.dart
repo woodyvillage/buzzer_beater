@@ -90,9 +90,6 @@ class _MemberFormState extends State<MemberForm> {
               return S2Tile.fromState(
                 state,
                 isTwoLine: true,
-                // leading: const CircleAvatar(
-                //   backgroundImage: NetworkImage('https://source.unsplash.com/xsGxhtAsfSA/100x100'),
-                // ),
               );
             },
           ),

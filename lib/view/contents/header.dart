@@ -14,7 +14,7 @@ class ApplicationHeader extends StatelessWidget with PreferredSizeWidget {
     if (isView) {
       return AppBar(
         centerTitle: true,
-        title: Text('applicationName'),
+        title: Text('ミニバススコアブック'),
         actions: [
           Padding(
             padding: const EdgeInsets.all(6.0),

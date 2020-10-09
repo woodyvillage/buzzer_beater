@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import 'package:buzzer_beater/common/bloc.dart';
+import 'package:buzzer_beater/model/settingedit.dart';
 import 'package:buzzer_beater/util/setting.dart';
 
 class TextConfig extends StatelessWidget {
@@ -8,13 +11,14 @@ class TextConfig extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ApplicationBloc _bloc = Provider.of<ApplicationBloc>(context);
     if (SettingUtil.settings[index][SettingUtil.settingNote] == null) {
       // noteがない形式
       return ListTile(
         title: Text(SettingUtil.settings[index][SettingUtil.settingTitle]),
         trailing: Icon(Icons.chevron_right),
         onTap: () {
-          print('push b');
+          settingedit(context, _bloc, SettingUtil.settings[index]);
         },
       );
     } else {
@@ -26,8 +30,8 @@ class TextConfig extends StatelessWidget {
           style: TextStyle(fontSize: 12),
         ),
         trailing: Icon(Icons.chevron_right),
-        onTap: () {
-          print('push c');
+        onTap: () async {
+          settingedit(context, _bloc, SettingUtil.settings[index]);
         },
       );
     }
