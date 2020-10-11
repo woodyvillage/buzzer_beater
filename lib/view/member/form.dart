@@ -28,6 +28,7 @@ class _MemberFormState extends State<MemberForm> {
   String _error = '';
   List<S2Choice<String>> _teamList = <S2Choice<String>>[];
   final _picker = ImagePicker();
+  var _switchValue = true;
 
   @override
   void didChangeDependencies() {
@@ -57,8 +58,27 @@ class _MemberFormState extends State<MemberForm> {
     );
   }
 
+  void levelingForm() {
+    if (_form[2].controller.text == null ||
+        _form[2].controller.text == 'null' ||
+        _form[2].controller.text == '0') {
+      _form[2].controller.text = '';
+    }
+    if (_form[3].controller.text == null ||
+        _form[3].controller.text == 'null' ||
+        _form[3].controller.text == '0') {
+      _form[3].controller.text = '';
+    }
+    if (_form[4].controller.text == null ||
+        _form[4].controller.text == 'null' ||
+        _form[4].controller.text == '0') {
+      _form[4].controller.text = '';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    levelingForm();
     return Scaffold(
       appBar: AppBar(
         title: routesetFloatText[routesetMember],
@@ -128,6 +148,24 @@ class _MemberFormState extends State<MemberForm> {
                 children: <Widget>[
                   Container(
                     width: MediaQuery.of(context).size.width - 145,
+                    margin: const EdgeInsets.fromLTRB(0, 0, 0, 10),
+                    child: SwitchListTile(
+                      value: _switchValue,
+                      title: Text(
+                        '選手として登録',
+                        style: TextStyle(
+                          color: Colors.grey[600],
+                        ),
+                      ),
+                      onChanged: (bool value) {
+                        setState(() {
+                          _switchValue = value;
+                        });
+                      },
+                    ),
+                  ),
+                  Container(
+                    width: MediaQuery.of(context).size.width - 145,
                     margin: const EdgeInsets.fromLTRB(0, 0, 15, 10),
                     child: TextFormField(
                       enabled: true,
@@ -190,7 +228,7 @@ class _MemberFormState extends State<MemberForm> {
                       keyboardType: TextInputType.number,
                       textInputAction: TextInputAction.next,
                       maxLines: 1,
-                      maxLength: 7,
+                      maxLength: 9,
                       maxLengthEnforced: true,
                       textAlignVertical: TextAlignVertical.center,
                       obscureText: false,
@@ -203,7 +241,11 @@ class _MemberFormState extends State<MemberForm> {
                         WhitelistingTextInputFormatter.digitsOnly,
                       ],
                       onFieldSubmitted: (v) {
-                        FocusScope.of(context).requestFocus(_form[4].node);
+                        if (_switchValue) {
+                          FocusScope.of(context).requestFocus(_form[4].node);
+                        } else {
+                          FocusScope.of(context).requestFocus(_form[1].node);
+                        }
                       },
                     ),
                   ),
@@ -211,7 +253,7 @@ class _MemberFormState extends State<MemberForm> {
                     width: MediaQuery.of(context).size.width - 145,
                     margin: const EdgeInsets.fromLTRB(0, 0, 15, 10),
                     child: TextFormField(
-                      enabled: true,
+                      enabled: _switchValue,
                       autofocus: true,
                       focusNode: _form[4].node,
                       controller: _form[4].controller,
@@ -251,8 +293,8 @@ class _MemberFormState extends State<MemberForm> {
                   icon: formIcon[formSubmit],
                   label: formText[formSubmit],
                   onPressed: () async {
-                    var _result =
-                        await confirmMemberValue(_bloc, widget.dto, _form);
+                    var _result = await confirmMemberValue(
+                        _bloc, widget.dto, _form, _switchValue);
                     context.read<TeamMateNotifier>().getAllMembers();
                     if (_result == 0) {
                       Navigator.pop(context);

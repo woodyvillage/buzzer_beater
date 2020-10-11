@@ -45,7 +45,8 @@ class _TeamsListState extends State<TeamsList> {
               return GestureDetector(
                 onTap: () {
                   MaterialPageRoute materialPageRoute = MaterialPageRoute(
-                    builder: (context) => TeamForm(dto: snapshot.data[index]),
+                    builder: (context) =>
+                        TeamForm(dto: snapshot.data[index], edit: true),
                   );
                   Navigator.push(
                     context,

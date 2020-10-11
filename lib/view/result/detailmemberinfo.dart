@@ -21,7 +21,7 @@ class ResultMemberInfo extends StatelessWidget {
       child: Column(
         children: <Widget>[
           Container(
-            height: MediaQuery.of(context).size.height - 408,
+            height: MediaQuery.of(context).size.height - 409,
             child: ListView.builder(
               itemCount: _bench.length + 2,
               itemBuilder: (BuildContext context, int index) {

@@ -11,7 +11,7 @@ class ApplicationFloat extends StatelessWidget {
 
   dispatch(BuildContext context, int index) {
     MaterialPageRoute teamPageRoute = MaterialPageRoute(
-      builder: (context) => TeamForm(),
+      builder: (context) => TeamForm(edit: false),
     );
     MaterialPageRoute memberPageRoute = MaterialPageRoute(
       builder: (context) => MemberForm(),

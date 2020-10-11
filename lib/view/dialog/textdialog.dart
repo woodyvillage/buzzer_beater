@@ -16,7 +16,7 @@ class _TextDialogState extends State<TextDialog> {
   @override
   void initState() {
     super.initState();
-    if (widget.value != null) {
+    if (widget.value != null && widget.value != '0') {
       _appCtrl = TextEditingController(text: widget.value);
     }
   }

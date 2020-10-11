@@ -5,6 +5,7 @@ import 'package:buzzer_beater/common/bloc.dart';
 import 'package:buzzer_beater/dao/member.dart';
 import 'package:buzzer_beater/dto/form.dart';
 import 'package:buzzer_beater/dto/member.dart';
+import 'package:buzzer_beater/dto/team.dart';
 import 'package:buzzer_beater/util/member.dart';
 
 List<FormDto> buildMemberFormValue(MemberDto _member) {
@@ -33,8 +34,8 @@ List<FormDto> buildMemberFormValue(MemberDto _member) {
   return _form;
 }
 
-Future confirmMemberValue(
-    ApplicationBloc _bloc, MemberDto _selected, List<FormDto> _form) async {
+Future confirmMemberValue(ApplicationBloc _bloc, MemberDto _selected,
+    List<FormDto> _form, bool _switch) async {
   MemberDao _dao = MemberDao();
   MemberDto _dto = MemberDto();
 
@@ -54,9 +55,13 @@ Future confirmMemberValue(
   _form[3].controller.text == ''
       ? _dto.regist = null
       : _dto.regist = int.parse(_form[3].controller.text);
-  _form[4].controller.text == ''
-      ? _dto.number = null
-      : _dto.number = int.parse(_form[4].controller.text);
+  if (_switch) {
+    _form[4].controller.text == ''
+        ? _dto.number = null
+        : _dto.number = int.parse(_form[4].controller.text);
+  } else {
+    _dto.number = null;
+  }
 
   if (!_dto.isComplete()) {
     // 必須項目未入力
@@ -81,4 +86,31 @@ Future confirmMemberValue(
 
     return 0;
   }
+}
+
+Future firstMembnerSupport(List<TeamDto> _team) async {
+  MemberDao _dao = MemberDao();
+  MemberDto _dto = MemberDto();
+
+  _dto.team = _team[0].id;
+
+  for (int i = 4; i < 12; i++) {
+    _dto.name = i.toString() + '番';
+    _dto.age = 12;
+    _dto.regist = 0;
+    _dto.number = i;
+    await _dao.insert(_dto);
+  }
+
+  _dto.name = '監督';
+  _dto.age = 0;
+  _dto.regist = 0;
+  _dto.number = null;
+  await _dao.insert(_dto);
+
+  _dto.name = 'コーチ';
+  _dto.age = 0;
+  _dto.regist = 0;
+  _dto.number = null;
+  await _dao.insert(_dto);
 }

@@ -36,6 +36,16 @@ class TeamDao {
     return _team;
   }
 
+  Future<List<TeamDto>> selectByName(TeamDto _dto) async {
+    Database _db = await instance.database;
+    List<Map<String, dynamic>> _result = await _db.query(TableUtil.teamTable,
+        where: '${TableUtil.cName} = ?', whereArgs: [_dto.name]);
+    List<TeamDto> _team = _result.isNotEmpty
+        ? _result.map((item) => TeamDto.parse(item)).toList()
+        : [];
+    return _team;
+  }
+
   Future<int> insert(TeamDto _dto) async {
     Database _db = await instance.database;
     print('team.insert: ${_dto.toMap()}');

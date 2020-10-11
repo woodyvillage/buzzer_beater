@@ -76,6 +76,7 @@ Widget imageItem({
 Widget titleItem({
   @required dynamic data,
 }) {
+  String _age;
   if (data is TeamDto) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -87,6 +88,7 @@ Widget titleItem({
       ],
     );
   } else if (data is MemberDto) {
+    _age = data.age == 0 ? '不明' : data.age.toString();
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -98,7 +100,7 @@ Widget titleItem({
               style: TextStyle(fontSize: 20),
             ),
             Text(
-              '  (' + data.age.toString() + ')',
+              '  (' + _age + ')',
               style: TextStyle(fontSize: 15),
             ),
           ],
@@ -106,6 +108,7 @@ Widget titleItem({
       ],
     );
   } else if (data is BenchDto) {
+    _age = data.age == 0 ? '不明' : data.age.toString();
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -117,7 +120,7 @@ Widget titleItem({
               style: TextStyle(fontSize: 20),
             ),
             Text(
-              '  (' + data.age.toString() + ')',
+              '  (' + _age + ')',
               style: TextStyle(fontSize: 15),
             ),
           ],

@@ -15,6 +15,7 @@ class MembersList extends StatefulWidget {
 
 class _MembersListState extends State<MembersList> {
   List<TeamMateDto> _teammateList;
+  String _regist;
 
   @override
   void didChangeDependencies() {
@@ -47,6 +48,13 @@ class _MembersListState extends State<MembersList> {
                 headerBuilder: _buildHeader,
                 addAutomaticKeepAlives: true,
                 itemBuilder: (context, sectionIndex, itemIndex, index) {
+                  _regist =
+                      _teammateList[sectionIndex].members[itemIndex].regist == 0
+                          ? '不明'
+                          : _teammateList[sectionIndex]
+                              .members[itemIndex]
+                              .regist
+                              .toString();
                   return ListTile(
                     leading: Container(
                       child: imageItem(
@@ -58,10 +66,7 @@ class _MembersListState extends State<MembersList> {
                       data: _teammateList[sectionIndex].members[itemIndex],
                     ),
                     subtitle: Text(
-                      _teammateList[sectionIndex]
-                          .members[itemIndex]
-                          .regist
-                          .toString(),
+                      _regist,
                     ),
                     trailing: roundNumberItem(
                       context: context,

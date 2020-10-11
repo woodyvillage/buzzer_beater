@@ -6,6 +6,7 @@ import 'package:buzzer_beater/common/bloc.dart';
 import 'package:buzzer_beater/dao/team.dart';
 import 'package:buzzer_beater/dto/form.dart';
 import 'package:buzzer_beater/dto/team.dart';
+import 'package:buzzer_beater/model/memberedit.dart';
 import 'package:buzzer_beater/util/table.dart';
 import 'package:buzzer_beater/util/team.dart';
 
@@ -61,8 +62,8 @@ Future<List<S2Choice<String>>> buildSelectListValue() async {
   return _list;
 }
 
-Future confirmTeamValue(
-    ApplicationBloc _bloc, TeamDto _selected, List<FormDto> _form) async {
+Future confirmTeamValue(ApplicationBloc _bloc, TeamDto _selected,
+    List<FormDto> _form, bool _switch) async {
   TeamDao _dao = TeamDao();
   TeamDto _dto = TeamDto();
 
@@ -100,13 +101,16 @@ Future confirmTeamValue(
     // 新規登録
     await _dao.insert(_dto);
     _bloc.trigger.add(true);
-
-    return 0;
   } else {
     // 更新登録
     await _dao.update(_dto);
     _bloc.trigger.add(true);
-
-    return 0;
   }
+
+  if (_switch) {
+    List<TeamDto> _team = await _dao.selectByName(_dto);
+    await firstMembnerSupport(_team);
+  }
+
+  return 0;
 }
