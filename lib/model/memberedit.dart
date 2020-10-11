@@ -114,3 +114,11 @@ Future firstMembnerSupport(List<TeamDto> _team) async {
   _dto.number = null;
   await _dao.insert(_dto);
 }
+
+Future deleteMember(ApplicationBloc _bloc, MemberDto _dto) async {
+  MemberDao _dao = MemberDao();
+  await _dao.delete(_dto);
+  _bloc.trigger.add(true);
+
+  return 0;
+}

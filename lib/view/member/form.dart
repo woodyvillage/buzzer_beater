@@ -15,8 +15,9 @@ import 'package:buzzer_beater/util/routeset.dart';
 import 'package:buzzer_beater/util/form.dart';
 
 class MemberForm extends StatefulWidget {
-  MemberForm({Key key, this.dto}) : super(key: key);
+  MemberForm({Key key, this.dto, this.edit}) : super(key: key);
   final MemberDto dto;
+  final bool edit;
 
   @override
   _MemberFormState createState() => _MemberFormState();
@@ -29,6 +30,7 @@ class _MemberFormState extends State<MemberForm> {
   List<S2Choice<String>> _teamList = <S2Choice<String>>[];
   final _picker = ImagePicker();
   var _switchValue = true;
+  FormDto _next;
 
   @override
   void didChangeDependencies() {
@@ -79,6 +81,11 @@ class _MemberFormState extends State<MemberForm> {
   @override
   Widget build(BuildContext context) {
     levelingForm();
+    if (_switchValue) {
+      _next = _form[4];
+    } else {
+      _next = _form[1];
+    }
     return Scaffold(
       appBar: AppBar(
         title: routesetFloatText[routesetMember],
@@ -164,160 +171,167 @@ class _MemberFormState extends State<MemberForm> {
                       },
                     ),
                   ),
-                  Container(
-                    width: MediaQuery.of(context).size.width - 145,
-                    margin: const EdgeInsets.fromLTRB(0, 0, 15, 10),
-                    child: TextFormField(
-                      enabled: true,
-                      autofocus: true,
-                      focusNode: _form[1].node,
-                      controller: _form[1].controller,
-                      keyboardType: TextInputType.text,
-                      textInputAction: TextInputAction.next,
-                      maxLines: 1,
-                      maxLength: 20,
-                      maxLengthEnforced: false,
-                      textAlignVertical: TextAlignVertical.center,
-                      obscureText: false,
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(),
-                        hintText: _form[1].hint,
-                        labelText: _form[1].value,
-                      ),
-                      onFieldSubmitted: (v) {
-                        FocusScope.of(context).requestFocus(_form[2].node);
-                      },
-                    ),
-                  ),
-                  Container(
-                    width: MediaQuery.of(context).size.width - 145,
-                    margin: const EdgeInsets.fromLTRB(0, 0, 15, 10),
-                    child: TextFormField(
-                      enabled: true,
-                      autofocus: true,
-                      focusNode: _form[2].node,
-                      controller: _form[2].controller,
-                      keyboardType: TextInputType.number,
-                      textInputAction: TextInputAction.next,
-                      maxLines: 1,
-                      maxLength: 2,
-                      maxLengthEnforced: true,
-                      textAlignVertical: TextAlignVertical.center,
-                      obscureText: false,
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(),
-                        hintText: _form[2].hint,
-                        labelText: _form[2].value,
-                      ),
-                      inputFormatters: <TextInputFormatter>[
-                        WhitelistingTextInputFormatter.digitsOnly,
-                      ],
-                      onFieldSubmitted: (v) {
-                        FocusScope.of(context).requestFocus(_form[3].node);
-                      },
-                    ),
-                  ),
-                  Container(
-                    width: MediaQuery.of(context).size.width - 145,
-                    margin: const EdgeInsets.fromLTRB(0, 0, 15, 10),
-                    child: TextFormField(
-                      enabled: true,
-                      autofocus: true,
-                      focusNode: _form[3].node,
-                      controller: _form[3].controller,
-                      keyboardType: TextInputType.number,
-                      textInputAction: TextInputAction.next,
-                      maxLines: 1,
-                      maxLength: 9,
-                      maxLengthEnforced: true,
-                      textAlignVertical: TextAlignVertical.center,
-                      obscureText: false,
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(),
-                        hintText: _form[3].hint,
-                        labelText: _form[3].value,
-                      ),
-                      inputFormatters: <TextInputFormatter>[
-                        WhitelistingTextInputFormatter.digitsOnly,
-                      ],
-                      onFieldSubmitted: (v) {
-                        if (_switchValue) {
-                          FocusScope.of(context).requestFocus(_form[4].node);
-                        } else {
-                          FocusScope.of(context).requestFocus(_form[1].node);
-                        }
-                      },
-                    ),
-                  ),
-                  Container(
-                    width: MediaQuery.of(context).size.width - 145,
-                    margin: const EdgeInsets.fromLTRB(0, 0, 15, 10),
-                    child: TextFormField(
-                      enabled: _switchValue,
-                      autofocus: true,
-                      focusNode: _form[4].node,
-                      controller: _form[4].controller,
-                      keyboardType: TextInputType.number,
-                      textInputAction: TextInputAction.next,
-                      maxLines: 1,
-                      maxLength: 2,
-                      maxLengthEnforced: true,
-                      textAlignVertical: TextAlignVertical.center,
-                      obscureText: false,
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(),
-                        hintText: _form[4].hint,
-                        labelText: _form[4].value,
-                      ),
-                      inputFormatters: <TextInputFormatter>[
-                        WhitelistingTextInputFormatter.digitsOnly,
-                      ],
-                      onFieldSubmitted: (v) {
-                        FocusScope.of(context).requestFocus(_form[1].node);
-                      },
-                    ),
-                  ),
+                  textFormField(_form[1], _form[2], 20, true),
+                  numberFormField(_form[2], _form[3], 2, true),
+                  numberFormField(_form[3], _next, 9, true),
+                  numberFormField(_form[4], _form[1], 2, _switchValue),
                 ],
               ),
             ],
           ),
           Padding(padding: const EdgeInsets.symmetric(vertical: 10)),
-          Container(
-            margin: const EdgeInsets.only(right: 15),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                RaisedButton.icon(
-                  color: Colors.green,
-                  textColor: Colors.white,
-                  icon: formIcon[formSubmit],
-                  label: formText[formSubmit],
-                  onPressed: () async {
-                    var _result = await confirmMemberValue(
-                        _bloc, widget.dto, _form, _switchValue);
-                    context.read<TeamMateNotifier>().getAllMembers();
-                    if (_result == 0) {
-                      Navigator.pop(context);
-                    } else {
-                      setState(() => _result < 0
-                          ? _error = '全ての項目を入力してください'
-                          : _error = 'すでに同じメンバーが登録されています');
-                    }
-                  },
-                ),
-                Padding(padding: const EdgeInsets.symmetric(horizontal: 5)),
-                RaisedButton.icon(
-                  color: Colors.orange,
-                  textColor: Colors.white,
-                  icon: formIcon[formCancel],
-                  label: formText[formCancel],
-                  onPressed: () => Navigator.pop(context),
-                ),
-              ],
-            ),
-          ),
+          commandField(widget.edit),
         ],
       ),
     );
+  }
+
+  Widget textFormField(
+      FormDto _form, FormDto _next, int _length, bool _switch) {
+    return Container(
+      width: MediaQuery.of(context).size.width - 145,
+      margin: const EdgeInsets.fromLTRB(0, 0, 15, 10),
+      child: TextFormField(
+        enabled: true,
+        autofocus: true,
+        focusNode: _form.node,
+        controller: _form.controller,
+        keyboardType: TextInputType.text,
+        textInputAction: TextInputAction.next,
+        maxLines: 1,
+        maxLength: 20,
+        maxLengthEnforced: false,
+        textAlignVertical: TextAlignVertical.center,
+        obscureText: false,
+        decoration: InputDecoration(
+          border: OutlineInputBorder(),
+          hintText: _form.hint,
+          labelText: _form.value,
+        ),
+        onFieldSubmitted: (v) {
+          FocusScope.of(context).requestFocus(_next.node);
+        },
+      ),
+    );
+  }
+
+  Widget numberFormField(
+      FormDto _form, FormDto _next, int _length, bool _switch) {
+    return Container(
+      width: MediaQuery.of(context).size.width - 145,
+      margin: const EdgeInsets.fromLTRB(0, 0, 15, 10),
+      child: TextFormField(
+        enabled: _switch,
+        autofocus: true,
+        focusNode: _form.node,
+        controller: _form.controller,
+        keyboardType: TextInputType.number,
+        textInputAction: TextInputAction.next,
+        maxLines: 1,
+        maxLength: _length,
+        maxLengthEnforced: true,
+        textAlignVertical: TextAlignVertical.center,
+        obscureText: false,
+        decoration: InputDecoration(
+          border: OutlineInputBorder(),
+          hintText: _form.hint,
+          labelText: _form.value,
+        ),
+        inputFormatters: <TextInputFormatter>[
+          WhitelistingTextInputFormatter.digitsOnly,
+        ],
+        onFieldSubmitted: (v) {
+          FocusScope.of(context).requestFocus(_next.node);
+        },
+      ),
+    );
+  }
+
+  Widget commandField(bool _switch) {
+    if (_switch) {
+      return Container(
+        margin: const EdgeInsets.only(right: 15),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            RaisedButton.icon(
+              color: Colors.green,
+              textColor: Colors.white,
+              icon: formIcon[formSubmit],
+              label: formText[formSubmit],
+              onPressed: () async {
+                var _result = await confirmMemberValue(
+                    _bloc, widget.dto, _form, _switchValue);
+                context.read<TeamMateNotifier>().getAllMembers();
+                if (_result == 0) {
+                  Navigator.pop(context);
+                } else {
+                  setState(() => _result < 0
+                      ? _error = '全ての項目を入力してください'
+                      : _error = 'すでに同じメンバーが登録されています');
+                }
+              },
+            ),
+            Padding(padding: const EdgeInsets.symmetric(horizontal: 5)),
+            RaisedButton.icon(
+              color: Colors.orange,
+              textColor: Colors.white,
+              icon: formIcon[formCancel],
+              label: formText[formCancel],
+              onPressed: () => Navigator.pop(context),
+            ),
+            Padding(padding: const EdgeInsets.symmetric(horizontal: 5)),
+            RaisedButton.icon(
+              color: Colors.red,
+              textColor: Colors.white,
+              icon: formIcon[formDelete],
+              label: formText[formDelete],
+              onPressed: () async {
+                var _result = await deleteMember(_bloc, widget.dto);
+                context.read<TeamMateNotifier>().getAllMembers();
+                if (_result == 0) {
+                  Navigator.pop(context);
+                }
+              },
+            ),
+          ],
+        ),
+      );
+    } else {
+      return Container(
+        margin: const EdgeInsets.only(right: 15),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            RaisedButton.icon(
+              color: Colors.green,
+              textColor: Colors.white,
+              icon: formIcon[formSubmit],
+              label: formText[formSubmit],
+              onPressed: () async {
+                var _result = await confirmMemberValue(
+                    _bloc, widget.dto, _form, _switchValue);
+                context.read<TeamMateNotifier>().getAllMembers();
+                if (_result == 0) {
+                  Navigator.pop(context);
+                } else {
+                  setState(() => _result < 0
+                      ? _error = '全ての項目を入力してください'
+                      : _error = 'すでに同じメンバーが登録されています');
+                }
+              },
+            ),
+            Padding(padding: const EdgeInsets.symmetric(horizontal: 5)),
+            RaisedButton.icon(
+              color: Colors.orange,
+              textColor: Colors.white,
+              icon: formIcon[formCancel],
+              label: formText[formCancel],
+              onPressed: () => Navigator.pop(context),
+            ),
+          ],
+        ),
+      );
+    }
   }
 }

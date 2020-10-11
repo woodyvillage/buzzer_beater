@@ -77,6 +77,7 @@ class _MembersListState extends State<MembersList> {
                       MaterialPageRoute materialPageRoute = MaterialPageRoute(
                         builder: (context) => MemberForm(
                           dto: _teammateList[sectionIndex].members[itemIndex],
+                          edit: true,
                         ),
                       );
                       Navigator.push(

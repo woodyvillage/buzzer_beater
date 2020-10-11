@@ -14,7 +14,7 @@ class ApplicationFloat extends StatelessWidget {
       builder: (context) => TeamForm(edit: false),
     );
     MaterialPageRoute memberPageRoute = MaterialPageRoute(
-      builder: (context) => MemberForm(),
+      builder: (context) => MemberForm(edit: false),
     );
     switch (index) {
       case routesetTeam:
