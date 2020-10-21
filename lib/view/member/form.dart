@@ -1,4 +1,5 @@
 import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
@@ -6,6 +7,7 @@ import 'package:smart_select/smart_select.dart';
 import 'package:provider/provider.dart';
 
 import 'package:buzzer_beater/common/bloc.dart';
+import 'package:buzzer_beater/common/flushbar.dart';
 import 'package:buzzer_beater/common/notifier.dart';
 import 'package:buzzer_beater/dto/form.dart';
 import 'package:buzzer_beater/dto/member.dart';
@@ -26,15 +28,12 @@ class MemberForm extends StatefulWidget {
 class _MemberFormState extends State<MemberForm> {
   ApplicationBloc _bloc;
   List<FormDto> _form = <FormDto>[];
-  String _error = '';
   List<S2Choice<String>> _teamList = <S2Choice<String>>[];
   final _picker = ImagePicker();
-  var _switchValue = true;
   FormDto _next;
 
   @override
   void didChangeDependencies() {
-    // 起動時の最初の一回
     super.didChangeDependencies();
     _bloc = Provider.of<ApplicationBloc>(context);
   }
@@ -47,7 +46,7 @@ class _MemberFormState extends State<MemberForm> {
   }
 
   void _buildSelectListView() async {
-    _teamList = await buildSelectListValue();
+    _teamList = await buildTeamListValue();
     setState(() {});
   }
 
@@ -73,6 +72,7 @@ class _MemberFormState extends State<MemberForm> {
     }
     if (_form[4].controller.text == null ||
         _form[4].controller.text == 'null' ||
+        _form[4].controller.text == '-1' ||
         _form[4].controller.text == '0') {
       _form[4].controller.text = '';
     }
@@ -81,119 +81,131 @@ class _MemberFormState extends State<MemberForm> {
   @override
   Widget build(BuildContext context) {
     levelingForm();
-    if (_switchValue) {
+    if (_form[5].boolvalue) {
       _next = _form[4];
     } else {
       _next = _form[1];
     }
     return Scaffold(
+      resizeToAvoidBottomPadding: false,
       appBar: AppBar(
         title: routesetFloatText[routesetMember],
       ),
-      body: ListView(
-        children: <Widget>[
-          Container(
-            color: Theme.of(context).canvasColor,
-            height: 40,
-            padding: EdgeInsets.only(left: 25, right: 25),
-            alignment: Alignment.centerLeft,
-            child: Text(
-              _error,
-              style: TextStyle(
-                color: Theme.of(context).errorColor,
-                fontWeight: FontWeight.w500,
-                fontSize: 14,
-              ),
-            ),
-          ),
-          SmartSelect<String>.single(
-            title: _form[0].value,
-            value: _form[0].controller.text,
-            choiceItems: _teamList,
-            onChange: (state) =>
-                setState(() => _form[0].controller.text = state.value),
-            modalType: S2ModalType.bottomSheet,
-            tileBuilder: (context, state) {
-              return S2Tile.fromState(
-                state,
-                isTwoLine: true,
-              );
-            },
-          ),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Container(
-                margin: const EdgeInsets.fromLTRB(15, 0, 15, 0),
-                child: Stack(
-                  alignment: AlignmentDirectional.topStart,
-                  children: <Widget>[
-                    Container(
-                      height: 100,
-                      width: 100,
-                      child: (_form[0].image != null)
-                          ? Image.file(
-                              _form[0].image,
-                              fit: BoxFit.cover,
-                            )
-                          : Image.asset(
-                              'images/noimage.png',
-                              fit: BoxFit.cover,
-                            ),
-                    ),
-                    MaterialButton(
-                      height: 100,
-                      minWidth: 100,
-                      color: Colors.white30,
-                      onPressed: () => _imagePicker(),
-                      child: Text('+'),
-                    )
-                  ],
+      body: GestureDetector(
+        onTap: () {
+          FocusScope.of(context).unfocus();
+        },
+        child: Column(
+          children: <Widget>[
+            Padding(padding: const EdgeInsets.symmetric(vertical: 5)),
+            selectFormField(),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Padding(padding: const EdgeInsets.symmetric(horizontal: 5)),
+                Expanded(
+                  flex: 25,
+                  child: memberImageField(),
                 ),
-              ),
-              Column(
-                children: <Widget>[
-                  Container(
-                    width: MediaQuery.of(context).size.width - 145,
-                    margin: const EdgeInsets.fromLTRB(0, 0, 0, 10),
-                    child: SwitchListTile(
-                      value: _switchValue,
-                      title: Text(
-                        '選手として登録',
-                        style: TextStyle(
-                          color: Colors.grey[600],
-                        ),
+                Expanded(
+                  flex: 3,
+                  child: Container(),
+                ),
+                Expanded(
+                  flex: 72,
+                  child: Column(
+                    children: <Widget>[
+                      Row(
+                        children: <Widget>[
+                          Expanded(
+                            flex: 70,
+                            child: textFormField(_form[1], _form[2], 20),
+                          ),
+                          Expanded(
+                            flex: 30,
+                            child: numberFormField(_form[2], _form[3], 2, true),
+                          ),
+                        ],
                       ),
-                      onChanged: (bool value) {
-                        setState(() {
-                          _switchValue = value;
-                        });
-                      },
-                    ),
+                      Row(
+                        children: <Widget>[
+                          Expanded(
+                            flex: 60,
+                            child: numberFormField(_form[3], _form[4], 9, true),
+                          ),
+                          Expanded(
+                            flex: 40,
+                            child: numberFormField(
+                                _form[4], _form[1], 2, _form[5].boolvalue),
+                          ),
+                        ],
+                      ),
+                      roleFormField(_form[5].boolvalue),
+                    ],
                   ),
-                  textFormField(_form[1], _form[2], 20, true),
-                  numberFormField(_form[2], _form[3], 2, true),
-                  numberFormField(_form[3], _next, 9, true),
-                  numberFormField(_form[4], _form[1], 2, _switchValue),
-                ],
-              ),
-            ],
-          ),
-          Padding(padding: const EdgeInsets.symmetric(vertical: 10)),
-          commandField(widget.edit),
-        ],
+                ),
+              ],
+            ),
+            Padding(padding: const EdgeInsets.symmetric(vertical: 10)),
+            commandField(),
+          ],
+        ),
       ),
     );
   }
 
-  Widget textFormField(
-      FormDto _form, FormDto _next, int _length, bool _switch) {
+  Widget selectFormField() {
+    return SmartSelect<String>.single(
+      title: _form[0].value,
+      value: _form[0].controller.text,
+      placeholder: '選択してください',
+      choiceItems: _teamList,
+      onChange: (state) =>
+          setState(() => _form[0].controller.text = state.value),
+      modalType: S2ModalType.popupDialog,
+      tileBuilder: (context, state) {
+        return S2Tile.fromState(
+          state,
+          isTwoLine: true,
+        );
+      },
+    );
+  }
+
+  Widget memberImageField() {
+    return Stack(
+      alignment: AlignmentDirectional.topStart,
+      children: <Widget>[
+        Container(
+          height: 100,
+          width: 100,
+          child: (_form[0].image != null)
+              ? Image.file(
+                  _form[0].image,
+                  fit: BoxFit.cover,
+                )
+              : Image.asset(
+                  'images/noimage.png',
+                  fit: BoxFit.cover,
+                ),
+        ),
+        MaterialButton(
+          height: 100,
+          minWidth: 100,
+          color: Colors.white30,
+          onPressed: () => _imagePicker(),
+          child: Text('+'),
+        )
+      ],
+    );
+  }
+
+  Widget textFormField(FormDto _form, FormDto _next, int _length) {
     return Container(
-      width: MediaQuery.of(context).size.width - 145,
       margin: const EdgeInsets.fromLTRB(0, 0, 15, 10),
       child: TextFormField(
         enabled: true,
-        autofocus: true,
+        autofocus: false,
         focusNode: _form.node,
         controller: _form.controller,
         keyboardType: TextInputType.text,
@@ -218,11 +230,10 @@ class _MemberFormState extends State<MemberForm> {
   Widget numberFormField(
       FormDto _form, FormDto _next, int _length, bool _switch) {
     return Container(
-      width: MediaQuery.of(context).size.width - 145,
       margin: const EdgeInsets.fromLTRB(0, 0, 15, 10),
       child: TextFormField(
         enabled: _switch,
-        autofocus: true,
+        autofocus: false,
         focusNode: _form.node,
         controller: _form.controller,
         keyboardType: TextInputType.number,
@@ -247,91 +258,92 @@ class _MemberFormState extends State<MemberForm> {
     );
   }
 
-  Widget commandField(bool _switch) {
-    if (_switch) {
-      return Container(
-        margin: const EdgeInsets.only(right: 15),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            RaisedButton.icon(
-              color: Colors.green,
-              textColor: Colors.white,
-              icon: formIcon[formSubmit],
-              label: formText[formSubmit],
-              onPressed: () async {
-                var _result = await confirmMemberValue(
-                    _bloc, widget.dto, _form, _switchValue);
-                context.read<TeamMateNotifier>().getAllMembers();
-                if (_result == 0) {
-                  Navigator.pop(context);
-                } else {
-                  setState(() => _result < 0
-                      ? _error = '全ての項目を入力してください'
-                      : _error = 'すでに同じメンバーが登録されています');
-                }
-              },
-            ),
-            Padding(padding: const EdgeInsets.symmetric(horizontal: 5)),
-            RaisedButton.icon(
-              color: Colors.orange,
-              textColor: Colors.white,
-              icon: formIcon[formCancel],
-              label: formText[formCancel],
-              onPressed: () => Navigator.pop(context),
-            ),
-            Padding(padding: const EdgeInsets.symmetric(horizontal: 5)),
-            RaisedButton.icon(
-              color: Colors.red,
-              textColor: Colors.white,
-              icon: formIcon[formDelete],
-              label: formText[formDelete],
-              onPressed: () async {
-                var _result = await deleteMember(_bloc, widget.dto);
-                context.read<TeamMateNotifier>().getAllMembers();
-                if (_result == 0) {
-                  Navigator.pop(context);
-                }
-              },
-            ),
-          ],
+  Widget roleFormField(bool _isPlayer) {
+    return SwitchListTile(
+      value: _isPlayer,
+      title: Text(
+        '選手として登録',
+        style: TextStyle(
+          color: Colors.grey[600],
         ),
+      ),
+      onChanged: (bool value) {
+        setState(() {
+          _isPlayer = value;
+        });
+      },
+    );
+  }
+
+  Widget commandField() {
+    return Container(
+      margin: const EdgeInsets.only(right: 15),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          submitButton(),
+          Padding(padding: const EdgeInsets.symmetric(horizontal: 5)),
+          cancelButton(),
+          deleteButton(),
+        ],
+      ),
+    );
+  }
+
+  Widget submitButton() {
+    return RaisedButton.icon(
+      color: Colors.green,
+      textColor: Colors.white,
+      icon: formIcon[formSubmit],
+      label: formText[formSubmit],
+      onPressed: () async {
+        var _result = await confirmMemberValue(_bloc, widget.dto, _form);
+        context.read<EnrollNotifier>().getEnroll();
+        if (_result == 0) {
+          Navigator.pop(context);
+          showInformation(context, '登録しました');
+        } else {
+          showError(
+              context, _result < 0 ? '全ての項目を入力してください' : 'すでに同じメンバーが登録されています');
+          setState(() {});
+        }
+      },
+    );
+  }
+
+  Widget cancelButton() {
+    return RaisedButton.icon(
+      color: Colors.orange,
+      textColor: Colors.white,
+      icon: formIcon[formCancel],
+      label: formText[formCancel],
+      onPressed: () => Navigator.pop(context),
+    );
+  }
+
+  Widget deleteButton() {
+    if (widget.edit) {
+      return Row(
+        children: <Widget>[
+          Padding(padding: const EdgeInsets.symmetric(horizontal: 5)),
+          RaisedButton.icon(
+            color: Colors.red,
+            textColor: Colors.white,
+            icon: formIcon[formDelete],
+            label: formText[formDelete],
+            onPressed: () async {
+              var _result = await deleteMember(_bloc, widget.dto);
+              context.read<EnrollNotifier>().getEnroll();
+              if (_result == 0) {
+                Navigator.pop(context);
+                showInformation(context, '削除しました');
+              }
+            },
+          ),
+        ],
       );
     } else {
-      return Container(
-        margin: const EdgeInsets.only(right: 15),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            RaisedButton.icon(
-              color: Colors.green,
-              textColor: Colors.white,
-              icon: formIcon[formSubmit],
-              label: formText[formSubmit],
-              onPressed: () async {
-                var _result = await confirmMemberValue(
-                    _bloc, widget.dto, _form, _switchValue);
-                context.read<TeamMateNotifier>().getAllMembers();
-                if (_result == 0) {
-                  Navigator.pop(context);
-                } else {
-                  setState(() => _result < 0
-                      ? _error = '全ての項目を入力してください'
-                      : _error = 'すでに同じメンバーが登録されています');
-                }
-              },
-            ),
-            Padding(padding: const EdgeInsets.symmetric(horizontal: 5)),
-            RaisedButton.icon(
-              color: Colors.orange,
-              textColor: Colors.white,
-              icon: formIcon[formCancel],
-              label: formText[formCancel],
-              onPressed: () => Navigator.pop(context),
-            ),
-          ],
-        ),
-      );
+      return Container();
     }
   }
 }

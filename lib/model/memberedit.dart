@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:smart_select/smart_select.dart';
 
 import 'package:buzzer_beater/common/bloc.dart';
 import 'package:buzzer_beater/dao/member.dart';
@@ -7,6 +8,7 @@ import 'package:buzzer_beater/dto/form.dart';
 import 'package:buzzer_beater/dto/member.dart';
 import 'package:buzzer_beater/dto/team.dart';
 import 'package:buzzer_beater/util/member.dart';
+import 'package:buzzer_beater/util/table.dart';
 
 List<FormDto> buildMemberFormValue(MemberDto _member) {
   List<FormDto> _form = <FormDto>[];
@@ -15,7 +17,7 @@ List<FormDto> buildMemberFormValue(MemberDto _member) {
     var _dto = FormDto()
       ..node = FocusNode()
       ..controller = TextEditingController()
-      ..value = members[i][memberTitle];
+      ..value = members[i][MemberUtil.memberTitle];
     _form.add(_dto);
   }
   if (_member != null) {
@@ -27,15 +29,44 @@ List<FormDto> buildMemberFormValue(MemberDto _member) {
     }
     _form[1].controller.text = _member.name;
     _form[2].controller.text = _member.age.toString();
-    _form[3].controller.text = _member.regist.toString();
+    _form[3].controller.text =
+        _member.jbaid == 0 ? '' : _member.jbaid.toString().padLeft(9, "0");
     _form[4].controller.text = _member.number.toString();
+    _form[5].boolvalue = _member.number == null ? false : true;
   }
 
   return _form;
 }
 
-Future confirmMemberValue(ApplicationBloc _bloc, MemberDto _selected,
-    List<FormDto> _form, bool _switch) async {
+Future<List<S2Choice<String>>> buildMemberListValue() async {
+  List<S2Choice<String>> _list = <S2Choice<String>>[];
+  MemberDao _dao = MemberDao();
+  List<MemberDto> _dto = await _dao.select(TableUtil.cId);
+
+  for (int i = 0; i < _dto.length; i++) {
+    _list.add(
+        S2Choice<String>(value: _dto[i].id.toString(), title: _dto[i].name));
+  }
+
+  return _list;
+}
+
+Future<List<S2Choice<String>>> buildMemberListValueByTeamId(int _team) async {
+  List<S2Choice<String>> _list = <S2Choice<String>>[];
+  MemberDao _dao = MemberDao();
+  List<MemberDto> _dto =
+      await _dao.selectByTeamId(_team, TableUtil.cId, TableUtil.asc);
+
+  for (int i = 0; i < _dto.length; i++) {
+    _list.add(
+        S2Choice<String>(value: _dto[i].id.toString(), title: _dto[i].name));
+  }
+
+  return _list;
+}
+
+Future confirmMemberValue(
+    ApplicationBloc _bloc, MemberDto _selected, List<FormDto> _form) async {
   MemberDao _dao = MemberDao();
   MemberDto _dto = MemberDto();
 
@@ -53,9 +84,9 @@ Future confirmMemberValue(ApplicationBloc _bloc, MemberDto _selected,
       ? _dto.age = null
       : _dto.age = int.parse(_form[2].controller.text);
   _form[3].controller.text == ''
-      ? _dto.regist = null
-      : _dto.regist = int.parse(_form[3].controller.text);
-  if (_switch) {
+      ? _dto.jbaid = null
+      : _dto.jbaid = int.parse(_form[3].controller.text);
+  if (_form[5].boolvalue) {
     _form[4].controller.text == ''
         ? _dto.number = null
         : _dto.number = int.parse(_form[4].controller.text);
@@ -68,7 +99,8 @@ Future confirmMemberValue(ApplicationBloc _bloc, MemberDto _selected,
     return -1;
   }
 
-  if (_dto.id == null && await _dao.selectDuplicateCount(_dto) > 0) {
+  if (_dto.id == null &&
+      await _dao.duplicateCount(_dto, [TableUtil.cJbaId], [_dto.jbaid]) > 0) {
     // 重複あり
     return 1;
   }
@@ -88,29 +120,29 @@ Future confirmMemberValue(ApplicationBloc _bloc, MemberDto _selected,
   }
 }
 
-Future firstMembnerSupport(List<TeamDto> _team) async {
+Future firstMemberSupport(List<TeamDto> _team) async {
   MemberDao _dao = MemberDao();
   MemberDto _dto = MemberDto();
 
   _dto.team = _team[0].id;
 
   for (int i = 4; i < 12; i++) {
-    _dto.name = i.toString() + '番';
+    _dto.name = _team[0].name + 'の' + i.toString() + '番';
     _dto.age = 12;
-    _dto.regist = 0;
-    _dto.number = i;
+    _dto.jbaid = i + (i * 1234) + (i * 12345678);
+    _dto.number = i + 20;
     await _dao.insert(_dto);
   }
 
-  _dto.name = '監督';
-  _dto.age = 0;
-  _dto.regist = 0;
+  _dto.name = _team[0].name + 'の監督';
+  _dto.age = 40;
+  _dto.jbaid = 13 + (13 * 1234) + (13 * 12345678);
   _dto.number = null;
   await _dao.insert(_dto);
 
-  _dto.name = 'コーチ';
-  _dto.age = 0;
-  _dto.regist = 0;
+  _dto.name = _team[0].name + 'のコーチ';
+  _dto.age = 30;
+  _dto.jbaid = 14 + (14 * 1234) + (14 * 12345678);
   _dto.number = null;
   await _dao.insert(_dto);
 }
