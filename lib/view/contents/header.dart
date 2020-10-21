@@ -36,7 +36,7 @@ class ApplicationHeader extends StatelessWidget with PreferredSizeWidget {
     } else {
       return AppBar(
         centerTitle: true,
-        title: Text('applicationName'),
+        title: Text('設定画面'),
       );
     }
   }

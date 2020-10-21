@@ -11,8 +11,11 @@ void main() => runApp(
           Provider<ApplicationBloc>(
             create: (_) => ApplicationBloc(),
           ),
-          ChangeNotifierProvider<TeamMateNotifier>(
-            create: (_) => TeamMateNotifier(),
+          ChangeNotifierProvider<EnrollNotifier>(
+            create: (_) => EnrollNotifier(),
+          ),
+          ChangeNotifierProvider<OrderNotifier>(
+            create: (_) => OrderNotifier(),
           ),
         ],
         child: ApplicationFrame(),

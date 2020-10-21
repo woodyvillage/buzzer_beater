@@ -26,10 +26,10 @@ class ApplicationBloc {
       List<TeamDto> _tdto = await _tdao.select(TableUtil.cId);
       _setTeamController.sink.add(_tdto);
 
-      // チーム情報
+      // 試合結果
       ResultDao _rdao = ResultDao();
-      List<ResultDto> _rdto = await _rdao.getAllResult();
-      _setResultController.sink.add(_rdto);
+      List<ResultDto> _redto = await _rdao.getAllResult();
+      _setResultController.sink.add(_redto);
     });
   }
 

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:buzzer_beater/model/resultedit.dart';
 import 'package:buzzer_beater/util/routeset.dart';
 import 'package:buzzer_beater/view/member/form.dart';
+import 'package:buzzer_beater/view/roster/form.dart';
 import 'package:buzzer_beater/view/team/form.dart';
 
 class ApplicationFloat extends StatelessWidget {
@@ -16,6 +17,9 @@ class ApplicationFloat extends StatelessWidget {
     MaterialPageRoute memberPageRoute = MaterialPageRoute(
       builder: (context) => MemberForm(edit: false),
     );
+    MaterialPageRoute rosterPageRoute = MaterialPageRoute(
+      builder: (context) => RosterForm(edit: false),
+    );
     switch (index) {
       case routesetTeam:
         Navigator.push(
@@ -27,6 +31,12 @@ class ApplicationFloat extends StatelessWidget {
         Navigator.push(
           context,
           memberPageRoute,
+        );
+        break;
+      case routesetRoster:
+        Navigator.push(
+          context,
+          rosterPageRoute,
         );
         break;
       case routesetMatch:

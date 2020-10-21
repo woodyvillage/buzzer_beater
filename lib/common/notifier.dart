@@ -1,15 +1,29 @@
 import 'package:flutter/material.dart';
 
-import 'package:buzzer_beater/dao/teammate.dart';
-import 'package:buzzer_beater/dto/teammate.dart';
+import 'package:buzzer_beater/dao/enroll.dart';
+import 'package:buzzer_beater/dao/order.dart';
+import 'package:buzzer_beater/dto/enroll.dart';
+import 'package:buzzer_beater/dto/order.dart';
 
-class TeamMateNotifier extends ChangeNotifier {
-  List<TeamMateDto> _teammateList;
-  List<TeamMateDto> get teammateList => _teammateList;
+class EnrollNotifier extends ChangeNotifier {
+  List<EnrollDto> _enrollList;
+  List<EnrollDto> get enrollList => _enrollList;
 
-  getAllMembers() async {
-    TeamMateDao _dao = TeamMateDao();
-    _teammateList = await _dao.getAllMember();
+  getEnroll() async {
+    EnrollDao _dao = EnrollDao();
+    _enrollList = await _dao.getEnroll();
+
+    notifyListeners();
+  }
+}
+
+class OrderNotifier extends ChangeNotifier {
+  List<OrderDto> _orderList;
+  List<OrderDto> get orderList => _orderList;
+
+  getOrder() async {
+    OrderDao _dao = OrderDao();
+    _orderList = await _dao.getOrder();
 
     notifyListeners();
   }
