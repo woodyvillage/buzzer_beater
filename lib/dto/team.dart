@@ -3,47 +3,48 @@ import 'package:buzzer_beater/util/table.dart';
 class TeamDto {
   int id;
   String name;
-  int majormain;
-  int majorshade;
-  int minormain;
-  int minorshade;
+  int homeMain;
+  int homeEdge;
+  int awayMain;
+  int awayEdge;
   String image;
 
-  TeamDto(
-      {this.id,
-      this.name,
-      this.majormain,
-      this.majorshade,
-      this.minormain,
-      this.minorshade,
-      this.image});
+  TeamDto({
+    this.id,
+    this.name,
+    this.homeMain,
+    this.homeEdge,
+    this.awayMain,
+    this.awayEdge,
+    this.image,
+  });
 
   factory TeamDto.parse(Map<String, dynamic> _record) => TeamDto(
         id: _record[TableUtil.cId],
         name: _record[TableUtil.cName],
-        majormain: _record[TableUtil.cMajorMain],
-        majorshade: _record[TableUtil.cMajorShade],
-        minormain: _record[TableUtil.cMinorMain],
-        minorshade: _record[TableUtil.cMinorShade],
+        homeMain: _record[TableUtil.cHomeMain],
+        homeEdge: _record[TableUtil.cHomeEdge],
+        awayMain: _record[TableUtil.cAwayMain],
+        awayEdge: _record[TableUtil.cAwayEdge],
         image: _record[TableUtil.cImage],
       );
 
   Map<String, dynamic> toMap() => {
         TableUtil.cId: id,
         TableUtil.cName: name,
-        TableUtil.cMajorMain: majormain,
-        TableUtil.cMajorShade: majorshade,
-        TableUtil.cMinorMain: minormain,
-        TableUtil.cMinorShade: minorshade,
+        TableUtil.cHomeMain: homeMain,
+        TableUtil.cHomeEdge: homeEdge,
+        TableUtil.cAwayMain: awayMain,
+        TableUtil.cAwayEdge: awayEdge,
         TableUtil.cImage: image,
       };
 
   bool isComplete() {
     if (name == null ||
-        majormain == null ||
-        majorshade == null ||
-        minormain == null ||
-        minorshade == null) {
+        homeMain == null ||
+        homeEdge == null ||
+        awayMain == null ||
+        awayEdge == null) {
       return false;
     } else {
       return true;

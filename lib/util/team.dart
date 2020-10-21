@@ -5,21 +5,27 @@ final teams = [
   [Icon(MaterialCommunityIcons.basketball), 'チーム名称', null, '', ''],
   [
     Icon(MaterialCommunityIcons.tshirt_crew),
-    'ユニフォームカラー１',
+    'ビジターカラー（濃）',
     null,
-    Colors.red[800],
-    Colors.red
+    Colors.blue[100],
+    Colors.lightBlue
   ],
   [
     Icon(MaterialCommunityIcons.tshirt_crew_outline),
-    'ユニフォームカラー２',
+    'ホームカラー（淡）',
     null,
     Colors.white,
     Colors.grey
   ],
 ];
-final teamIcon = 0;
-final teamTitle = 1;
-final teamHint = 2;
-final teamDefault1 = 3;
-final teamDefault2 = 4;
+
+class TeamUtil {
+  static final teamIcon = 0;
+  static final teamTitle = 1;
+  static final teamHint = 2;
+  static final teamMainColor = 3;
+  static final teamEdgeColor = 4;
+
+  static final homeColor = 0;
+  static final awayColor = 1;
+}

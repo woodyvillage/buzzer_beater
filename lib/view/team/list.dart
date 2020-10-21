@@ -15,7 +15,6 @@ class _TeamsListState extends State<TeamsList> {
 
   @override
   void didChangeDependencies() {
-    // 起動時の最初の一回
     super.didChangeDependencies();
     _bloc = Provider.of<ApplicationBloc>(context);
   }
@@ -27,7 +26,6 @@ class _TeamsListState extends State<TeamsList> {
   }
 
   _flush() async {
-    // 起動時の最初の一回
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _bloc.trigger.add(true);
     });
@@ -45,15 +43,20 @@ class _TeamsListState extends State<TeamsList> {
               return GestureDetector(
                 onTap: () {
                   MaterialPageRoute materialPageRoute = MaterialPageRoute(
-                    builder: (context) =>
-                        TeamForm(dto: snapshot.data[index], edit: true),
+                    builder: (context) => TeamForm(
+                      dto: snapshot.data[index],
+                      edit: true,
+                    ),
                   );
                   Navigator.push(
                     context,
                     materialPageRoute,
                   );
                 },
-                child: teamBoard(data: snapshot.data[index], context: context),
+                child: teamBoard(
+                  data: snapshot.data[index],
+                  context: context,
+                ),
               );
             },
           );

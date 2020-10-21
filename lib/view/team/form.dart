@@ -5,6 +5,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
 import 'package:buzzer_beater/common/bloc.dart';
+import 'package:buzzer_beater/common/flushbar.dart';
 import 'package:buzzer_beater/dto/form.dart';
 import 'package:buzzer_beater/dto/team.dart';
 import 'package:buzzer_beater/model/teamedit.dart';
@@ -23,15 +24,13 @@ class TeamForm extends StatefulWidget {
 class _TeamFormState extends State<TeamForm> {
   ApplicationBloc _bloc;
   List<FormDto> _form = <FormDto>[];
-  String _error = '';
   ColorSwatch _tempMainColor;
   Color _tempShadeColor;
   final _picker = ImagePicker();
-  var _switchValue = false;
+  var _hasSupport = false;
 
   @override
   void didChangeDependencies() {
-    // 起動時の最初の一回
     super.didChangeDependencies();
     _bloc = Provider.of<ApplicationBloc>(context);
   }
@@ -59,8 +58,8 @@ class _TeamFormState extends State<TeamForm> {
               child: Text('決定'),
               onPressed: () {
                 Navigator.of(context).pop();
-                setState(() => _dto.border = _tempMainColor);
-                setState(() => _dto.color = _tempShadeColor);
+                setState(() => _dto.mainColor = _tempMainColor);
+                setState(() => _dto.edgeColor = _tempShadeColor);
               },
             ),
           ],
@@ -74,7 +73,7 @@ class _TeamFormState extends State<TeamForm> {
       "カラーを選んでください",
       _dto,
       MaterialColorPicker(
-        selectedColor: _dto.color,
+        selectedColor: _dto.mainColor,
         onColorChange: (color) => setState(() => _tempShadeColor = color),
         onMainColorChange: (color) => setState(() => _tempMainColor = color),
       ),
@@ -90,31 +89,17 @@ class _TeamFormState extends State<TeamForm> {
 
   @override
   Widget build(BuildContext context) {
-    if (widget.edit) {
-      return Scaffold(
-        appBar: AppBar(
-          title: routesetFloatText[routesetTeam],
-        ),
-        body: ListView(
+    return Scaffold(
+      resizeToAvoidBottomPadding: false,
+      appBar: AppBar(
+        title: routesetFloatText[routesetTeam],
+      ),
+      body: GestureDetector(
+        onTap: () {
+          FocusScope.of(context).unfocus();
+        },
+        child: ListView(
           children: <Widget>[
-            messageField(),
-            Padding(padding: const EdgeInsets.symmetric(vertical: 5)),
-            teamImageField(),
-            formField(_form[1]),
-            formField(_form[2]),
-            Padding(padding: const EdgeInsets.symmetric(vertical: 10)),
-            commandField(),
-          ],
-        ),
-      );
-    } else {
-      return Scaffold(
-        appBar: AppBar(
-          title: routesetFloatText[routesetTeam],
-        ),
-        body: ListView(
-          children: <Widget>[
-            messageField(),
             Padding(padding: const EdgeInsets.symmetric(vertical: 5)),
             teamImageField(),
             formField(_form[1]),
@@ -123,23 +108,6 @@ class _TeamFormState extends State<TeamForm> {
             Padding(padding: const EdgeInsets.symmetric(vertical: 10)),
             commandField(),
           ],
-        ),
-      );
-    }
-  }
-
-  Widget messageField() {
-    return Container(
-      color: Theme.of(context).canvasColor,
-      height: 20,
-      padding: EdgeInsets.only(left: 25, right: 25),
-      alignment: Alignment.centerLeft,
-      child: Text(
-        _error,
-        style: TextStyle(
-          color: Theme.of(context).errorColor,
-          fontWeight: FontWeight.w500,
-          fontSize: 14,
         ),
       ),
     );
@@ -150,7 +118,7 @@ class _TeamFormState extends State<TeamForm> {
       margin: const EdgeInsets.fromLTRB(15, 15, 15, 0),
       child: TextFormField(
         enabled: true,
-        autofocus: true,
+        autofocus: false,
         focusNode: _form[0].node,
         controller: _form[0].controller,
         keyboardType: TextInputType.text,
@@ -207,15 +175,15 @@ class _TeamFormState extends State<TeamForm> {
             width: 50.0,
             height: 50.0,
             child: RaisedButton(
-              color: _form.color,
+              color: _form.mainColor,
               shape: CircleBorder(
                 side: BorderSide(
-                  color: _form.border,
-                  width: 1.5,
+                  color: _form.edgeColor,
+                  width: 3,
                   style: BorderStyle.solid,
                 ),
               ),
-              onPressed: () async {
+              onPressed: () {
                 _openColorPicker(_form);
               },
             ),
@@ -226,31 +194,35 @@ class _TeamFormState extends State<TeamForm> {
   }
 
   Widget firstMemberSupoport() {
-    return Container(
-      margin: const EdgeInsets.fromLTRB(80, 5, 0, 0),
-      child: Row(
-        children: <Widget>[
-          Icon(Icons.supervisor_account),
-          Padding(padding: const EdgeInsets.symmetric(horizontal: 1)),
-          Expanded(
-            child: SwitchListTile(
-              value: _switchValue,
-              title: Text(
-                'とりあえずメンバーでの初期登録を済ませる',
-                style: TextStyle(
-                  fontSize: 15,
+    if (!widget.edit) {
+      return Container(
+        margin: const EdgeInsets.fromLTRB(80, 5, 0, 0),
+        child: Row(
+          children: <Widget>[
+            Icon(Icons.supervisor_account),
+            Padding(padding: const EdgeInsets.symmetric(horizontal: 1)),
+            Expanded(
+              child: SwitchListTile(
+                value: _hasSupport,
+                title: Text(
+                  'とりあえずのメンバーで初期登録を済ませる',
+                  style: TextStyle(
+                    fontSize: 15,
+                  ),
                 ),
+                onChanged: (bool value) {
+                  setState(() {
+                    _hasSupport = value;
+                  });
+                },
               ),
-              onChanged: (bool value) {
-                setState(() {
-                  _switchValue = value;
-                });
-              },
             ),
-          ),
-        ],
-      ),
-    );
+          ],
+        ),
+      );
+    } else {
+      return Container();
+    }
   }
 
   Widget commandField() {
@@ -259,33 +231,68 @@ class _TeamFormState extends State<TeamForm> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          RaisedButton.icon(
-            color: Colors.green,
-            textColor: Colors.white,
-            icon: formIcon[formSubmit],
-            label: formText[formSubmit],
-            onPressed: () async {
-              var _result = await confirmTeamValue(
-                  _bloc, widget.dto, _form, _switchValue);
-              if (_result == 0) {
-                Navigator.pop(context);
-              } else {
-                setState(() => _result < 0
-                    ? _error = 'チーム名称を入力してください'
-                    : _error = 'すでに同じチームが登録されています');
-              }
-            },
-          ),
+          submitButton(),
           Padding(padding: const EdgeInsets.symmetric(horizontal: 5)),
-          RaisedButton.icon(
-            color: Colors.orange,
-            textColor: Colors.white,
-            icon: formIcon[formCancel],
-            label: formText[formCancel],
-            onPressed: () => Navigator.pop(context),
-          ),
+          cancelButton(),
+          deleteButton(),
         ],
       ),
     );
+  }
+
+  Widget submitButton() {
+    return RaisedButton.icon(
+      color: Colors.green,
+      textColor: Colors.white,
+      icon: formIcon[formSubmit],
+      label: formText[formSubmit],
+      onPressed: () async {
+        var _result =
+            await confirmTeamValue(_bloc, widget.dto, _form, _hasSupport);
+        if (_result == 0) {
+          Navigator.pop(context);
+          showInformation(context, '登録しました');
+        } else {
+          showError(
+              context, _result < 0 ? 'チーム名称を入力してください' : 'すでに同じチームが登録されています');
+          setState(() {});
+        }
+      },
+    );
+  }
+
+  Widget cancelButton() {
+    return RaisedButton.icon(
+      color: Colors.orange,
+      textColor: Colors.white,
+      icon: formIcon[formCancel],
+      label: formText[formCancel],
+      onPressed: () => Navigator.pop(context),
+    );
+  }
+
+  Widget deleteButton() {
+    if (widget.edit) {
+      return Row(
+        children: <Widget>[
+          Padding(padding: const EdgeInsets.symmetric(horizontal: 5)),
+          RaisedButton.icon(
+            color: Colors.red,
+            textColor: Colors.white,
+            icon: formIcon[formDelete],
+            label: formText[formDelete],
+            onPressed: () async {
+              var _result = await deleteTeam(_bloc, widget.dto);
+              if (_result == 0) {
+                Navigator.pop(context);
+                showInformation(context, '削除しました');
+              }
+            },
+          ),
+        ],
+      );
+    } else {
+      return Container();
+    }
   }
 }
