@@ -11,4 +11,7 @@ class MemberUtil {
   static final memberTitle = 0;
   static final memberHint = 1;
   static final memberDefault = 2;
+
+  static final player = 0;
+  static final coach = 1;
 }

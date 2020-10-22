@@ -24,7 +24,7 @@ class TeamForm extends StatefulWidget {
 class _TeamFormState extends State<TeamForm> {
   ApplicationBloc _bloc;
   List<FormDto> _form = <FormDto>[];
-  ColorSwatch _tempMainColor;
+  Color _tempMainColor;
   Color _tempShadeColor;
   final _picker = ImagePicker();
   var _hasSupport = false;
@@ -74,8 +74,8 @@ class _TeamFormState extends State<TeamForm> {
       _dto,
       MaterialColorPicker(
         selectedColor: _dto.mainColor,
-        onColorChange: (color) => setState(() => _tempShadeColor = color),
-        onMainColorChange: (color) => setState(() => _tempMainColor = color),
+        onColorChange: (color) => setState(() => _tempMainColor = color),
+        onMainColorChange: (color) => setState(() => _tempShadeColor = color),
       ),
     );
   }
@@ -241,11 +241,17 @@ class _TeamFormState extends State<TeamForm> {
   }
 
   Widget submitButton() {
+    int _formIndex;
+    if (widget.edit) {
+      _formIndex = formUpdate;
+    } else {
+      _formIndex = formSubmit;
+    }
     return RaisedButton.icon(
       color: Colors.green,
       textColor: Colors.white,
-      icon: formIcon[formSubmit],
-      label: formText[formSubmit],
+      icon: formIcon[_formIndex],
+      label: formText[_formIndex],
       onPressed: () async {
         var _result =
             await confirmTeamValue(_bloc, widget.dto, _form, _hasSupport);

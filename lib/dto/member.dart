@@ -7,6 +7,7 @@ class MemberDto {
   int age;
   int jbaid;
   int number;
+  int role;
   String image;
 
   MemberDto({
@@ -16,6 +17,7 @@ class MemberDto {
     this.age,
     this.jbaid,
     this.number,
+    this.role,
     this.image,
   });
 
@@ -26,6 +28,7 @@ class MemberDto {
         age: _record[TableUtil.cAge],
         jbaid: _record[TableUtil.cJbaId],
         number: _record[TableUtil.cNumber],
+        role: _record[TableUtil.cRole],
         image: _record[TableUtil.cImage],
       );
 
@@ -36,6 +39,7 @@ class MemberDto {
         TableUtil.cAge: age,
         TableUtil.cJbaId: jbaid,
         TableUtil.cNumber: number,
+        TableUtil.cRole: role,
         TableUtil.cImage: image,
       };
 

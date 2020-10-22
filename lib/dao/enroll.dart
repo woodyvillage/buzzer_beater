@@ -8,17 +8,17 @@ import 'package:buzzer_beater/util/table.dart';
 class EnrollDao {
   Future<List<EnrollDto>> getEnroll() async {
     var enroll = <EnrollDto>[];
-
     TeamDao _tdao = TeamDao();
+    MemberDao _mdao = MemberDao();
+
     List<TeamDto> _tdto = await _tdao.select(TableUtil.cId);
 
-    MemberDao _mdao = MemberDao();
-    for (int i = 0; i < _tdto.length; i++) {
-      List<MemberDto> _mdto = await _mdao.selectByTeamId(
-          _tdto[i].id, TableUtil.cAge, TableUtil.desc);
+    for (TeamDto _team in _tdto) {
+      List<MemberDto> _mdto =
+          await _mdao.selectByTeamId(_team.id, TableUtil.cAge, TableUtil.desc);
       var _enroll = EnrollDto()
         ..expanded = false
-        ..team = _tdto[i]
+        ..team = _team
         ..members = _mdto;
       enroll.add(_enroll);
     }

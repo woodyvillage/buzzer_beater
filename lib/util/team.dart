@@ -7,15 +7,15 @@ final teams = [
     Icon(MaterialCommunityIcons.tshirt_crew),
     'ビジターカラー（濃）',
     null,
-    Colors.blue[100],
-    Colors.lightBlue
+    Colors.blue,
+    Colors.lightBlue[100],
   ],
   [
     Icon(MaterialCommunityIcons.tshirt_crew_outline),
     'ホームカラー（淡）',
     null,
     Colors.white,
-    Colors.grey
+    Colors.grey,
   ],
 ];
 

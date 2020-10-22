@@ -102,12 +102,11 @@ Future confirmTeamValue(ApplicationBloc _bloc, TeamDto _selected,
   if (_dto.id == null) {
     // 新規登録
     await _dao.insert(_dto);
-    _bloc.trigger.add(true);
   } else {
     // 更新登録
     await _dao.update(_dto);
-    _bloc.trigger.add(true);
   }
+  _bloc.trigger.add(true);
 
   if (_isSupport) {
     List<TeamDto> _team = await _dao.selectByName(_dto.name);

@@ -14,10 +14,17 @@ List<FormDto> buildMemberFormValue(MemberDto _member) {
   List<FormDto> _form = <FormDto>[];
 
   for (int i = 0; i < members.length; i++) {
+    bool _boolvalue;
+    if (members[i][MemberUtil.memberDefault] is bool) {
+      _boolvalue = members[i][MemberUtil.memberDefault];
+    } else {
+      _boolvalue = null;
+    }
     var _dto = FormDto()
       ..node = FocusNode()
       ..controller = TextEditingController()
-      ..value = members[i][MemberUtil.memberTitle];
+      ..value = members[i][MemberUtil.memberTitle]
+      ..boolvalue = _boolvalue;
     _form.add(_dto);
   }
   if (_member != null) {
@@ -32,7 +39,7 @@ List<FormDto> buildMemberFormValue(MemberDto _member) {
     _form[3].controller.text =
         _member.jbaid == 0 ? '' : _member.jbaid.toString().padLeft(9, "0");
     _form[4].controller.text = _member.number.toString();
-    _form[5].boolvalue = _member.number == null ? false : true;
+    _form[5].boolvalue = _member.role == MemberUtil.player ? true : false;
   }
 
   return _form;
@@ -93,6 +100,7 @@ Future confirmMemberValue(
   } else {
     _dto.number = null;
   }
+  _dto.role = _form[5].boolvalue == true ? MemberUtil.player : MemberUtil.coach;
 
   if (!_dto.isComplete()) {
     // 必須項目未入力
@@ -127,20 +135,23 @@ Future firstMemberSupport(List<TeamDto> _team) async {
   _dto.team = _team[0].id;
 
   for (int i = 4; i < 12; i++) {
-    _dto.name = _team[0].name + 'の' + i.toString() + '番';
+    _dto.role = MemberUtil.player;
+    _dto.name = i.toString() + '番';
     _dto.age = 12;
     _dto.jbaid = i + (i * 1234) + (i * 12345678);
     _dto.number = i + 20;
     await _dao.insert(_dto);
   }
 
-  _dto.name = _team[0].name + 'の監督';
+  _dto.role = MemberUtil.coach;
+  _dto.name = '監督';
   _dto.age = 40;
   _dto.jbaid = 13 + (13 * 1234) + (13 * 12345678);
   _dto.number = null;
   await _dao.insert(_dto);
 
-  _dto.name = _team[0].name + 'のコーチ';
+  _dto.role = MemberUtil.coach;
+  _dto.name = 'コーチ';
   _dto.age = 30;
   _dto.jbaid = 14 + (14 * 1234) + (14 * 12345678);
   _dto.number = null;

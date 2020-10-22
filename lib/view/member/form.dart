@@ -291,11 +291,17 @@ class _MemberFormState extends State<MemberForm> {
   }
 
   Widget submitButton() {
+    int _formIndex;
+    if (widget.edit) {
+      _formIndex = formUpdate;
+    } else {
+      _formIndex = formSubmit;
+    }
     return RaisedButton.icon(
       color: Colors.green,
       textColor: Colors.white,
-      icon: formIcon[formSubmit],
-      label: formText[formSubmit],
+      icon: formIcon[_formIndex],
+      label: formText[_formIndex],
       onPressed: () async {
         var _result = await confirmMemberValue(_bloc, widget.dto, _form);
         context.read<EnrollNotifier>().getEnroll();
