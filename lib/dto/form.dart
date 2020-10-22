@@ -7,8 +7,9 @@ class FormDto {
   Icon icon;
   String hint;
   String value;
-  Color color;
-  Color border;
+  bool boolvalue;
+  Color mainColor;
+  Color edgeColor;
   File image;
 
   FormDto(
@@ -17,6 +18,7 @@ class FormDto {
       this.icon,
       this.hint,
       this.value,
+      this.boolvalue,
       this.image});
 
   bool isPrepare() {
