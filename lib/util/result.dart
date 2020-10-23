@@ -4,11 +4,11 @@ class ResultUtil {
   static final home = 0;
   static final away = 1;
 
-  static const team = 11;
-  static const total = 12;
-  static const period = 13;
-  static const bench = 14;
-  static const progress = 15;
+  static const teamdata = 11;
+  static const totaldata = 12;
+  static const perioddata = 13;
+  static const playerdata = 14;
+  static const progressdata = 15;
 
   static const fieldgoal = 2;
   static const freethrow = 1;
@@ -16,6 +16,10 @@ class ResultUtil {
   static const stay = 0;
   static const play = 1;
   static const change = 2;
+
+  static const player = 0;
+  static final assistant = 1;
+  static final coach = 2;
 }
 
 final resultDetailIcon = [

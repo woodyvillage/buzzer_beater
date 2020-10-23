@@ -17,7 +17,7 @@ class ResultTeam extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    TeamDto _team = getHomeAway(dto, side, ResultUtil.team);
+    TeamDto _team = getHomeAway(dto, side, ResultUtil.teamdata);
     return SafeArea(
       child: Column(
         children: <Widget>[

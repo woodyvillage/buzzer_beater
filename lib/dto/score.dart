@@ -9,14 +9,15 @@ class ScoreDto {
   int score;
   int member;
 
-  ScoreDto(
-      {this.id,
-      this.match,
-      this.team,
-      this.period,
-      this.point,
-      this.score,
-      this.member});
+  ScoreDto({
+    this.id,
+    this.match,
+    this.team,
+    this.period,
+    this.point,
+    this.score,
+    this.member,
+  });
 
   factory ScoreDto.parse(Map<String, dynamic> _record) => ScoreDto(
         id: _record[TableUtil.cId],

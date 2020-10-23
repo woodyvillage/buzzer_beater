@@ -1,21 +1,19 @@
-import 'package:buzzer_beater/dao/member.dart';
-import 'package:buzzer_beater/dao/roster.dart';
+import 'package:buzzer_beater/dao/player.dart';
 import 'package:buzzer_beater/dao/score.dart';
 import 'package:buzzer_beater/dto/match.dart';
-import 'package:buzzer_beater/dto/member.dart';
-import 'package:buzzer_beater/dto/roster.dart';
+import 'package:buzzer_beater/dto/player.dart';
 import 'package:buzzer_beater/dto/score.dart';
 import 'package:buzzer_beater/dto/scoreprogress.dart';
 import 'package:buzzer_beater/dto/team.dart';
 
 class ScoreProgressDao {
   Future<List<ScoreProgressDto>> getAllScoreProgress(
-      MatchDto _match, TeamDto _team, int _max) async {
+      MatchDto _match, int _roster, TeamDto _team, int _max) async {
     List<ScoreProgressDto> scoreprogress = <ScoreProgressDto>[];
 
     for (int i = 1; i <= _max; i++) {
       ScoreDao _sdao = ScoreDao();
-      List<ScoreDto> _score = await _sdao.selectByScoreId(i, _match, _team);
+      List<ScoreDto> _score = await _sdao.selectById(_match.id, _team.id, i);
       if (_score.isNotEmpty) {
         if (_score[0].member == 0) {
           var _scoreprogress = ScoreProgressDto()
@@ -26,17 +24,16 @@ class ScoreProgressDao {
             ..image = null;
           scoreprogress.add(_scoreprogress);
         } else {
-          RosterDao _rdao = RosterDao();
-          List<RosterDto> _regular = await _rdao.selectById(_score[0].member);
-          MemberDao _mdao = MemberDao();
-          List<MemberDto> _member = await _mdao.selectById(_score[0].member);
-          _member[0].image ??= 'null';
+          PlayerDao _pdao = PlayerDao();
+          List<PlayerDto> _pdto =
+              await _pdao.getByMemberId(_roster, _score[0].member);
+          var _image = _pdto[0].image == null ? 'null' : _pdto[0].image;
           var _scoreprogress = ScoreProgressDto()
             ..score = i
             ..point = _score[0].point
-            ..number = _regular[0].number
-            ..name = _member[0].name
-            ..image = _member[0].image;
+            ..number = _pdto[0].number
+            ..name = _pdto[0].name
+            ..image = _image;
           scoreprogress.add(_scoreprogress);
         }
       } else {

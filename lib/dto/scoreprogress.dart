@@ -4,4 +4,12 @@ class ScoreProgressDto {
   int number;
   String name;
   String image;
+
+  ScoreProgressDto({
+    this.score,
+    this.point,
+    this.number,
+    this.name,
+    this.image,
+  });
 }

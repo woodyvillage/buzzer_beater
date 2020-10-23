@@ -16,7 +16,6 @@ class _ResultsListState extends State<ResultsList> {
 
   @override
   void didChangeDependencies() {
-    // 起動時の最初の一回
     super.didChangeDependencies();
     _bloc = Provider.of<ApplicationBloc>(context);
   }
@@ -28,7 +27,6 @@ class _ResultsListState extends State<ResultsList> {
   }
 
   _flush() async {
-    // 起動時の最初の一回
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _bloc.trigger.add(true);
     });
@@ -73,13 +71,9 @@ class _ResultsListState extends State<ResultsList> {
                             ),
                           ),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 2),
-                        ),
+                        Padding(padding: EdgeInsets.symmetric(vertical: 2)),
                         matchPanelTeamSubSet(data: snapshot.data[index]),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 5),
-                        ),
+                        Padding(padding: EdgeInsets.symmetric(vertical: 5)),
                         matchPanelScoreSubSet(data: snapshot.data[index]),
                       ],
                     ),

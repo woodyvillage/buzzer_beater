@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'package:buzzer_beater/dto/bench.dart';
 import 'package:buzzer_beater/dto/result.dart';
+import 'package:buzzer_beater/dto/player.dart';
 import 'package:buzzer_beater/dto/setting.dart';
 import 'package:buzzer_beater/model/resultedit.dart';
 import 'package:buzzer_beater/util/result.dart';
@@ -16,20 +16,20 @@ class ResultMemberInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<BenchDto> _bench = getHomeAway(dto, side, ResultUtil.bench);
+    List<PlayerDto> _player = getHomeAway(dto, side, ResultUtil.playerdata);
     return SafeArea(
       child: Column(
         children: <Widget>[
           Container(
             height: MediaQuery.of(context).size.height - 409,
             child: ListView.builder(
-              itemCount: _bench.length + 2,
+              itemCount: _player.length + 2,
               itemBuilder: (BuildContext context, int index) {
                 if (index == 0) {
                   return memberIndexSubSet();
                 }
                 index -= 1;
-                if (index == _bench.length) {
+                if (index == _player.length) {
                   return memberIndexSubSet();
                 }
                 return memberSheetSubSet(
