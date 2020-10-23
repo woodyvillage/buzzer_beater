@@ -55,9 +55,8 @@ Future<List<S2Choice<String>>> buildTeamListValue() async {
   TeamDao _dao = TeamDao();
   List<TeamDto> _dto = await _dao.select(TableUtil.cId);
 
-  for (int i = 0; i < _dto.length; i++) {
-    _list.add(
-        S2Choice<String>(value: _dto[i].id.toString(), title: _dto[i].name));
+  for (TeamDto _team in _dto) {
+    _list.add(S2Choice<String>(value: _team.id.toString(), title: _team.name));
   }
 
   return _list;

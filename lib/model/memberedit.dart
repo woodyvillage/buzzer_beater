@@ -50,9 +50,9 @@ Future<List<S2Choice<String>>> buildMemberListValue() async {
   MemberDao _dao = MemberDao();
   List<MemberDto> _dto = await _dao.select(TableUtil.cId);
 
-  for (int i = 0; i < _dto.length; i++) {
+  for (MemberDto _member in _dto) {
     _list.add(
-        S2Choice<String>(value: _dto[i].id.toString(), title: _dto[i].name));
+        S2Choice<String>(value: _member.id.toString(), title: _member.name));
   }
 
   return _list;
@@ -64,9 +64,9 @@ Future<List<S2Choice<String>>> buildMemberListValueByTeamId(int _team) async {
   List<MemberDto> _dto =
       await _dao.selectByTeamId(_team, TableUtil.cId, TableUtil.asc);
 
-  for (int i = 0; i < _dto.length; i++) {
+  for (MemberDto _member in _dto) {
     _list.add(
-        S2Choice<String>(value: _dto[i].id.toString(), title: _dto[i].name));
+        S2Choice<String>(value: _member.id.toString(), title: _member.name));
   }
 
   return _list;

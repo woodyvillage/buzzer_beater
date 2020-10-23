@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 
 import 'package:buzzer_beater/common/bloc.dart';
-import 'package:buzzer_beater/dao/record.dart';
+import 'package:buzzer_beater/dao/member.dart';
+import 'package:buzzer_beater/dao/regist.dart';
 import 'package:buzzer_beater/dao/roster.dart';
 import 'package:buzzer_beater/dto/form.dart';
-import 'package:buzzer_beater/dto/record.dart';
+import 'package:buzzer_beater/dto/member.dart';
+import 'package:buzzer_beater/dto/regist.dart';
 import 'package:buzzer_beater/dto/roster.dart';
 import 'package:buzzer_beater/dto/player.dart';
 import 'package:buzzer_beater/dto/team.dart';
@@ -46,8 +48,8 @@ Future confirmRosterValue(
     ApplicationBloc _bloc, List<FormDto> _form, bool _isEdit) async {
   RosterDao _dao = RosterDao();
   RosterDto _dto = RosterDto();
-  RecordDao _rdao = RecordDao();
-  RecordDto _rdto = RecordDto();
+  RegistDao _rdao = RegistDao();
+  RegistDto _rdto = RegistDto();
 
   if (_form[0].controller.text.isEmpty || _form[1].controller.text == '') {
     if (!_dto.isComplete()) {
@@ -106,7 +108,7 @@ Future confirmRosterValue(
   } else {
     List<RosterDto> _roster = await _dao.selectByName(
         int.parse(_form[0].controller.text), _form[1].controller.text);
-    List<RecordDto> _record =
+    List<RegistDto> _record =
         await _rdao.selectByMemberId(_roster[0].id, int.parse(_form[2].hint));
 
     _record[0].member = int.parse(_form[2].controller.text);
@@ -130,25 +132,39 @@ Future firstRosterSupport(List<TeamDto> _team) async {
 
   List<RosterDto> _roster = await _dao.selectByName(_team[0].id, _dto.name);
 
-  RecordDao _rdao = RecordDao();
-  RecordDto _rdto = RecordDto();
+  RegistDao _rdao = RegistDao();
+  RegistDto _rdto = RegistDto();
 
-  for (int i = 4; i < 14; i++) {
+  MemberDao _mdao = MemberDao();
+  List<MemberDto> _members =
+      await _mdao.selectByTeamId(_team[0].id, TableUtil.cId, TableUtil.asc);
+
+  int i = 4;
+  for (MemberDto _member in _members) {
     _rdto.team = _team[0].id;
     _rdto.roster = _roster[0].id;
-    _rdto.member = i - 3;
-    if (i > 11) {
-      _rdto.number = null;
-    } else {
+    _rdto.member = _member.id;
+    if (_member.role == RosterUtil.player) {
       _rdto.number = i;
+    } else {
+      _rdto.number = null;
     }
+    if (i == 12) {
+      _rdto.role = RosterUtil.coach;
+    } else if (i == 13) {
+      _rdto.role = RosterUtil.assistant;
+    } else {
+      _rdto.role = RosterUtil.player;
+    }
+    _rdto.sort = _member.role;
     await _rdao.insert(_rdto);
+    i++;
   }
 }
 
 Future deleteRoster(ApplicationBloc _bloc, PlayerDto _player) async {
-  RecordDao _dao = RecordDao();
-  List<RecordDto> _dto =
+  RegistDao _dao = RegistDao();
+  List<RegistDto> _dto =
       await _dao.selectByMemberId(_player.roster, _player.member);
   await _dao.delete(_dto[0]);
   _bloc.trigger.add(true);

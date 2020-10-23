@@ -1,8 +1,8 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 
-import 'package:buzzer_beater/dto/bench.dart';
 import 'package:buzzer_beater/dto/period.dart';
+import 'package:buzzer_beater/dto/player.dart';
 import 'package:buzzer_beater/dto/result.dart';
 import 'package:buzzer_beater/dto/setting.dart';
 import 'package:buzzer_beater/dto/scoreprogress.dart';
@@ -23,13 +23,13 @@ Widget runningScoreSubSet({
   @required SettingDto setting,
 }) {
   List<PeriodDto> _homeperiod =
-      getHomeAway(data, ResultUtil.home, ResultUtil.period);
+      getHomeAway(data, ResultUtil.home, ResultUtil.perioddata);
   List<PeriodDto> _awayperiod =
-      getHomeAway(data, ResultUtil.away, ResultUtil.period);
+      getHomeAway(data, ResultUtil.away, ResultUtil.perioddata);
   List<ScoreProgressDto> _homeprogress =
-      getHomeAway(data, ResultUtil.home, ResultUtil.progress);
+      getHomeAway(data, ResultUtil.home, ResultUtil.progressdata);
   List<ScoreProgressDto> _awayprogress =
-      getHomeAway(data, ResultUtil.away, ResultUtil.progress);
+      getHomeAway(data, ResultUtil.away, ResultUtil.progressdata);
 
   return Row(
     children: <Widget>[
@@ -329,7 +329,7 @@ Widget teamSheetSubSet({
   @required SettingDto setting,
   @required bool timeout,
 }) {
-  List<PeriodDto> _period = getHomeAway(data, side, ResultUtil.period);
+  List<PeriodDto> _period = getHomeAway(data, side, ResultUtil.perioddata);
   var _switch = _period.length == 4
       ? _quotaItem(setting.nottimeout)
       : _timeoutItem(_period[4], setting);
@@ -515,24 +515,24 @@ Widget memberSheetSubSet({
   @required int index,
   @required SettingDto setting,
 }) {
-  List<BenchDto> _bench = getHomeAway(data, side, ResultUtil.bench);
-  if (_bench[index].role == 0) {
+  List<PlayerDto> _player = getHomeAway(data, side, ResultUtil.playerdata);
+  if (_player[index].role == ResultUtil.player) {
     return Row(
       children: <Widget>[
         _filler(2),
-        _imageItem(_bench[index], 30),
+        _imageItem(_player[index], 30),
         _filler(2),
-        _nameItem(_bench[index], Alignment.centerLeft),
-        _numberItem(_bench[index], index),
-        _periodItem(_bench[index], index, 0, setting),
-        _periodItem(_bench[index], index, 1, setting),
-        _periodItem(_bench[index], index, 2, setting),
-        _periodItem(_bench[index], index, 3, setting),
-        _foulItem(_bench[index], index, 0, setting),
-        _foulItem(_bench[index], index, 1, setting),
-        _foulItem(_bench[index], index, 2, setting),
-        _foulItem(_bench[index], index, 3, setting),
-        _foulItem(_bench[index], index, 4, setting),
+        _nameItem(_player[index], Alignment.centerLeft),
+        _numberItem(_player[index], index),
+        _periodItem(_player[index], index, 0, setting),
+        _periodItem(_player[index], index, 1, setting),
+        _periodItem(_player[index], index, 2, setting),
+        _periodItem(_player[index], index, 3, setting),
+        _foulItem(_player[index], index, 0, setting),
+        _foulItem(_player[index], index, 1, setting),
+        _foulItem(_player[index], index, 2, setting),
+        _foulItem(_player[index], index, 3, setting),
+        _foulItem(_player[index], index, 4, setting),
         _filler(2),
       ],
     );
@@ -540,28 +540,28 @@ Widget memberSheetSubSet({
     return Row(
       children: <Widget>[
         _filler(2),
-        _imageItem(_bench[index], 30),
+        _imageItem(_player[index], 30),
         _filler(2),
-        _nameItem(_bench[index], Alignment.centerLeft),
-        _numberItem(_bench[index], index),
-        _foulItem(_bench[index], index, 0, setting),
-        _foulItem(_bench[index], index, 1, setting),
-        _foulItem(_bench[index], index, 2, setting),
-        _foulItem(_bench[index], index, 3, setting),
-        _foulItem(_bench[index], index, 4, setting),
+        _nameItem(_player[index], Alignment.centerLeft),
+        _numberItem(_player[index], index),
+        _foulItem(_player[index], index, 0, setting),
+        _foulItem(_player[index], index, 1, setting),
+        _foulItem(_player[index], index, 2, setting),
+        _foulItem(_player[index], index, 3, setting),
+        _foulItem(_player[index], index, 4, setting),
         _filler(2),
       ],
     );
   }
 }
 
-Widget _numberItem(BenchDto _data, int _index) {
-  var _size = _data.role == 0 ? 5 : 25;
+Widget _numberItem(PlayerDto _data, int _index) {
+  var _size = _data.role == ResultUtil.player ? 5 : 25;
   String _number;
-  if (_data.role == 0) {
+  if (_data.role == ResultUtil.player) {
     _number = _data.number.toString();
   } else {
-    _number = _data.role == 1 ? 'コーチ' : 'A.コーチ';
+    _number = _data.role == ResultUtil.coach ? 'コーチ' : 'A.コーチ';
   }
   return Expanded(
     flex: _size,
@@ -579,7 +579,7 @@ Widget _numberItem(BenchDto _data, int _index) {
   );
 }
 
-Widget _periodItem(BenchDto _data, int _index, int _num, SettingDto _setting) {
+Widget _periodItem(PlayerDto _data, int _index, int _num, SettingDto _setting) {
   return Expanded(
     flex: 5,
     child: Container(
@@ -625,7 +625,7 @@ Widget _spliteChangeItem(int _data, SettingDto _setting) {
   );
 }
 
-Widget _foulItem(BenchDto _data, int _index, int _num, SettingDto _setting) {
+Widget _foulItem(PlayerDto _data, int _index, int _num, SettingDto _setting) {
   var _mark = _data.foul[_num] == '' ? _setting.notfoul : _data.foul[_num];
   return Expanded(
     flex: 5,

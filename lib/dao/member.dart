@@ -35,6 +35,17 @@ class MemberDao extends BaseDao {
     return _toList(_result);
   }
 
+  Future<List<MemberDto>> selectByRosterId(int _value) async {
+    List<Map<String, dynamic>> _result = await selectBy(
+      TableUtil.memberTable,
+      [TableUtil.cRoster],
+      [_value],
+      [TableUtil.cRole, TableUtil.cNumber],
+      [TableUtil.asc, TableUtil.asc],
+    );
+    return _toList(_result);
+  }
+
   List<MemberDto> _toList(List<Map<String, dynamic>> _result) {
     return _result.isNotEmpty
         ? _result.map((item) => MemberDto.parse(item)).toList()

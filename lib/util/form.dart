@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 final formIcon = [
-  Icon(Icons.check_circle),
+  Icon(Icons.add_circle),
   Icon(Icons.cancel),
   Icon(Icons.remove_circle),
   Icon(Icons.check_circle),

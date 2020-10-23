@@ -4,6 +4,7 @@ import 'package:buzzer_beater/dto/result.dart';
 import 'package:buzzer_beater/dto/team.dart';
 import 'package:buzzer_beater/model/resultedit.dart';
 import 'package:buzzer_beater/util/result.dart';
+import 'package:buzzer_beater/util/team.dart';
 
 Widget _filler(int _flex) {
   return Expanded(
@@ -15,31 +16,40 @@ Widget _filler(int _flex) {
 Widget matchPanelTeamSubSet({
   @required ResultDto data,
 }) {
-  var _hometeam = getHomeAway(data, ResultUtil.home, ResultUtil.team);
-  var _awayteam = getHomeAway(data, ResultUtil.away, ResultUtil.team);
+  var _hometeam = getHomeAway(data, ResultUtil.home, ResultUtil.teamdata);
+  var _awayteam = getHomeAway(data, ResultUtil.away, ResultUtil.teamdata);
   return Row(
     children: <Widget>[
       _filler(2),
-      _teamColorItem(data.match.homemain, data.match.homeshade),
+      _teamColorItem(_hometeam, data.match.homeware),
       _filler(2),
       _teamNameItem(_hometeam, Alignment.centerLeft),
       _teamNameItem(_awayteam, Alignment.centerRight),
       _filler(2),
-      _teamColorItem(data.match.awaymain, data.match.awayshade),
+      _teamColorItem(_awayteam, data.match.awayware),
       _filler(2),
     ],
   );
 }
 
-Widget _teamColorItem(int _main, int _shade) {
+Widget _teamColorItem(TeamDto _team, int _ware) {
+  Color _mainColor;
+  Color _edgeColor;
+  if (_ware == TeamUtil.homeColor) {
+    _mainColor = Color(_team.awayMain);
+    _edgeColor = Color(_team.awayEdge);
+  } else {
+    _mainColor = Color(_team.homeMain);
+    _edgeColor = Color(_team.homeEdge);
+  }
   return Expanded(
     flex: 2,
     child: SizedBox(
       height: 50,
       child: Container(
         decoration: BoxDecoration(
-          border: Border.all(color: Color(_main)),
-          color: Color(_shade),
+          border: Border.all(color: _edgeColor),
+          color: _mainColor,
         ),
       ),
     ),
@@ -108,8 +118,8 @@ Widget _teamPeriodItem(ResultDto _data, int _index) {
     _text = '　－　';
   }
 
-  var _homeperiod = getHomeAway(_data, ResultUtil.home, ResultUtil.period);
-  var _awayperiod = getHomeAway(_data, ResultUtil.away, ResultUtil.period);
+  var _homeperiod = getHomeAway(_data, ResultUtil.home, ResultUtil.perioddata);
+  var _awayperiod = getHomeAway(_data, ResultUtil.away, ResultUtil.perioddata);
   if (_homeperiod.length <= _index || _awayperiod.length <= _index) {
     return Text(
       _text,

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 import 'package:buzzer_beater/dto/member.dart';
 import 'package:buzzer_beater/dto/result.dart';
-import 'package:buzzer_beater/dto/bench.dart';
+import 'package:buzzer_beater/dto/player.dart';
 import 'package:buzzer_beater/dto/team.dart';
 
 Widget teamBoard({
@@ -42,7 +42,7 @@ Widget teamBoard({
           stops: [0.96, 0.96],
           colors: [
             Theme.of(context).canvasColor,
-            Color(data.majorshade),
+            Color(data.homeMain),
           ],
         ),
         borderRadius: BorderRadius.all(Radius.circular(4.0)),
@@ -107,7 +107,7 @@ Widget titleItem({
         ),
       ],
     );
-  } else if (data is BenchDto) {
+  } else if (data is PlayerDto) {
     _age = data.age == 0 ? '不明' : data.age.toString();
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -128,9 +128,11 @@ Widget titleItem({
       ],
     );
   } else if (data is ResultDto) {
-    var _place = data.match.place == null ? '' : ' - ' + data.match.place;
+    var _place = data.match.place == null
+        ? ''
+        : ' - ' + data.match.place + '(' + data.match.coat + ')';
     return SizedBox(
-      height: 52,
+      height: 58,
       child: Padding(
         padding: EdgeInsets.only(left: 10),
         child: Column(
@@ -138,7 +140,7 @@ Widget titleItem({
           children: <Widget>[
             Text(
               data.match.name,
-              style: TextStyle(fontSize: 20),
+              style: TextStyle(fontSize: 26, fontWeight: FontWeight.w900),
             ),
             Text(
               data.match.date + _place,
@@ -154,40 +156,44 @@ Widget titleItem({
 }
 
 Widget roundNumberItem({
-  @required context,
-  @required team,
-  @required member,
+  @required BuildContext context,
+  @required TeamDto team,
+  @required dynamic member,
 }) {
-  Color _borderColor;
-  Color _groundColor;
+  Color _mainColor;
+  Color _edgeColor;
   Text _child;
   if (member.number == null) {
-    _borderColor = Theme.of(context).canvasColor;
-    _groundColor = Theme.of(context).canvasColor;
+    _mainColor = Theme.of(context).canvasColor;
+    _edgeColor = Theme.of(context).canvasColor;
     _child = Text('');
   } else {
-    if (team.majormain == team.majorshade) {
-      _borderColor = Color(team.majormain);
-      _groundColor = Theme.of(context).canvasColor;
+    if (team.homeMain == team.homeEdge) {
+      _mainColor = Color(team.homeMain);
+      _edgeColor = Theme.of(context).canvasColor;
     } else {
-      _borderColor = Color(team.majormain);
-      _groundColor = Color(team.majorshade);
+      _mainColor = Color(team.homeMain);
+      _edgeColor = Color(team.homeEdge);
     }
-    _child = Text(
-      member.number.toString(),
-      style: TextStyle(
-        color: Color(team.majormain),
-        fontSize: 25,
-        fontWeight: FontWeight.w500,
-      ),
-    );
+    if (member.number < 0) {
+      _child = Text('');
+    } else {
+      _child = Text(
+        member.number.toString(),
+        style: TextStyle(
+          color: Color(team.homeEdge),
+          fontSize: 25,
+          fontWeight: FontWeight.w500,
+        ),
+      );
+    }
   }
 
   return CircleAvatar(
-    backgroundColor: _borderColor,
+    backgroundColor: _edgeColor,
     radius: 30,
     child: CircleAvatar(
-      backgroundColor: _groundColor,
+      backgroundColor: _mainColor,
       radius: 24,
       child: _child,
     ),

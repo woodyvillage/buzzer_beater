@@ -43,5 +43,6 @@ class RosterUtil {
   static final memberDefault = 2;
 
   static final player = 0;
-  static final coach = 1;
+  static final assistant = 1;
+  static final coach = 2;
 }
