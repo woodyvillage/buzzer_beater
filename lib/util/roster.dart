@@ -32,9 +32,9 @@ final rosters = [
   ['登録選手15', null, ''],
   ['背番号', null, 0],
   ['コーチ', null, ''],
-  ['背番号', null, null],
+  ['背番号', null, false],
   ['アシスタントコーチ', null, ''],
-  ['背番号', null, null],
+  ['背番号', null, false],
 ];
 
 class RosterUtil {
