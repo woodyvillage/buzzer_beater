@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:smart_select/smart_select.dart';
 
 import 'package:buzzer_beater/common/bloc.dart';
 import 'package:buzzer_beater/dao/member.dart';
 import 'package:buzzer_beater/dao/regist.dart';
 import 'package:buzzer_beater/dao/roster.dart';
+import 'package:buzzer_beater/dao/team.dart';
 import 'package:buzzer_beater/dto/form.dart';
 import 'package:buzzer_beater/dto/member.dart';
 import 'package:buzzer_beater/dto/regist.dart';
@@ -42,6 +44,22 @@ Future<List<FormDto>> buildRosterFormValue(PlayerDto _member) async {
   }
 
   return _form;
+}
+
+Future<List<S2Choice<String>>> buildRosterListValue() async {
+  List<S2Choice<String>> _list = <S2Choice<String>>[];
+  RosterDao _rdao = RosterDao();
+  List<RosterDto> _rdto = await _rdao.select(TableUtil.cId);
+
+  for (RosterDto _roster in _rdto) {
+    TeamDao _tdao = TeamDao();
+    List<TeamDto> _tdto = await _tdao.selectById(_roster.id);
+    _list.add(S2Choice<String>(
+        value: _roster.id.toString(),
+        title: _tdto[0].name + ' ' + _roster.name));
+  }
+
+  return _list;
 }
 
 Future confirmRosterValue(

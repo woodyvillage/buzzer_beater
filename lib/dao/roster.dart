@@ -3,6 +3,15 @@ import 'package:buzzer_beater/dto/roster.dart';
 import 'package:buzzer_beater/util/table.dart';
 
 class RosterDao extends BaseDao {
+  Future<List<RosterDto>> select(String _column) async {
+    List<Map<String, dynamic>> _result = await selectOrder(
+      TableUtil.rosterTable,
+      _column,
+      TableUtil.asc,
+    );
+    return _toList(_result);
+  }
+
   Future<List<RosterDto>> selectById(int _value) async {
     List<Map<String, dynamic>> _result = await selectBy(
       TableUtil.rosterTable,
