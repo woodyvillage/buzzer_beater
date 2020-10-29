@@ -47,21 +47,26 @@ class _RosterFormState extends State<RosterForm> {
   }
 
   void _buildSelectListView() async {
-    _teamList = await buildTeamListValue();
-    _memberList = await buildMemberListValue();
+    if (widget.edit) {
+      _teamList = await buildTeamListValueById(widget.dto.team);
+      _memberList = await buildMemberListValueByTeamId(widget.dto.team);
+    } else {
+      _teamList = await buildTeamListValue();
+      _memberList = await buildMemberListValue();
+    }
     setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
     if (widget.edit) {
-      if (_form.length > 0) {
+      if (_form.isNotEmpty) {
         return singleRosterForm(context);
       } else {
         return Container();
       }
     } else {
-      if (_form.length > 0) {
+      if (_form.isNotEmpty) {
         return multiRosterForm(context);
       } else {
         return Container();

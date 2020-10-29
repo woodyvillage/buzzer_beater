@@ -62,6 +62,18 @@ Future<List<S2Choice<String>>> buildTeamListValue() async {
   return _list;
 }
 
+Future<List<S2Choice<String>>> buildTeamListValueById(int _index) async {
+  List<S2Choice<String>> _list = <S2Choice<String>>[];
+  TeamDao _dao = TeamDao();
+  List<TeamDto> _dto = await _dao.selectById(_index);
+
+  for (TeamDto _team in _dto) {
+    _list.add(S2Choice<String>(value: _team.id.toString(), title: _team.name));
+  }
+
+  return _list;
+}
+
 Future confirmTeamValue(ApplicationBloc _bloc, TeamDto _selected,
     List<FormDto> _form, bool _isSupport) async {
   TeamDao _dao = TeamDao();
