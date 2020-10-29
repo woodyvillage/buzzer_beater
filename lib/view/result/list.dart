@@ -57,7 +57,7 @@ class _ResultsListState extends State<ResultsList> {
                   color: Theme.of(context).cardColor,
                   margin: EdgeInsets.fromLTRB(10, 15, 10, 0),
                   child: SizedBox(
-                    height: 250,
+                    height: 240,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
@@ -72,9 +72,8 @@ class _ResultsListState extends State<ResultsList> {
                           ),
                         ),
                         Padding(padding: EdgeInsets.symmetric(vertical: 2)),
-                        matchPanelTeamSubSet(data: snapshot.data[index]),
-                        Padding(padding: EdgeInsets.symmetric(vertical: 5)),
-                        matchPanelScoreSubSet(data: snapshot.data[index]),
+                        resultPanelTeamSubSet(data: snapshot.data[index]),
+                        resultPanelScoreSubSet(data: snapshot.data[index]),
                       ],
                     ),
                   ),

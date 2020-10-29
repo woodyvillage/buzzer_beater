@@ -53,7 +53,7 @@ class _TeamsListState extends State<TeamsList> {
                     materialPageRoute,
                   );
                 },
-                child: teamBoard(
+                child: teamBoardSubSet(
                   data: snapshot.data[index],
                   context: context,
                 ),

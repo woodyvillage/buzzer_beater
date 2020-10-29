@@ -45,7 +45,7 @@ class PlayerDao {
     MemberDao _mdao = MemberDao();
     RegistDao _rdao = RegistDao();
 
-    List<RegistDto> _rdto = await _rdao.selectByMemberId(_roster, _member);
+    List<RegistDto> _rdto = await _rdao.selectByRosterMember(_roster, _member);
     List<MemberDto> _mdto = await _mdao.selectById(_rdto[0].member);
 
     var _player = PlayerDto()
@@ -79,7 +79,7 @@ class PlayerDao {
       List<MemberDto> _mdto = await _mdao.selectById(_regist.member);
 
       List<RecordDto> _dto =
-          await _dao.selectByMatchId(_match, _roster, _regist.member);
+          await _dao.selectByMatchRosterMember(_match, _roster, _regist.member);
 
       var _image = _mdto[0].image == null ? 'null' : _mdto[0].image;
       var _player = PlayerDto()

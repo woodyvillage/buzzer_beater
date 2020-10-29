@@ -3,7 +3,7 @@ import 'package:buzzer_beater/dto/period.dart';
 import 'package:buzzer_beater/util/table.dart';
 
 class PeriodDao extends BaseDao {
-  Future<int> sumMatchByTeamId(int _match, int _team) async {
+  Future<int> sumByMatchTeam(int _match, int _team) async {
     return await sumBy(
       TableUtil.periodTable,
       [TableUtil.cMatch, TableUtil.cTeam],
@@ -12,7 +12,7 @@ class PeriodDao extends BaseDao {
     );
   }
 
-  Future<List<PeriodDto>> selectMatchByTeamId(int _match, int _team) async {
+  Future<List<PeriodDto>> selectByMatchTeam(int _match, int _team) async {
     List<Map<String, dynamic>> _result = await selectBy(
       TableUtil.periodTable,
       [TableUtil.cMatch, TableUtil.cTeam],

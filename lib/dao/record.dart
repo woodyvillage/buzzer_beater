@@ -3,7 +3,7 @@ import 'package:buzzer_beater/dto/record.dart';
 import 'package:buzzer_beater/util/table.dart';
 
 class RecordDao extends BaseDao {
-  Future<List<RecordDto>> selectByMatchId(
+  Future<List<RecordDto>> selectByMatchRosterMember(
       int _match, int _roster, int _member) async {
     List<Map<String, dynamic>> _result = await selectBy(
       TableUtil.recordTable,

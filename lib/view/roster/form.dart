@@ -55,9 +55,17 @@ class _RosterFormState extends State<RosterForm> {
   @override
   Widget build(BuildContext context) {
     if (widget.edit) {
-      return singleRosterForm(context);
+      if (_form.length > 0) {
+        return singleRosterForm(context);
+      } else {
+        return Container();
+      }
     } else {
-      return multiRosterForm(context);
+      if (_form.length > 0) {
+        return multiRosterForm(context);
+      } else {
+        return Container();
+      }
     }
   }
 
@@ -271,7 +279,7 @@ class _RosterFormState extends State<RosterForm> {
     if (widget.edit) {
       _formIndex = formUpdate;
     } else {
-      _formIndex = formSubmit;
+      _formIndex = formRegist;
     }
     return RaisedButton.icon(
       color: Colors.green,

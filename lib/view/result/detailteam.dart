@@ -22,7 +22,7 @@ class ResultTeam extends StatelessWidget {
       child: Column(
         children: <Widget>[
           Container(
-            child: teamBoard(data: _team, context: context),
+            child: teamBoardSubSet(data: _team, context: context),
           ),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 5),

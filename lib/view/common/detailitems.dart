@@ -111,10 +111,10 @@ Widget _splitePointItem(ScoreProgressDto _data, SettingDto _setting) {
   var _mark = '';
   switch (_data.point) {
     case ResultUtil.fieldgoal:
-      _mark = _setting.fieldGoal;
+      _mark = _setting.fieldgoal;
       break;
     case ResultUtil.freethrow:
-      _mark = _setting.freeThrow;
+      _mark = _setting.freethrow;
       break;
     default:
   }
@@ -155,7 +155,7 @@ Widget _pointedItem(List<PeriodDto> _period, List<ScoreProgressDto> _progress,
   var _decoration = _scoreDecorationItem(_period, _total, _index);
   var _mark = '';
   if (_progress[_index].number != null && _progress[_index].number < 0) {
-    _mark = _setting.ownGoal;
+    _mark = _setting.owngoal;
   } else {
     _mark = _progress[_index].point == null
         ? ''
@@ -236,7 +236,6 @@ Widget teamHeaderSubSet() {
         child: Container(
           alignment: Alignment.center,
           child: Text('タイムアウト'),
-          height: 50,
           decoration: BoxDecoration(
             color: Colors.blueGrey,
             border: Border.all(
@@ -251,7 +250,6 @@ Widget teamHeaderSubSet() {
         child: Container(
           alignment: Alignment.center,
           child: Text('チームファウル'),
-          height: 50,
           decoration: BoxDecoration(
             color: Colors.blueGrey,
             border: Border.all(
@@ -266,7 +264,6 @@ Widget teamHeaderSubSet() {
         child: Container(
           alignment: Alignment.center,
           child: Text('チームファウル'),
-          height: 50,
           decoration: BoxDecoration(
             color: Colors.blueGrey,
             border: Border.all(

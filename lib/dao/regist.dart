@@ -15,7 +15,7 @@ class RegistDao extends BaseDao {
     return _toList(_result);
   }
 
-  Future<List<RegistDto>> selectByMemberId(int _roster, int _member) async {
+  Future<List<RegistDto>> selectByRosterMember(int _roster, int _member) async {
     List<Map<String, dynamic>> _result = await selectBy(
       TableUtil.registTable,
       [TableUtil.cRoster, TableUtil.cMember],

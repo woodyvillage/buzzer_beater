@@ -1,7 +1,7 @@
 class SettingDto {
-  String fieldGoal;
-  String freeThrow;
-  String ownGoal;
+  String fieldgoal;
+  String freethrow;
+  String owngoal;
   String periodend;
   String timeout;
   String nottimeout;
@@ -12,9 +12,9 @@ class SettingDto {
   String change;
 
   SettingDto({
-    this.fieldGoal,
-    this.freeThrow,
-    this.ownGoal,
+    this.fieldgoal,
+    this.freethrow,
+    this.owngoal,
     this.periodend,
     this.timeout,
     this.nottimeout,

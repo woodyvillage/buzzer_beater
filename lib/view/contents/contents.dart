@@ -38,6 +38,7 @@ class _ApplicationContentsState extends State<ApplicationContents> {
   Widget build(BuildContext context) {
     if (routesetFloatIcon[_selectedIndex] == null) {
       return Scaffold(
+        resizeToAvoidBottomPadding: false,
         appBar: ApplicationHeader(
           isView: true,
         ),
@@ -53,6 +54,7 @@ class _ApplicationContentsState extends State<ApplicationContents> {
       );
     } else {
       return Scaffold(
+        resizeToAvoidBottomPadding: false,
         appBar: ApplicationHeader(isView: true),
         body: routesetClass.elementAt(
           _selectedIndex,

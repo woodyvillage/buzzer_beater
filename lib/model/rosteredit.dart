@@ -5,7 +5,6 @@ import 'package:buzzer_beater/common/bloc.dart';
 import 'package:buzzer_beater/dao/member.dart';
 import 'package:buzzer_beater/dao/regist.dart';
 import 'package:buzzer_beater/dao/roster.dart';
-import 'package:buzzer_beater/dao/team.dart';
 import 'package:buzzer_beater/dto/form.dart';
 import 'package:buzzer_beater/dto/member.dart';
 import 'package:buzzer_beater/dto/regist.dart';
@@ -19,13 +18,20 @@ Future<List<FormDto>> buildRosterFormValue(PlayerDto _member) async {
   List<FormDto> _form = <FormDto>[];
 
   for (int i = 0; i < rosters.length; i++) {
+    bool _boolvalue;
+    if (rosters[i][RosterUtil.memberDefault] is bool) {
+      _boolvalue = rosters[i][RosterUtil.memberDefault];
+    } else {
+      _boolvalue = null;
+    }
     var _dto = FormDto()
       ..node = FocusNode()
       ..controller = TextEditingController()
       ..value = rosters[i][RosterUtil.memberTitle]
       ..hint = rosters[i][RosterUtil.memberDefault] == 0
           ? ''
-          : rosters[i][RosterUtil.memberDefault].toString();
+          : rosters[i][RosterUtil.memberDefault].toString()
+      ..boolvalue = _boolvalue;
     _form.add(_dto);
   }
 
@@ -52,11 +58,26 @@ Future<List<S2Choice<String>>> buildRosterListValue() async {
   List<RosterDto> _rdto = await _rdao.select(TableUtil.cId);
 
   for (RosterDto _roster in _rdto) {
-    TeamDao _tdao = TeamDao();
-    List<TeamDto> _tdto = await _tdao.selectById(_roster.id);
     _list.add(S2Choice<String>(
-        value: _roster.id.toString(),
-        title: _tdto[0].name + ' ' + _roster.name));
+      value: _roster.id.toString(),
+      title: _roster.name,
+    ));
+  }
+
+  return _list;
+}
+
+Future<List<S2Choice<String>>> buildRosterListValueByTeamId(int _value) async {
+  List<S2Choice<String>> _list = <S2Choice<String>>[];
+  RosterDao _rdao = RosterDao();
+  List<RosterDto> _rdto =
+      await _rdao.selectByTeamId(_value, [TableUtil.cName], [TableUtil.asc]);
+
+  for (RosterDto _roster in _rdto) {
+    _list.add(S2Choice<String>(
+      value: _roster.id.toString(),
+      title: _roster.name,
+    ));
   }
 
   return _list;
@@ -109,25 +130,39 @@ Future confirmRosterValue(
       await _dao.insert(_dto);
     }
 
-    List<RosterDto> _roster = await _dao.selectByName(_dto.team, _dto.name);
+    MemberDao _mdao = MemberDao();
+    List<RosterDto> _roster =
+        await _dao.selectByTeamIdName(_dto.team, _dto.name);
     for (int i = 2; i < _form.length; i = i + 2) {
-      _rdto.team = int.parse(_form[0].controller.text);
-      _rdto.roster = _roster[0].id;
-      _form[i].controller.text.isEmpty
-          ? _rdto.member = null
-          : _rdto.member = int.parse(_form[i].controller.text);
-      _form[i + 1].controller.text.isEmpty
-          ? _rdto.number = null
-          : _rdto.number = int.parse(_form[i + 1].controller.text);
-      if (_rdto.member != null) {
-        await _rdao.insert(_rdto);
+      if (_form[i].controller.text != '') {
+        List<MemberDto> _member =
+            await _mdao.selectById(int.parse(_form[i].controller.text));
+
+        if (_member.isNotEmpty) {
+          _rdto.team = int.parse(_form[0].controller.text);
+          _rdto.roster = _roster[0].id;
+          _form[i].controller.text.isEmpty
+              ? _rdto.member = null
+              : _rdto.member = int.parse(_form[i].controller.text);
+          _form[i + 1].controller.text.isEmpty
+              ? _rdto.number = null
+              : _rdto.number = int.parse(_form[i + 1].controller.text);
+          _rdto.role = _member[0].role;
+          _rdto.sort = _member[0].role == RosterUtil.player
+              ? RosterUtil.player
+              : RosterUtil.coach;
+        }
+
+        if (_rdto.member != null) {
+          await _rdao.insert(_rdto);
+        }
       }
     }
   } else {
-    List<RosterDto> _roster = await _dao.selectByName(
+    List<RosterDto> _roster = await _dao.selectByTeamIdName(
         int.parse(_form[0].controller.text), _form[1].controller.text);
-    List<RegistDto> _record =
-        await _rdao.selectByMemberId(_roster[0].id, int.parse(_form[2].hint));
+    List<RegistDto> _record = await _rdao.selectByRosterMember(
+        _roster[0].id, int.parse(_form[2].hint));
 
     _record[0].member = int.parse(_form[2].controller.text);
     _record[0].number = int.parse(_form[3].controller.text);
@@ -148,7 +183,8 @@ Future firstRosterSupport(List<TeamDto> _team) async {
   _dto.name = '暫定ロースター';
   await _dao.insert(_dto);
 
-  List<RosterDto> _roster = await _dao.selectByName(_team[0].id, _dto.name);
+  List<RosterDto> _roster =
+      await _dao.selectByTeamIdName(_team[0].id, _dto.name);
 
   RegistDao _rdao = RegistDao();
   RegistDto _rdto = RegistDto();
@@ -183,7 +219,7 @@ Future firstRosterSupport(List<TeamDto> _team) async {
 Future deleteRoster(ApplicationBloc _bloc, PlayerDto _player) async {
   RegistDao _dao = RegistDao();
   List<RegistDto> _dto =
-      await _dao.selectByMemberId(_player.roster, _player.member);
+      await _dao.selectByRosterMember(_player.roster, _player.member);
   await _dao.delete(_dto[0]);
   _bloc.trigger.add(true);
 

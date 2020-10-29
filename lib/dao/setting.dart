@@ -8,9 +8,9 @@ class SettingDao {
   Future<SettingDto> getAllPrefereces(List<List<Object>> _settings) async {
     SettingDto _setting = SettingDto();
 
-    _setting.fieldGoal = await _getPref(SettingUtil.fieldgoal);
-    _setting.freeThrow = await _getPref(SettingUtil.freethrow);
-    _setting.ownGoal = await _getPref(SettingUtil.owngoal);
+    _setting.fieldgoal = await _getPref(SettingUtil.fieldgoal);
+    _setting.freethrow = await _getPref(SettingUtil.freethrow);
+    _setting.owngoal = await _getPref(SettingUtil.owngoal);
     _setting.periodend = await _getPref(SettingUtil.periodend);
     _setting.timeout = await _getPref(SettingUtil.timeout);
     _setting.nottimeout = await _getPref(SettingUtil.nottimeout);

@@ -28,7 +28,7 @@ class ApplicationBloc {
 
       // 試合結果
       ResultDao _rdao = ResultDao();
-      List<ResultDto> _redto = await _rdao.getAllResult();
+      List<ResultDto> _redto = await _rdao.getResult();
       _setResultController.sink.add(_redto);
     });
   }

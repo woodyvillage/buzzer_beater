@@ -13,7 +13,7 @@ Widget _filler(int _flex) {
   );
 }
 
-Widget matchPanelTeamSubSet({
+Widget resultPanelTeamSubSet({
   @required ResultDto data,
 }) {
   var _hometeam = getHomeAway(data, ResultUtil.home, ResultUtil.teamdata);
@@ -36,11 +36,11 @@ Widget _teamColorItem(TeamDto _team, int _ware) {
   Color _mainColor;
   Color _edgeColor;
   if (_ware == TeamUtil.homeColor) {
-    _mainColor = Color(_team.awayMain);
-    _edgeColor = Color(_team.awayEdge);
-  } else {
     _mainColor = Color(_team.homeMain);
     _edgeColor = Color(_team.homeEdge);
+  } else {
+    _mainColor = Color(_team.awayMain);
+    _edgeColor = Color(_team.awayEdge);
   }
   return Expanded(
     flex: 2,
@@ -48,7 +48,10 @@ Widget _teamColorItem(TeamDto _team, int _ware) {
       height: 50,
       child: Container(
         decoration: BoxDecoration(
-          border: Border.all(color: _edgeColor),
+          border: Border.all(
+            color: _edgeColor,
+            width: 2,
+          ),
           color: _mainColor,
         ),
       ),
@@ -57,19 +60,20 @@ Widget _teamColorItem(TeamDto _team, int _ware) {
 }
 
 Widget _teamNameItem(TeamDto _team, Alignment _align) {
+  double _size = _team.name.length > 10 ? 14 : 16;
   return Expanded(
     flex: 45,
     child: Container(
       alignment: _align,
       child: Text(
         _team.name,
-        style: TextStyle(fontSize: 16),
+        style: TextStyle(fontSize: _size),
       ),
     ),
   );
 }
 
-Widget matchPanelScoreSubSet({
+Widget resultPanelScoreSubSet({
   @required ResultDto data,
 }) {
   return Row(

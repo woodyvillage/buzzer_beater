@@ -9,8 +9,9 @@ import 'package:buzzer_beater/common/flushbar.dart';
 import 'package:buzzer_beater/dto/form.dart';
 import 'package:buzzer_beater/dto/team.dart';
 import 'package:buzzer_beater/model/teamedit.dart';
-import 'package:buzzer_beater/util/routeset.dart';
 import 'package:buzzer_beater/util/form.dart';
+import 'package:buzzer_beater/util/routeset.dart';
+import 'package:buzzer_beater/util/team.dart';
 
 class TeamForm extends StatefulWidget {
   TeamForm({Key key, this.dto, this.edit}) : super(key: key);
@@ -68,14 +69,18 @@ class _TeamFormState extends State<TeamForm> {
     );
   }
 
-  void _openColorPicker(FormDto _dto) async {
+  void _openColorPicker(FormDto _dto, int _color) async {
+    var _title = _color == TeamUtil.mainColor
+        ? _dto.value + 'を選んでください'
+        : _dto.value + 'のエッジ色を選んでください';
     _openDialog(
-      "カラーを選んでください",
+      _title,
       _dto,
       MaterialColorPicker(
         selectedColor: _dto.mainColor,
-        onColorChange: (color) => setState(() => _tempMainColor = color),
-        onMainColorChange: (color) => setState(() => _tempShadeColor = color),
+        onColorChange: (color) => setState(() => _color == TeamUtil.mainColor
+            ? _tempMainColor = _tempShadeColor = color
+            : _tempShadeColor = color),
       ),
     );
   }
@@ -100,7 +105,7 @@ class _TeamFormState extends State<TeamForm> {
         },
         child: ListView(
           children: <Widget>[
-            Padding(padding: const EdgeInsets.symmetric(vertical: 5)),
+            Padding(padding: const EdgeInsets.symmetric(vertical: 15)),
             teamImageField(),
             formField(_form[1]),
             formField(_form[2]),
@@ -115,7 +120,7 @@ class _TeamFormState extends State<TeamForm> {
 
   Widget teamImageField() {
     return Container(
-      margin: const EdgeInsets.fromLTRB(15, 15, 15, 0),
+      margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
       child: TextFormField(
         enabled: true,
         autofocus: false,
@@ -135,8 +140,8 @@ class _TeamFormState extends State<TeamForm> {
             alignment: AlignmentDirectional.topStart,
             children: <Widget>[
               Container(
-                height: 50,
-                width: 50,
+                height: 100,
+                width: 100,
                 child: _form[0].image != null
                     ? Image.file(
                         _form[0].image,
@@ -148,8 +153,8 @@ class _TeamFormState extends State<TeamForm> {
                       ),
               ),
               MaterialButton(
-                height: 50,
-                minWidth: 50,
+                height: 100,
+                minWidth: 100,
                 color: Colors.white30,
                 onPressed: () => _imagePicker(),
                 child: Text('+'),
@@ -184,7 +189,8 @@ class _TeamFormState extends State<TeamForm> {
                 ),
               ),
               onPressed: () {
-                _openColorPicker(_form);
+                _openColorPicker(_form, TeamUtil.edgeColor);
+                _openColorPicker(_form, TeamUtil.mainColor);
               },
             ),
           ),

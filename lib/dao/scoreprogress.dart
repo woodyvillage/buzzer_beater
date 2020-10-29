@@ -13,7 +13,8 @@ class ScoreProgressDao {
 
     for (int i = 1; i <= _max; i++) {
       ScoreDao _sdao = ScoreDao();
-      List<ScoreDto> _score = await _sdao.selectById(_match.id, _team.id, i);
+      List<ScoreDto> _score =
+          await _sdao.selectByMatchTeamScore(_match.id, _team.id, i);
       if (_score.isNotEmpty) {
         if (_score[0].member == 0) {
           var _scoreprogress = ScoreProgressDto()

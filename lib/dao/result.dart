@@ -12,24 +12,37 @@ import 'package:buzzer_beater/dto/team.dart';
 import 'package:buzzer_beater/util/table.dart';
 
 class ResultDao {
-  Future<List<ResultDto>> getAllResult() async {
-    var result = <ResultDto>[];
-
+  Future<List<ResultDto>> getResult() async {
     MatchDao _mdao = MatchDao();
     List<MatchDto> _mdto = await _mdao.select(TableUtil.cDate);
+    return _getResult(_mdto);
+  }
 
-    for (MatchDto _match in _mdto) {
+  Future<ResultDto> getResultById(int _value) async {
+    MatchDao _mdao = MatchDao();
+    List<MatchDto> _mdto = await _mdao.selectById(_value);
+    var _result = await _getResult(_mdto);
+    return _result[0];
+  }
+
+  Future<List<ResultDto>> _getResult(List<MatchDto> _matches) async {
+    var result = <ResultDto>[];
+
+    for (MatchDto _match in _matches) {
       TeamDao _tdao = TeamDao();
       List<TeamDto> _home = await _tdao.selectById(_match.hometeam);
       List<TeamDto> _away = await _tdao.selectById(_match.awayteam);
 
       PeriodDao _pdao = PeriodDao();
-      int _hometotal = await _pdao.sumMatchByTeamId(_match.id, _home[0].id);
-      int _awaytotal = await _pdao.sumMatchByTeamId(_match.id, _away[0].id);
+      int _hometotal = await _pdao.sumByMatchTeam(_match.id, _home[0].id);
+      _hometotal ??= 0;
+      int _awaytotal = await _pdao.sumByMatchTeam(_match.id, _away[0].id);
+      _awaytotal ??= 0;
+
       List<PeriodDto> _homeperiod =
-          await _pdao.selectMatchByTeamId(_match.id, _home[0].id);
+          await _pdao.selectByMatchTeam(_match.id, _home[0].id);
       List<PeriodDto> _awayperiod =
-          await _pdao.selectMatchByTeamId(_match.id, _away[0].id);
+          await _pdao.selectByMatchTeam(_match.id, _away[0].id);
 
       PlayerDao _dao = PlayerDao();
       List<PlayerDto> _homeplayer =

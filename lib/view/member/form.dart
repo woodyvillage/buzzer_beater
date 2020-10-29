@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
@@ -11,10 +10,10 @@ import 'package:buzzer_beater/common/flushbar.dart';
 import 'package:buzzer_beater/common/notifier.dart';
 import 'package:buzzer_beater/dto/form.dart';
 import 'package:buzzer_beater/dto/member.dart';
-import 'package:buzzer_beater/model/teamedit.dart';
 import 'package:buzzer_beater/model/memberedit.dart';
-import 'package:buzzer_beater/util/routeset.dart';
+import 'package:buzzer_beater/model/teamedit.dart';
 import 'package:buzzer_beater/util/form.dart';
+import 'package:buzzer_beater/util/routeset.dart';
 
 class MemberForm extends StatefulWidget {
   MemberForm({Key key, this.dto, this.edit}) : super(key: key);
@@ -95,54 +94,32 @@ class _MemberFormState extends State<MemberForm> {
         onTap: () {
           FocusScope.of(context).unfocus();
         },
-        child: Column(
+        child: ListView(
           children: <Widget>[
-            Padding(padding: const EdgeInsets.symmetric(vertical: 5)),
-            selectFormField(),
+            Padding(padding: const EdgeInsets.fromLTRB(15, 0, 15, 0)),
+            teamImageField(),
             Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Padding(padding: const EdgeInsets.symmetric(horizontal: 5)),
                 Expanded(
-                  flex: 25,
-                  child: memberImageField(),
+                  flex: 70,
+                  child: textFormField(_form[1], _form[2], 7),
                 ),
                 Expanded(
-                  flex: 3,
-                  child: Container(),
+                  flex: 30,
+                  child: numberFormField(_form[2], _form[3], 2, true),
+                ),
+              ],
+            ),
+            Row(
+              children: <Widget>[
+                Expanded(
+                  flex: 60,
+                  child: numberFormField(_form[3], _form[4], 9, true),
                 ),
                 Expanded(
-                  flex: 72,
-                  child: Column(
-                    children: <Widget>[
-                      Row(
-                        children: <Widget>[
-                          Expanded(
-                            flex: 70,
-                            child: textFormField(_form[1], _form[2], 20),
-                          ),
-                          Expanded(
-                            flex: 30,
-                            child: numberFormField(_form[2], _form[3], 2, true),
-                          ),
-                        ],
-                      ),
-                      Row(
-                        children: <Widget>[
-                          Expanded(
-                            flex: 60,
-                            child: numberFormField(_form[3], _form[4], 9, true),
-                          ),
-                          Expanded(
-                            flex: 40,
-                            child: numberFormField(
-                                _form[4], _form[1], 2, _form[5].boolvalue),
-                          ),
-                        ],
-                      ),
-                      roleFormField(_form[5].boolvalue),
-                    ],
-                  ),
+                  flex: 40,
+                  child: numberFormField(
+                      _form[4], _form[1], 2, _form[5].boolvalue),
                 ),
               ],
             ),
@@ -154,55 +131,68 @@ class _MemberFormState extends State<MemberForm> {
     );
   }
 
-  Widget selectFormField() {
-    return SmartSelect<String>.single(
-      title: _form[0].value,
-      value: _form[0].controller.text,
-      placeholder: '選択してください',
-      choiceItems: _teamList,
-      onChange: (state) =>
-          setState(() => _form[0].controller.text = state.value),
-      modalType: S2ModalType.popupDialog,
-      tileBuilder: (context, state) {
-        return S2Tile.fromState(
-          state,
-          isTwoLine: true,
-        );
-      },
-    );
-  }
-
-  Widget memberImageField() {
-    return Stack(
-      alignment: AlignmentDirectional.topStart,
+  Widget teamImageField() {
+    return Row(
       children: <Widget>[
-        Container(
-          height: 100,
-          width: 100,
-          child: (_form[0].image != null)
-              ? Image.file(
-                  _form[0].image,
-                  fit: BoxFit.cover,
-                )
-              : Image.asset(
-                  'images/noimage.png',
-                  fit: BoxFit.cover,
-                ),
+        Padding(padding: const EdgeInsets.symmetric(horizontal: 5)),
+        Expanded(
+          flex: 25,
+          child: Stack(
+            alignment: AlignmentDirectional.topStart,
+            children: <Widget>[
+              Container(
+                height: 100,
+                width: 100,
+                child: (_form[0].image != null)
+                    ? Image.file(
+                        _form[0].image,
+                        fit: BoxFit.cover,
+                      )
+                    : Image.asset(
+                        'images/noimage.png',
+                        fit: BoxFit.cover,
+                      ),
+              ),
+              MaterialButton(
+                height: 100,
+                minWidth: 100,
+                color: Colors.white30,
+                onPressed: () => _imagePicker(),
+                child: Text('+'),
+              ),
+            ],
+          ),
         ),
-        MaterialButton(
-          height: 100,
-          minWidth: 100,
-          color: Colors.white30,
-          onPressed: () => _imagePicker(),
-          child: Text('+'),
-        )
+        Expanded(
+          flex: 70,
+          child: Column(
+            children: [
+              SmartSelect<String>.single(
+                title: _form[0].value,
+                value: _form[0].controller.text,
+                placeholder: '選択してください',
+                choiceItems: _teamList,
+                onChange: (state) =>
+                    setState(() => _form[0].controller.text = state.value),
+                modalType: S2ModalType.popupDialog,
+                tileBuilder: (context, state) {
+                  return S2Tile.fromState(
+                    state,
+                    isTwoLine: true,
+                  );
+                },
+              ),
+              roleFormField(_form[5].boolvalue),
+            ],
+          ),
+        ),
       ],
     );
   }
 
   Widget textFormField(FormDto _form, FormDto _next, int _length) {
     return Container(
-      margin: const EdgeInsets.fromLTRB(0, 0, 15, 10),
+      margin: const EdgeInsets.fromLTRB(10, 0, 10, 10),
       child: TextFormField(
         enabled: true,
         autofocus: false,
@@ -211,7 +201,7 @@ class _MemberFormState extends State<MemberForm> {
         keyboardType: TextInputType.text,
         textInputAction: TextInputAction.next,
         maxLines: 1,
-        maxLength: 20,
+        maxLength: _length,
         maxLengthEnforced: false,
         textAlignVertical: TextAlignVertical.center,
         obscureText: false,
@@ -230,7 +220,7 @@ class _MemberFormState extends State<MemberForm> {
   Widget numberFormField(
       FormDto _form, FormDto _next, int _length, bool _switch) {
     return Container(
-      margin: const EdgeInsets.fromLTRB(0, 0, 15, 10),
+      margin: const EdgeInsets.fromLTRB(10, 0, 10, 10),
       child: TextFormField(
         enabled: _switch,
         autofocus: false,
@@ -269,7 +259,7 @@ class _MemberFormState extends State<MemberForm> {
       ),
       onChanged: (bool value) {
         setState(() {
-          _isPlayer = value;
+          _form[5].boolvalue = value;
         });
       },
     );

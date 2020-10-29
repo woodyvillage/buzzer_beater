@@ -18,7 +18,7 @@ class ResultScore extends StatelessWidget {
           Container(
             height: 50,
             margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-            child: matchPanelTeamSubSet(data: dto),
+            child: resultPanelTeamSubSet(data: dto),
           ),
           Container(
             height: MediaQuery.of(context).size.height - 209,

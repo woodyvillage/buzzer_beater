@@ -6,14 +6,14 @@ import 'package:buzzer_beater/dto/result.dart';
 import 'package:buzzer_beater/dto/player.dart';
 import 'package:buzzer_beater/dto/team.dart';
 
-Widget teamBoard({
+Widget teamBoardSubSet({
   @required TeamDto data,
   @required BuildContext context,
 }) {
   return Card(
     elevation: 8,
     color: Theme.of(context).cardColor,
-    margin: EdgeInsets.fromLTRB(10, 15, 10, 0),
+    margin: EdgeInsets.fromLTRB(10, 15, 10, 15),
     child: Container(
       height: 110,
       child: Padding(
@@ -24,7 +24,7 @@ Widget teamBoard({
             imageItem(data: data, size: 80),
             Expanded(
               child: Padding(
-                padding: const EdgeInsets.only(left: 20),
+                padding: const EdgeInsets.only(left: 10),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -42,7 +42,7 @@ Widget teamBoard({
           stops: [0.96, 0.96],
           colors: [
             Theme.of(context).canvasColor,
-            Color(data.homeMain),
+            Color(data.awayMain),
           ],
         ),
         borderRadius: BorderRadius.all(Radius.circular(4.0)),
@@ -78,12 +78,13 @@ Widget titleItem({
 }) {
   String _age;
   if (data is TeamDto) {
+    double _size = data.name.length > 10 ? 22 : 24;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           data.name,
-          style: TextStyle(fontSize: 22),
+          style: TextStyle(fontSize: _size),
         ),
       ],
     );
@@ -140,7 +141,7 @@ Widget titleItem({
           children: <Widget>[
             Text(
               data.match.name,
-              style: TextStyle(fontSize: 26, fontWeight: FontWeight.w900),
+              style: TextStyle(fontSize: 25, fontWeight: FontWeight.w900),
             ),
             Text(
               data.match.date + _place,
@@ -162,18 +163,22 @@ Widget roundNumberItem({
 }) {
   Color _mainColor;
   Color _edgeColor;
+  Color _fontColor;
   Text _child;
   if (member.number == null) {
     _mainColor = Theme.of(context).canvasColor;
     _edgeColor = Theme.of(context).canvasColor;
+    _fontColor = Theme.of(context).canvasColor;
     _child = Text('');
   } else {
-    if (team.homeMain == team.homeEdge) {
-      _mainColor = Color(team.homeMain);
-      _edgeColor = Theme.of(context).canvasColor;
+    if (team.awayMain == team.awayEdge) {
+      _mainColor = Color(team.awayMain);
+      _edgeColor = Color(team.awayEdge);
+      _fontColor = Theme.of(context).canvasColor;
     } else {
-      _mainColor = Color(team.homeMain);
-      _edgeColor = Color(team.homeEdge);
+      _mainColor = Color(team.awayMain);
+      _edgeColor = Color(team.awayEdge);
+      _fontColor = Color(team.awayEdge);
     }
     if (member.number < 0) {
       _child = Text('');
@@ -181,7 +186,7 @@ Widget roundNumberItem({
       _child = Text(
         member.number.toString(),
         style: TextStyle(
-          color: Color(team.homeEdge),
+          color: _fontColor,
           fontSize: 25,
           fontWeight: FontWeight.w500,
         ),

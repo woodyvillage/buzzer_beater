@@ -23,17 +23,6 @@ class RosterDao extends BaseDao {
     return _toList(_result);
   }
 
-  Future<List<RosterDto>> selectByName(int _team, String _value) async {
-    List<Map<String, dynamic>> _result = await selectBy(
-      TableUtil.rosterTable,
-      [TableUtil.cTeam, TableUtil.cName],
-      [_team, _value],
-      [TableUtil.cId],
-      [TableUtil.asc],
-    );
-    return _toList(_result);
-  }
-
   Future<List<RosterDto>> selectByTeamId(
       int _value, List<String> _column, List<String> _direction) async {
     List<Map<String, dynamic>> _result = await selectBy(
@@ -51,6 +40,17 @@ class RosterDao extends BaseDao {
       TableUtil.rosterTable,
       [TableUtil.cMember],
       [_value],
+      [TableUtil.cId],
+      [TableUtil.asc],
+    );
+    return _toList(_result);
+  }
+
+  Future<List<RosterDto>> selectByTeamIdName(int _team, String _value) async {
+    List<Map<String, dynamic>> _result = await selectBy(
+      TableUtil.rosterTable,
+      [TableUtil.cTeam, TableUtil.cName],
+      [_team, _value],
       [TableUtil.cId],
       [TableUtil.asc],
     );
