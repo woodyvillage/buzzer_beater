@@ -7,11 +7,12 @@ import 'package:buzzer_beater/dao/regist.dart';
 import 'package:buzzer_beater/dao/roster.dart';
 import 'package:buzzer_beater/dto/form.dart';
 import 'package:buzzer_beater/dto/member.dart';
+import 'package:buzzer_beater/dto/player.dart';
 import 'package:buzzer_beater/dto/regist.dart';
 import 'package:buzzer_beater/dto/roster.dart';
-import 'package:buzzer_beater/dto/player.dart';
 import 'package:buzzer_beater/dto/team.dart';
-import 'package:buzzer_beater/util/roster.dart';
+import 'package:buzzer_beater/util/application.dart';
+import 'package:buzzer_beater/util/form.dart';
 import 'package:buzzer_beater/util/table.dart';
 
 Future<List<FormDto>> buildRosterFormValue(PlayerDto _member) async {
@@ -19,18 +20,18 @@ Future<List<FormDto>> buildRosterFormValue(PlayerDto _member) async {
 
   for (int i = 0; i < rosters.length; i++) {
     bool _boolvalue;
-    if (rosters[i][RosterUtil.memberDefault] is bool) {
-      _boolvalue = rosters[i][RosterUtil.memberDefault];
+    if (rosters[i][ApplicationUtil.formDefault] is bool) {
+      _boolvalue = rosters[i][ApplicationUtil.formDefault];
     } else {
       _boolvalue = null;
     }
     var _dto = FormDto()
       ..node = FocusNode()
       ..controller = TextEditingController()
-      ..value = rosters[i][RosterUtil.memberTitle]
-      ..hint = rosters[i][RosterUtil.memberDefault] == 0
+      ..value = rosters[i][ApplicationUtil.formTitle]
+      ..hint = rosters[i][ApplicationUtil.formDefault] == 0
           ? ''
-          : rosters[i][RosterUtil.memberDefault].toString()
+          : rosters[i][ApplicationUtil.formDefault].toString()
       ..boolvalue = _boolvalue;
     _form.add(_dto);
   }
@@ -43,8 +44,8 @@ Future<List<FormDto>> buildRosterFormValue(PlayerDto _member) async {
     _form[1].controller.text = _roster[0].name;
     _form[2].controller.text = _member.member.toString();
     _form[2].hint = _member.member.toString();
-    _form[3].boolvalue = _member.role == RosterUtil.player ? true : false;
-    if (_member.role == RosterUtil.player) {
+    _form[3].boolvalue = _member.role == ApplicationUtil.player ? true : false;
+    if (_member.role == ApplicationUtil.player) {
       _form[3].controller.text = _member.number.toString();
     }
   }
@@ -78,6 +79,30 @@ Future<List<S2Choice<String>>> buildRosterListValueByTeamId(int _value) async {
       value: _roster.id.toString(),
       title: _roster.name,
     ));
+  }
+
+  return _list;
+}
+
+Future<List<S2Choice<String>>> buildMemberListValueByRosterId(
+    int _roster) async {
+  List<S2Choice<String>> _list = <S2Choice<String>>[];
+  RegistDao _dao = RegistDao();
+  List<RegistDto> _dto = await _dao.selectByRosterId(_roster,
+      [TableUtil.cSort, TableUtil.cNumber], [TableUtil.asc, TableUtil.asc]);
+
+  for (RegistDto _regist in _dto) {
+    MemberDao _mdao = MemberDao();
+    List<MemberDto> _member = await _mdao.selectById(_regist.member);
+
+    if (_regist.role > 0) {
+      _list.add(S2Choice<String>(
+          value: _regist.id.toString(), title: 'コーチ ' + _member[0].name));
+    } else {
+      _list.add(S2Choice<String>(
+          value: _regist.id.toString(),
+          title: _regist.number.toString() + '番 ' + _member[0].name));
+    }
   }
 
   return _list;
@@ -148,9 +173,10 @@ Future confirmRosterValue(
               ? _rdto.number = null
               : _rdto.number = int.parse(_form[i + 1].controller.text);
           _rdto.role = _member[0].role;
-          _rdto.sort = _member[0].role == RosterUtil.player
-              ? RosterUtil.player
-              : RosterUtil.coach;
+          _rdto.sort = _member[0].role == ApplicationUtil.player
+              ? ApplicationUtil.player
+              : ApplicationUtil.coach;
+          _rdto.ball = null;
         }
 
         if (_rdto.member != null) {
@@ -198,17 +224,17 @@ Future firstRosterSupport(List<TeamDto> _team) async {
     _rdto.team = _team[0].id;
     _rdto.roster = _roster[0].id;
     _rdto.member = _member.id;
-    if (_member.role == RosterUtil.player) {
+    if (_member.role == ApplicationUtil.player) {
       _rdto.number = i;
     } else {
       _rdto.number = null;
     }
     if (i == 12) {
-      _rdto.role = RosterUtil.coach;
+      _rdto.role = ApplicationUtil.coach;
     } else if (i == 13) {
-      _rdto.role = RosterUtil.assistant;
+      _rdto.role = ApplicationUtil.assistant;
     } else {
-      _rdto.role = RosterUtil.player;
+      _rdto.role = ApplicationUtil.player;
     }
     _rdto.sort = _member.role;
     await _rdao.insert(_rdto);

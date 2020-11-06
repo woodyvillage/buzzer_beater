@@ -9,7 +9,7 @@ class PlayerDto {
   int age;
   int jbaid;
   String image;
-  List<int> quota;
+  List<int> quarter;
   List<String> foul;
 
   PlayerDto({
@@ -23,7 +23,7 @@ class PlayerDto {
     this.age,
     this.jbaid,
     this.image,
-    this.quota,
+    this.quarter,
     this.foul,
   });
 }

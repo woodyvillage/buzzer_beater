@@ -7,7 +7,8 @@ import 'package:buzzer_beater/dao/member.dart';
 import 'package:buzzer_beater/dto/form.dart';
 import 'package:buzzer_beater/dto/member.dart';
 import 'package:buzzer_beater/dto/team.dart';
-import 'package:buzzer_beater/util/member.dart';
+import 'package:buzzer_beater/util/application.dart';
+import 'package:buzzer_beater/util/form.dart';
 import 'package:buzzer_beater/util/table.dart';
 
 List<FormDto> buildMemberFormValue(MemberDto _member) {
@@ -15,15 +16,15 @@ List<FormDto> buildMemberFormValue(MemberDto _member) {
 
   for (int i = 0; i < members.length; i++) {
     bool _boolvalue;
-    if (members[i][MemberUtil.memberDefault] is bool) {
-      _boolvalue = members[i][MemberUtil.memberDefault];
+    if (members[i][ApplicationUtil.formDefault] is bool) {
+      _boolvalue = members[i][ApplicationUtil.formDefault];
     } else {
       _boolvalue = null;
     }
     var _dto = FormDto()
       ..node = FocusNode()
       ..controller = TextEditingController()
-      ..value = members[i][MemberUtil.memberTitle]
+      ..value = members[i][ApplicationUtil.formTitle]
       ..boolvalue = _boolvalue;
     _form.add(_dto);
   }
@@ -39,7 +40,7 @@ List<FormDto> buildMemberFormValue(MemberDto _member) {
     _form[3].controller.text =
         _member.jbaid == 0 ? '' : _member.jbaid.toString().padLeft(9, "0");
     _form[4].controller.text = _member.number.toString();
-    _form[5].boolvalue = _member.role == MemberUtil.player ? true : false;
+    _form[5].boolvalue = _member.role == ApplicationUtil.player ? true : false;
   }
 
   return _form;
@@ -100,7 +101,9 @@ Future confirmMemberValue(
   } else {
     _dto.number = null;
   }
-  _dto.role = _form[5].boolvalue == true ? MemberUtil.player : MemberUtil.coach;
+  _dto.role = _form[5].boolvalue == true
+      ? ApplicationUtil.player
+      : ApplicationUtil.coach;
 
   if (!_dto.isComplete()) {
     // 必須項目未入力
@@ -135,7 +138,7 @@ Future firstMemberSupport(List<TeamDto> _team) async {
   _dto.team = _team[0].id;
 
   for (int i = 4; i < 12; i++) {
-    _dto.role = MemberUtil.player;
+    _dto.role = ApplicationUtil.player;
     _dto.name = i.toString() + '番';
     _dto.age = 12;
     _dto.jbaid = i + (i * 1234) + (i * 12345678);
@@ -143,14 +146,14 @@ Future firstMemberSupport(List<TeamDto> _team) async {
     await _dao.insert(_dto);
   }
 
-  _dto.role = MemberUtil.coach;
+  _dto.role = ApplicationUtil.coach;
   _dto.name = '監督';
   _dto.age = 40;
   _dto.jbaid = 13 + (13 * 1234) + (13 * 12345678);
   _dto.number = null;
   await _dao.insert(_dto);
 
-  _dto.role = MemberUtil.coach;
+  _dto.role = ApplicationUtil.coach;
   _dto.name = 'コーチ';
   _dto.age = 30;
   _dto.jbaid = 14 + (14 * 1234) + (14 * 12345678);

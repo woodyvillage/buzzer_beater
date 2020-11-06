@@ -8,6 +8,7 @@ class PeriodDto {
   int score;
   int timeout;
   int teamfoul;
+  int status;
 
   PeriodDto({
     this.id,
@@ -17,6 +18,7 @@ class PeriodDto {
     this.score,
     this.timeout,
     this.teamfoul,
+    this.status,
   });
 
   factory PeriodDto.parse(Map<String, dynamic> _record) => PeriodDto(
@@ -27,6 +29,7 @@ class PeriodDto {
         score: _record[TableUtil.cScore],
         timeout: _record[TableUtil.cTimeout],
         teamfoul: _record[TableUtil.cTeamfoul],
+        status: _record[TableUtil.cStatus],
       );
 
   Map<String, dynamic> toMap() => {
@@ -37,5 +40,6 @@ class PeriodDto {
         TableUtil.cScore: score,
         TableUtil.cTimeout: timeout,
         TableUtil.cTeamfoul: teamfoul,
+        TableUtil.cStatus: status,
       };
 }

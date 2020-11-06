@@ -6,6 +6,8 @@ class MatchDto {
   String name;
   String place;
   String coat;
+  int quarter;
+  int status;
   int hometeam;
   int awayteam;
   int homeroster;
@@ -19,6 +21,8 @@ class MatchDto {
     this.name,
     this.place,
     this.coat,
+    this.quarter,
+    this.status,
     this.hometeam,
     this.awayteam,
     this.homeroster,
@@ -33,6 +37,8 @@ class MatchDto {
         name: _record[TableUtil.cName],
         place: _record[TableUtil.cPlace],
         coat: _record[TableUtil.cCoat],
+        quarter: _record[TableUtil.cQuarter],
+        status: _record[TableUtil.cStatus],
         hometeam: _record[TableUtil.cHometeam],
         awayteam: _record[TableUtil.cAwayteam],
         homeroster: _record[TableUtil.cHomeroster],
@@ -47,6 +53,8 @@ class MatchDto {
         TableUtil.cName: name,
         TableUtil.cPlace: place,
         TableUtil.cCoat: coat,
+        TableUtil.cQuarter: quarter,
+        TableUtil.cStatus: status,
         TableUtil.cHometeam: hometeam,
         TableUtil.cAwayteam: awayteam,
         TableUtil.cHomeroster: homeroster,
@@ -54,4 +62,19 @@ class MatchDto {
         TableUtil.cHomeware: homeware,
         TableUtil.cAwayware: awayware,
       };
+
+  bool isComplete() {
+    if (date == null ||
+        name == null ||
+        hometeam == null ||
+        awayteam == null ||
+        homeroster == null ||
+        awayroster == null ||
+        homeware == null ||
+        awayware == null) {
+      return false;
+    } else {
+      return true;
+    }
+  }
 }

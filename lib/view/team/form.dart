@@ -9,9 +9,9 @@ import 'package:buzzer_beater/common/flushbar.dart';
 import 'package:buzzer_beater/dto/form.dart';
 import 'package:buzzer_beater/dto/team.dart';
 import 'package:buzzer_beater/model/teamedit.dart';
+import 'package:buzzer_beater/util/application.dart';
 import 'package:buzzer_beater/util/form.dart';
 import 'package:buzzer_beater/util/routeset.dart';
-import 'package:buzzer_beater/util/team.dart';
 
 class TeamForm extends StatefulWidget {
   TeamForm({Key key, this.dto, this.edit}) : super(key: key);
@@ -70,17 +70,18 @@ class _TeamFormState extends State<TeamForm> {
   }
 
   void _openColorPicker(FormDto _dto, int _color) async {
-    var _title = _color == TeamUtil.mainColor
-        ? _dto.value + 'を選んでください'
+    var _title = _color == ApplicationUtil.mainColor
+        ? _dto.value + 'のメイン色を選んでください'
         : _dto.value + 'のエッジ色を選んでください';
     _openDialog(
       _title,
       _dto,
       MaterialColorPicker(
         selectedColor: _dto.mainColor,
-        onColorChange: (color) => setState(() => _color == TeamUtil.mainColor
-            ? _tempMainColor = _tempShadeColor = color
-            : _tempShadeColor = color),
+        onColorChange: (color) => setState(() =>
+            _color == ApplicationUtil.mainColor
+                ? _tempMainColor = _tempShadeColor = color
+                : _tempShadeColor = color),
       ),
     );
   }
@@ -189,8 +190,8 @@ class _TeamFormState extends State<TeamForm> {
                 ),
               ),
               onPressed: () {
-                _openColorPicker(_form, TeamUtil.edgeColor);
-                _openColorPicker(_form, TeamUtil.mainColor);
+                _openColorPicker(_form, ApplicationUtil.edgeColor);
+                _openColorPicker(_form, ApplicationUtil.mainColor);
               },
             ),
           ),

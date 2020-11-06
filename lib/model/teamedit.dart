@@ -8,29 +8,30 @@ import 'package:buzzer_beater/dto/form.dart';
 import 'package:buzzer_beater/dto/team.dart';
 import 'package:buzzer_beater/model/memberedit.dart';
 import 'package:buzzer_beater/model/rosteredit.dart';
+import 'package:buzzer_beater/util/application.dart';
+import 'package:buzzer_beater/util/form.dart';
 import 'package:buzzer_beater/util/table.dart';
-import 'package:buzzer_beater/util/team.dart';
 
 List<FormDto> buildTeamFormValue(TeamDto _team) {
   List<FormDto> _form = <FormDto>[];
 
   for (int i = 0; i < teams.length; i++) {
-    if (teams[i][TeamUtil.teamMainColor] is Color) {
+    if (teams[i][ApplicationUtil.functionColor] is Color) {
       var _dto = FormDto()
         ..node = FocusNode()
         ..controller = TextEditingController()
-        ..icon = teams[i][TeamUtil.teamIcon]
-        ..value = teams[i][TeamUtil.teamTitle]
-        ..mainColor = teams[i][TeamUtil.teamMainColor]
-        ..edgeColor = teams[i][TeamUtil.teamEdgeColor];
+        ..icon = teams[i][ApplicationUtil.functionIcon]
+        ..value = teams[i][ApplicationUtil.functionTitle]
+        ..mainColor = teams[i][ApplicationUtil.functionColor]
+        ..edgeColor = teams[i][ApplicationUtil.functionEdge];
       _form.add(_dto);
     } else {
       var _dto = FormDto()
         ..node = FocusNode()
         ..controller = TextEditingController()
-        ..icon = teams[i][TeamUtil.teamIcon]
-        ..hint = teams[i][TeamUtil.teamHint]
-        ..value = teams[i][TeamUtil.teamTitle];
+        ..icon = teams[i][ApplicationUtil.functionIcon]
+        // ..hint = teams[i][TeamUtil.teamHint]
+        ..value = teams[i][ApplicationUtil.functionTitle];
       _form.add(_dto);
     }
   }

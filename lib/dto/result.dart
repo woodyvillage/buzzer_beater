@@ -16,4 +16,6 @@ class ResultDto {
   List<PlayerDto> awayplayers;
   List<ScoreProgressDto> homeprogress;
   List<ScoreProgressDto> awayprogress;
+  int quarter;
+  int status;
 }

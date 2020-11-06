@@ -2,10 +2,10 @@ import 'package:buzzer_beater/dao/member.dart';
 import 'package:buzzer_beater/dao/record.dart';
 import 'package:buzzer_beater/dao/regist.dart';
 import 'package:buzzer_beater/dto/member.dart';
+import 'package:buzzer_beater/dto/player.dart';
 import 'package:buzzer_beater/dto/record.dart';
 import 'package:buzzer_beater/dto/regist.dart';
-import 'package:buzzer_beater/dto/player.dart';
-import 'package:buzzer_beater/util/roster.dart';
+import 'package:buzzer_beater/util/application.dart';
 import 'package:buzzer_beater/util/table.dart';
 
 class PlayerDao {
@@ -26,9 +26,9 @@ class PlayerDao {
         ..roster = _roster
         ..member = _regist.member
         ..number = _regist.number
-        ..role = _regist.role == RosterUtil.player
-            ? RosterUtil.player
-            : RosterUtil.coach
+        ..role = _regist.role == ApplicationUtil.player
+            ? ApplicationUtil.player
+            : ApplicationUtil.coach
         ..name = _mdto[0].name
         ..age = _mdto[0].age
         ..jbaid = _mdto[0].jbaid
@@ -93,11 +93,59 @@ class PlayerDao {
         ..age = _mdto[0].age
         ..jbaid = _mdto[0].jbaid
         ..image = _image
-        ..quota = [
-          _dto[0].quota1,
-          _dto[0].quota2,
-          _dto[0].quota3,
-          _dto[0].quota4
+        ..quarter = [
+          _dto[0].quarter1,
+          _dto[0].quarter2,
+          _dto[0].quarter3,
+          _dto[0].quarter4
+        ]
+        ..foul = [
+          _dto[0].foul1,
+          _dto[0].foul2,
+          _dto[0].foul3,
+          _dto[0].foul4,
+          _dto[0].foul5
+        ];
+      player.add(_player);
+    }
+
+    return player;
+  }
+
+  // result
+  Future<List<PlayerDto>> getMatchByRosterQuarterId(
+      int _roster, int _match, int _quarter) async {
+    var player = <PlayerDto>[];
+    MemberDao _mdao = MemberDao();
+    RegistDao _rdao = RegistDao();
+    RecordDao _dao = RecordDao();
+
+    List<RecordDto> _dto =
+        await _dao.selectByMatchRosterQuarter(_match, _roster, _quarter);
+
+    for (RecordDto _record in _dto) {
+      List<MemberDto> _mdto = await _mdao.selectById(_record.member);
+
+      List<RegistDto> _rdto =
+          await _rdao.selectByRosterMember(_roster, _record.member);
+
+      var _image = _mdto[0].image == null ? 'null' : _mdto[0].image;
+      var _player = PlayerDto()
+        ..team = _record.team
+        ..roster = _roster
+        ..member = _record.member
+        ..number = _rdto[0].number
+        ..role = _rdto[0].role
+        ..sort = _rdto[0].sort
+        ..name = _mdto[0].name
+        ..age = _mdto[0].age
+        ..jbaid = _mdto[0].jbaid
+        ..image = _image
+        ..quarter = [
+          _dto[0].quarter1,
+          _dto[0].quarter2,
+          _dto[0].quarter3,
+          _dto[0].quarter4
         ]
         ..foul = [
           _dto[0].foul1,

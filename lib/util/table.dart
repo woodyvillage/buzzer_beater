@@ -28,11 +28,14 @@ class TableUtil {
 
   static final registTable = 'regist';
   static final cSort = 'sort';
+  static final cBall = 'ball';
 
   static final matchTable = 'match';
   static final cPlace = 'place';
   static final cDate = 'date';
   static final cCoat = 'coat';
+  static final cStatus = 'status';
+  static final cQuarter = 'quarter';
   static final cHometeam = 'hometeam';
   static final cAwayteam = 'awayteam';
   static final cHomeroster = 'homeroster';
@@ -51,10 +54,10 @@ class TableUtil {
   static final cPoint = 'point';
 
   static final recordTable = 'record';
-  static final cQuota1 = 'quota1';
-  static final cQuota2 = 'quota2';
-  static final cQuota3 = 'quota3';
-  static final cQuota4 = 'quota4';
+  static final cQuarter1 = 'quarter1';
+  static final cQuarter2 = 'quarter2';
+  static final cQuarter3 = 'quarter3';
+  static final cQuarter4 = 'quarter4';
   static final cFoul1 = 'foul1';
   static final cFoul2 = 'foul2';
   static final cFoul3 = 'foul3';
@@ -107,7 +110,8 @@ class TableUtil {
             $cMember INTEGER NOT NULL,
             $cNumber INTEGER,
             $cRole INTEGER NOT NULL,
-            $cSort INTEGER NOT NULL
+            $cSort INTEGER NOT NULL,
+            $cBall INTEGER
           );
           '''
     ],
@@ -119,6 +123,8 @@ class TableUtil {
             $cName TEXT NOT NULL,
             $cPlace TEXT,
             $cCoat TEXT,
+            $cQuarter INTEGER NOT NULL,
+            $cStatus INTEGER NOT NULL,
             $cHometeam INTEGER NOT NULL,
             $cAwayteam INTEGER NOT NULL,
             $cHomeroster INTEGER NOT NULL,
@@ -136,8 +142,9 @@ class TableUtil {
             $cTeam INTEGER NOT NULL,
             $cPeriod INTEGER NOT NULL,
             $cScore INTEGER NOT NULL,
-            $cTimeout INTEGER NOT NULL,
-            $cTeamfoul INTEGER NOT NULL
+            $cTimeout INTEGER,
+            $cTeamfoul INTEGER,
+            $cStatus INTEGER
           );
           '''
     ],
@@ -162,10 +169,10 @@ class TableUtil {
             $cRoster INTEGER NOT NULL,
             $cMatch INTEGER NOT NULL,
             $cMember INTEGER NOT NULL,
-            $cQuota1 INTEGER,
-            $cQuota2 INTEGER,
-            $cQuota3 INTEGER,
-            $cQuota4 INTEGER,
+            $cQuarter1 INTEGER,
+            $cQuarter2 INTEGER,
+            $cQuarter3 INTEGER,
+            $cQuarter4 INTEGER,
             $cFoul1 TEXT,
             $cFoul2 TEXT,
             $cFoul3 TEXT,

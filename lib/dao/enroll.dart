@@ -1,8 +1,8 @@
 import 'package:buzzer_beater/dao/member.dart';
 import 'package:buzzer_beater/dao/team.dart';
+import 'package:buzzer_beater/dto/enroll.dart';
 import 'package:buzzer_beater/dto/member.dart';
 import 'package:buzzer_beater/dto/team.dart';
-import 'package:buzzer_beater/dto/enroll.dart';
 import 'package:buzzer_beater/util/table.dart';
 
 class EnrollDao {

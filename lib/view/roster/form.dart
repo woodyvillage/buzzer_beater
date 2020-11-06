@@ -11,8 +11,8 @@ import 'package:buzzer_beater/dto/player.dart';
 import 'package:buzzer_beater/model/memberedit.dart';
 import 'package:buzzer_beater/model/teamedit.dart';
 import 'package:buzzer_beater/model/rosteredit.dart';
-import 'package:buzzer_beater/util/routeset.dart';
 import 'package:buzzer_beater/util/form.dart';
+import 'package:buzzer_beater/util/routeset.dart';
 
 class RosterForm extends StatefulWidget {
   RosterForm({Key key, this.dto, this.edit}) : super(key: key);

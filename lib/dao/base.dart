@@ -125,9 +125,47 @@ class BaseDao {
     );
   }
 
+  Future<List<Map<String, dynamic>>> selectByNot(
+    String _table,
+    List<String> _key,
+    List<dynamic> _value,
+    List<String> _column,
+    List<String> _direction,
+  ) async {
+    Database _db = await instance.database;
+    if (_key.length != _value.length) {
+      return null;
+    }
+    var _where = '';
+    for (int i = 0; i < _key.length; i++) {
+      if (i == 0) {
+        _where = _key[i] + ' <> ?';
+      } else {
+        _where = _where + ' and ' + _key[i] + ' <> ?';
+      }
+    }
+    if (_column.length != _direction.length) {
+      return null;
+    }
+    var _order = '';
+    for (int i = 0; i < _column.length; i++) {
+      if (i == 0) {
+        _order = _column[i] + _direction[i];
+      } else {
+        _order = _order + ', ' + _column[i] + _direction[i];
+      }
+    }
+    return await _db.query(
+      _table,
+      where: _where,
+      whereArgs: _value,
+      orderBy: _order,
+    );
+  }
+
   Future<int> insert(dynamic _dto) async {
     Database _db = await instance.database;
-    print('insert[${_dto.toMap()}]');
+    print(_decision(_dto) + ' insert[${_dto.toMap()}]');
     return await _db.insert(
       _decision(_dto),
       _dto.toMap(),
@@ -136,6 +174,7 @@ class BaseDao {
 
   Future<int> update(dynamic _dto) async {
     Database _db = await instance.database;
+    print(_decision(_dto) + ' update[${_dto.toMap()}]');
     return await _db.update(
       _decision(_dto),
       _dto.toMap(),
@@ -146,6 +185,7 @@ class BaseDao {
 
   Future<int> delete(dynamic _dto) async {
     Database _db = await instance.database;
+    print(_decision(_dto) + ' delete[${_dto.toMap()}]');
     return await _db.delete(
       _decision(_dto),
       where: '${TableUtil.cId} = ?',

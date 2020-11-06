@@ -6,10 +6,10 @@ class RecordDto {
   int roster;
   int match;
   int member;
-  int quota1;
-  int quota2;
-  int quota3;
-  int quota4;
+  int quarter1;
+  int quarter2;
+  int quarter3;
+  int quarter4;
   String foul1;
   String foul2;
   String foul3;
@@ -22,10 +22,10 @@ class RecordDto {
     this.roster,
     this.match,
     this.member,
-    this.quota1,
-    this.quota2,
-    this.quota3,
-    this.quota4,
+    this.quarter1,
+    this.quarter2,
+    this.quarter3,
+    this.quarter4,
     this.foul1,
     this.foul2,
     this.foul3,
@@ -39,10 +39,10 @@ class RecordDto {
         roster: _record[TableUtil.cRoster],
         match: _record[TableUtil.cMatch],
         member: _record[TableUtil.cMember],
-        quota1: _record[TableUtil.cQuota1],
-        quota2: _record[TableUtil.cQuota2],
-        quota3: _record[TableUtil.cQuota3],
-        quota4: _record[TableUtil.cQuota4],
+        quarter1: _record[TableUtil.cQuarter1],
+        quarter2: _record[TableUtil.cQuarter2],
+        quarter3: _record[TableUtil.cQuarter3],
+        quarter4: _record[TableUtil.cQuarter4],
         foul1: _record[TableUtil.cFoul1],
         foul2: _record[TableUtil.cFoul2],
         foul3: _record[TableUtil.cFoul3],
@@ -56,10 +56,10 @@ class RecordDto {
         TableUtil.cRoster: roster,
         TableUtil.cMatch: match,
         TableUtil.cMember: member,
-        TableUtil.cQuota1: quota1,
-        TableUtil.cQuota2: quota2,
-        TableUtil.cQuota3: quota3,
-        TableUtil.cQuota4: quota4,
+        TableUtil.cQuarter1: quarter1,
+        TableUtil.cQuarter2: quarter2,
+        TableUtil.cQuarter3: quarter3,
+        TableUtil.cQuarter4: quarter4,
         TableUtil.cFoul1: foul1,
         TableUtil.cFoul2: foul2,
         TableUtil.cFoul3: foul3,

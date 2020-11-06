@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 
 // import 'package:buzzer_beater/view/analysis/body.dart';
 import 'package:buzzer_beater/view/match/body.dart';
@@ -36,7 +37,7 @@ final routesetClass = [
   TeamBoard(),
   MemberBoard(),
   RosterBoard(),
-  MatchList(),
+  MatchBook(),
   ResultBook(),
   // AnalysisList(),
 ];
@@ -45,16 +46,16 @@ final routesetFloatIcon = [
   Icon(Icons.add),
   Icon(Icons.person_add),
   Icon(Icons.playlist_add),
+  Icon(Icons.add),
+  Icon(Icons.add),
   null,
-  null,
-  // Icon(Icons.play_arrow),
 ];
 
 final routesetFloatText = [
   Text('チーム追加'),
   Text('メンバー追加'),
   Text('メンバー登録'),
+  Text('試合開始'),
+  Text('試合開始'),
   null,
-  null,
-  // Text('試合開始'),
 ];

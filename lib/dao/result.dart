@@ -5,29 +5,38 @@ import 'package:buzzer_beater/dao/scoreprogress.dart';
 import 'package:buzzer_beater/dao/team.dart';
 import 'package:buzzer_beater/dto/match.dart';
 import 'package:buzzer_beater/dto/period.dart';
-import 'package:buzzer_beater/dto/result.dart';
 import 'package:buzzer_beater/dto/player.dart';
+import 'package:buzzer_beater/dto/result.dart';
 import 'package:buzzer_beater/dto/scoreprogress.dart';
 import 'package:buzzer_beater/dto/team.dart';
+import 'package:buzzer_beater/util/application.dart';
 import 'package:buzzer_beater/util/table.dart';
 
 class ResultDao {
   Future<List<ResultDto>> getResult() async {
     MatchDao _mdao = MatchDao();
-    List<MatchDto> _mdto = await _mdao.select(TableUtil.cDate);
-    return _getResult(_mdto);
+    List<MatchDto> _mdto =
+        await _mdao.selectByStatus(TableUtil.cDate, ApplicationUtil.definite);
+    return _getResult(_mdto, false);
+  }
+
+  Future<List<ResultDto>> getProgressResult() async {
+    MatchDao _mdao = MatchDao();
+    List<MatchDto> _mdto = await _mdao.selectByNotStatus(
+        TableUtil.cDate, ApplicationUtil.definite);
+    return _mdto == null ? null : _getResult(_mdto, false);
   }
 
   Future<ResultDto> getResultById(int _value) async {
     MatchDao _mdao = MatchDao();
     List<MatchDto> _mdto = await _mdao.selectById(_value);
-    var _result = await _getResult(_mdto);
+    var _result = await _getResult(_mdto, true);
     return _result[0];
   }
 
-  Future<List<ResultDto>> _getResult(List<MatchDto> _matches) async {
+  Future<List<ResultDto>> _getResult(
+      List<MatchDto> _matches, bool isQuarter) async {
     var result = <ResultDto>[];
-
     for (MatchDto _match in _matches) {
       TeamDao _tdao = TeamDao();
       List<TeamDto> _home = await _tdao.selectById(_match.hometeam);
@@ -68,7 +77,9 @@ class ResultDao {
         ..homeplayers = _homeplayer
         ..awayplayers = _awayplayer
         ..homeprogress = _homeprogress
-        ..awayprogress = _awayprogress;
+        ..awayprogress = _awayprogress
+        ..quarter = _match.quarter
+        ..status = _match.status;
       result.add(_result);
     }
 
