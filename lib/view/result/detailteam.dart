@@ -4,7 +4,7 @@ import 'package:buzzer_beater/dto/result.dart';
 import 'package:buzzer_beater/dto/setting.dart';
 import 'package:buzzer_beater/dto/team.dart';
 import 'package:buzzer_beater/model/resultedit.dart';
-import 'package:buzzer_beater/util/result.dart';
+import 'package:buzzer_beater/util/application.dart';
 import 'package:buzzer_beater/view/common/boarditems.dart';
 import 'package:buzzer_beater/view/result/detailteaminfo.dart';
 import 'package:buzzer_beater/view/result/detailmemberinfo.dart';
@@ -17,7 +17,7 @@ class ResultTeam extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    TeamDto _team = getHomeAway(dto, side, ResultUtil.teamdata);
+    TeamDto _team = getHomeAway(dto, side, ApplicationUtil.teamdata);
     return SafeArea(
       child: Column(
         children: <Widget>[

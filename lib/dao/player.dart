@@ -78,8 +78,8 @@ class PlayerDao {
     for (RegistDto _regist in _rdto) {
       List<MemberDto> _mdto = await _mdao.selectById(_regist.member);
 
-      List<RecordDto> _dto =
-          await _dao.selectByMatchRosterMember(_match, _roster, _regist.member);
+      List<RecordDto> _dto = await _dao.selectByMatchTeamRosterMember(
+          _match, _regist.team, _roster, _regist.member);
 
       var _image = _mdto[0].image == null ? 'null' : _mdto[0].image;
       var _player = PlayerDto()

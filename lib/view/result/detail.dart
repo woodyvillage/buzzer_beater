@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:buzzer_beater/dao/setting.dart';
 import 'package:buzzer_beater/dto/result.dart';
 import 'package:buzzer_beater/dto/setting.dart';
-import 'package:buzzer_beater/util/result.dart';
+import 'package:buzzer_beater/util/application.dart';
+import 'package:buzzer_beater/util/form.dart';
 import 'package:buzzer_beater/util/setting.dart';
 import 'package:buzzer_beater/view/result/detailscore.dart';
 import 'package:buzzer_beater/view/result/detailteam.dart';
@@ -50,9 +51,11 @@ class _ResultDetailState extends State<ResultDetail>
             setState(() => _currentIndex = index);
           },
           children: <Widget>[
-            ResultTeam(dto: widget.dto, side: ResultUtil.home, setting: _sdto),
+            ResultTeam(
+                dto: widget.dto, side: ApplicationUtil.home, setting: _sdto),
             ResultScore(dto: widget.dto, setting: _sdto),
-            ResultTeam(dto: widget.dto, side: ResultUtil.away, setting: _sdto),
+            ResultTeam(
+                dto: widget.dto, side: ApplicationUtil.away, setting: _sdto),
           ],
         ),
       ),

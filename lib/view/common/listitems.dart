@@ -3,8 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:buzzer_beater/dto/result.dart';
 import 'package:buzzer_beater/dto/team.dart';
 import 'package:buzzer_beater/model/resultedit.dart';
-import 'package:buzzer_beater/util/result.dart';
-import 'package:buzzer_beater/util/team.dart';
+import 'package:buzzer_beater/util/application.dart';
 
 Widget _filler(int _flex) {
   return Expanded(
@@ -15,27 +14,52 @@ Widget _filler(int _flex) {
 
 Widget resultPanelTeamSubSet({
   @required ResultDto data,
+  @required bool score,
 }) {
-  var _hometeam = getHomeAway(data, ResultUtil.home, ResultUtil.teamdata);
-  var _awayteam = getHomeAway(data, ResultUtil.away, ResultUtil.teamdata);
-  return Row(
-    children: <Widget>[
-      _filler(2),
-      _teamColorItem(_hometeam, data.match.homeware),
-      _filler(2),
-      _teamNameItem(_hometeam, Alignment.centerLeft),
-      _teamNameItem(_awayteam, Alignment.centerRight),
-      _filler(2),
-      _teamColorItem(_awayteam, data.match.awayware),
-      _filler(2),
-    ],
-  );
+  var _hometeam =
+      getHomeAway(data, ApplicationUtil.home, ApplicationUtil.teamdata);
+  var _awayteam =
+      getHomeAway(data, ApplicationUtil.away, ApplicationUtil.teamdata);
+  if (score) {
+    return Row(
+      children: <Widget>[
+        _filler(2),
+        _teamNameItem(_hometeam, Alignment.centerLeft),
+        _filler(1),
+        Text(
+          data.hometotal.toString(),
+          style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800),
+        ),
+        Text(' - '),
+        Text(
+          data.awaytotal.toString(),
+          style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800),
+        ),
+        _filler(1),
+        _teamNameItem(_awayteam, Alignment.centerRight),
+        _filler(2),
+      ],
+    );
+  } else {
+    return Row(
+      children: <Widget>[
+        _filler(2),
+        _teamColorItem(_hometeam, data.match.homeware),
+        _filler(2),
+        _teamNameItem(_hometeam, Alignment.centerLeft),
+        _teamNameItem(_awayteam, Alignment.centerRight),
+        _filler(2),
+        _teamColorItem(_awayteam, data.match.awayware),
+        _filler(2),
+      ],
+    );
+  }
 }
 
 Widget _teamColorItem(TeamDto _team, int _ware) {
   Color _mainColor;
   Color _edgeColor;
-  if (_ware == TeamUtil.homeColor) {
+  if (_ware == ApplicationUtil.homeColor) {
     _mainColor = Color(_team.homeMain);
     _edgeColor = Color(_team.homeEdge);
   } else {
@@ -60,14 +84,13 @@ Widget _teamColorItem(TeamDto _team, int _ware) {
 }
 
 Widget _teamNameItem(TeamDto _team, Alignment _align) {
-  double _size = _team.name.length > 10 ? 14 : 16;
   return Expanded(
     flex: 45,
     child: Container(
       alignment: _align,
       child: Text(
         _team.name,
-        style: TextStyle(fontSize: _size),
+        style: TextStyle(fontSize: 14),
       ),
     ),
   );
@@ -122,14 +145,11 @@ Widget _teamPeriodItem(ResultDto _data, int _index) {
     _text = '　－　';
   }
 
-  var _homeperiod = getHomeAway(_data, ResultUtil.home, ResultUtil.perioddata);
-  var _awayperiod = getHomeAway(_data, ResultUtil.away, ResultUtil.perioddata);
-  if (_homeperiod.length <= _index || _awayperiod.length <= _index) {
-    return Text(
-      _text,
-      style: TextStyle(fontSize: 16),
-    );
-  } else {
+  if (_data.quarter > _index) {
+    var _homeperiod =
+        getHomeAway(_data, ApplicationUtil.home, ApplicationUtil.perioddata);
+    var _awayperiod =
+        getHomeAway(_data, ApplicationUtil.away, ApplicationUtil.perioddata);
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
@@ -137,6 +157,11 @@ Widget _teamPeriodItem(ResultDto _data, int _index) {
         _teamPeriodScoreItem(_text, 60),
         _teamPeriodScoreItem(_awayperiod[_index].score, 20),
       ],
+    );
+  } else {
+    return Text(
+      _text,
+      style: TextStyle(fontSize: 16),
     );
   }
 }

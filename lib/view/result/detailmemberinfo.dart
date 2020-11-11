@@ -4,7 +4,7 @@ import 'package:buzzer_beater/dto/result.dart';
 import 'package:buzzer_beater/dto/player.dart';
 import 'package:buzzer_beater/dto/setting.dart';
 import 'package:buzzer_beater/model/resultedit.dart';
-import 'package:buzzer_beater/util/result.dart';
+import 'package:buzzer_beater/util/application.dart';
 import 'package:buzzer_beater/view/common/detailitems.dart';
 
 class ResultMemberInfo extends StatelessWidget {
@@ -16,7 +16,8 @@ class ResultMemberInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<PlayerDto> _player = getHomeAway(dto, side, ResultUtil.playerdata);
+    List<PlayerDto> _player =
+        getHomeAway(dto, side, ApplicationUtil.playerdata);
     return SafeArea(
       child: Column(
         children: <Widget>[

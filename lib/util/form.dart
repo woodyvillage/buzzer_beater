@@ -7,7 +7,7 @@ final formIcon = [
   Icon(Icons.remove_circle),
   Icon(Icons.add_circle),
   Icon(Icons.check_circle),
-  Icon(MaterialCommunityIcons.play_circle_outline),
+  Icon(Icons.play_circle_fill),
 ];
 
 final formText = [
@@ -144,31 +144,23 @@ final actions = [
   ['フィールドゴール', null, Colors.deepPurple, Colors.white],
   ['フリースロー', null, Colors.deepPurple, Colors.white],
   ['オウンゴール', null, Colors.deepPurple, Colors.white],
-  ['フリースロー付与', null, Colors.pink, Colors.white],
   ['パーソナル', null, Colors.purple, Colors.white],
   ['テクニカル', null, Colors.purple, Colors.white],
   ['アンスポーツマンライク', null, Colors.purple, Colors.white],
   ['ディスクォリファイング', null, Colors.purple, Colors.white],
   ['チームファール', null, Colors.purple, Colors.white],
-  [
-    '記録中断',
-    MaterialCommunityIcons.pause_circle_outline,
-    Colors.green,
-    Colors.white
-  ],
-  [
-    '試合終了',
-    MaterialCommunityIcons.stop_circle_outline,
-    Colors.green,
-    Colors.white
-  ],
+  ['０', null, Colors.amber, Colors.black],
+  ['１', null, Colors.amber, Colors.black],
+  ['２', null, Colors.amber, Colors.black],
+  ['記録中断', Icon(Icons.pause_circle_outline), Colors.green, Colors.white],
+  ['試合終了', Icon(Icons.stop_circle_outlined), Colors.green, Colors.white],
 ];
 
 // Result
 final resultDetailIcon = [
-  Icon(Icons.face),
+  Icon(Icons.group),
   Icon(Icons.content_paste),
-  Icon(Icons.face),
+  Icon(Icons.group),
 ];
 
 final resultDetailText = Text('ランニングスコア');

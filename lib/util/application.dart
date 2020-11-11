@@ -18,7 +18,8 @@ class ApplicationUtil {
   // メンバー出場状態
   static const stay = 0;
   static const play = 1;
-  static const change = 2;
+  static const route = 3;
+  static const reentry = 5;
 
   // チーム配置
   static final home = 0;

@@ -23,7 +23,7 @@ class SettingUtil {
     [false, String, 'ファウル', 'ファウルしなかった回数に上書きで表示します', 'foul', '－'],
     [true, '', 'チームメンバー', null, null, null],
     [false, String, '出場', '出場時限に上書きで表示します', 'play', '／'],
-    [false, String, '交代', '交代時限に上書きで表示します', 'change', '＼'],
+    [false, String, '途中出場', '交代で出場した時限に上書きで表示します', 'change', '＼'],
   ];
 
   static final settingCaption = 0;

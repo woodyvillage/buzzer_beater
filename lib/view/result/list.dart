@@ -28,14 +28,14 @@ class _ResultsListState extends State<ResultsList> {
 
   _flush() async {
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      _bloc.trigger.add(true);
+      _bloc.definitetrigger.add(true);
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-      stream: _bloc.results,
+      stream: _bloc.definiteresults,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           return ListView.builder(
@@ -72,7 +72,8 @@ class _ResultsListState extends State<ResultsList> {
                           ),
                         ),
                         Padding(padding: EdgeInsets.symmetric(vertical: 2)),
-                        resultPanelTeamSubSet(data: snapshot.data[index]),
+                        resultPanelTeamSubSet(
+                            data: snapshot.data[index], score: false),
                         resultPanelScoreSubSet(data: snapshot.data[index]),
                       ],
                     ),

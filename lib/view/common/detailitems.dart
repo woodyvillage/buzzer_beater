@@ -7,7 +7,7 @@ import 'package:buzzer_beater/dto/result.dart';
 import 'package:buzzer_beater/dto/setting.dart';
 import 'package:buzzer_beater/dto/scoreprogress.dart';
 import 'package:buzzer_beater/model/resultedit.dart';
-import 'package:buzzer_beater/util/result.dart';
+import 'package:buzzer_beater/util/application.dart';
 import 'package:buzzer_beater/util/setting.dart';
 
 Widget _filler(int _flex) {
@@ -23,13 +23,13 @@ Widget runningScoreSubSet({
   @required SettingDto setting,
 }) {
   List<PeriodDto> _homeperiod =
-      getHomeAway(data, ResultUtil.home, ResultUtil.perioddata);
+      getHomeAway(data, ApplicationUtil.home, ApplicationUtil.perioddata);
   List<PeriodDto> _awayperiod =
-      getHomeAway(data, ResultUtil.away, ResultUtil.perioddata);
+      getHomeAway(data, ApplicationUtil.away, ApplicationUtil.perioddata);
   List<ScoreProgressDto> _homeprogress =
-      getHomeAway(data, ResultUtil.home, ResultUtil.progressdata);
+      getHomeAway(data, ApplicationUtil.home, ApplicationUtil.progressdata);
   List<ScoreProgressDto> _awayprogress =
-      getHomeAway(data, ResultUtil.away, ResultUtil.progressdata);
+      getHomeAway(data, ApplicationUtil.away, ApplicationUtil.progressdata);
 
   return Row(
     children: <Widget>[
@@ -73,6 +73,15 @@ Widget _scoreItem(List<PeriodDto> _period, List<ScoreProgressDto> _progress,
 BoxDecoration _scoreDecorationItem(
     List<PeriodDto> _data, int _total, int _index) {
   var period = isPeriod(_data, _index);
+  BorderSide _topdeco = _index == 0 && _data[0].score == 0
+      ? BorderSide(
+          color: Colors.black,
+          width: 4,
+        )
+      : BorderSide(
+          color: Colors.black,
+          width: 0,
+        );
   if (period) {
     return BoxDecoration(
         border: Border(
@@ -80,10 +89,7 @@ BoxDecoration _scoreDecorationItem(
         color: Colors.black,
         width: 4,
       ),
-      top: BorderSide(
-        color: Colors.black,
-        width: 0,
-      ),
+      top: _topdeco,
       left: BorderSide(
         color: Colors.black,
         width: 0,
@@ -110,10 +116,10 @@ BoxDecoration _scoreDecorationItem(
 Widget _splitePointItem(ScoreProgressDto _data, SettingDto _setting) {
   var _mark = '';
   switch (_data.point) {
-    case ResultUtil.fieldgoal:
+    case ApplicationUtil.fieldgoal:
       _mark = _setting.fieldgoal;
       break;
-    case ResultUtil.freethrow:
+    case ApplicationUtil.freethrow:
       _mark = _setting.freethrow;
       break;
     default:
@@ -326,9 +332,9 @@ Widget teamSheetSubSet({
   @required SettingDto setting,
   @required bool timeout,
 }) {
-  List<PeriodDto> _period = getHomeAway(data, side, ResultUtil.perioddata);
-  var _switch = _period.length == 4
-      ? _quotaItem(setting.nottimeout)
+  List<PeriodDto> _period = getHomeAway(data, side, ApplicationUtil.perioddata);
+  dynamic _switch = _period.length == 4
+      ? _quarterItem(setting.nottimeout)
       : _timeoutItem(_period[4], setting);
   if (timeout) {
     return Row(
@@ -339,12 +345,12 @@ Widget teamSheetSubSet({
         _timeoutItem(_period[2], setting),
         _timeoutItem(_period[3], setting),
         _switch,
-        _quotaItem('1Q'),
+        _quarterItem('1Q'),
         _teamfoulItem(_period[0], 1, setting),
         _teamfoulItem(_period[0], 2, setting),
         _teamfoulItem(_period[0], 3, setting),
         _teamfoulItem(_period[0], 4, setting),
-        _quotaItem('3Q'),
+        _quarterItem('3Q'),
         _teamfoulItem(_period[2], 1, setting),
         _teamfoulItem(_period[2], 2, setting),
         _teamfoulItem(_period[2], 3, setting),
@@ -356,12 +362,12 @@ Widget teamSheetSubSet({
     return Row(
       children: <Widget>[
         _filler(30),
-        _quotaItem('2Q'),
+        _quarterItem('2Q'),
         _teamfoulItem(_period[1], 1, setting),
         _teamfoulItem(_period[1], 2, setting),
         _teamfoulItem(_period[1], 3, setting),
         _teamfoulItem(_period[1], 4, setting),
-        _quotaItem('4Q'),
+        _quarterItem('4Q'),
         _teamfoulItem(_period[3], 1, setting),
         _teamfoulItem(_period[3], 2, setting),
         _teamfoulItem(_period[3], 3, setting),
@@ -373,9 +379,14 @@ Widget teamSheetSubSet({
 }
 
 Widget _timeoutItem(PeriodDto _data, SettingDto _setting) {
-  var _mark = _data == null || _data.timeout == 0
-      ? _setting.nottimeout
-      : _setting.timeout;
+  String _mark;
+  if (_data.timeout == null) {
+    _mark = _setting.nottimeout;
+  } else {
+    _mark = _data == null || _data.timeout == 0
+        ? _setting.nottimeout
+        : _setting.timeout;
+  }
   return Expanded(
     flex: 5,
     child: Container(
@@ -395,13 +406,13 @@ Widget _timeoutItem(PeriodDto _data, SettingDto _setting) {
   );
 }
 
-Widget _quotaItem(String _quota) {
+Widget _quarterItem(String _quarter) {
   return Expanded(
     flex: 5,
     child: Container(
       alignment: Alignment.center,
       child: Text(
-        _quota,
+        _quarter,
         textAlign: TextAlign.center,
       ),
       height: 25,
@@ -416,9 +427,14 @@ Widget _quotaItem(String _quota) {
 }
 
 Widget _teamfoulItem(PeriodDto _data, int cnt, SettingDto _setting) {
-  var _mark = _data == null || _data.teamfoul < cnt
-      ? _setting.notteamfoul
-      : _setting.teamfoul;
+  String _mark;
+  if (_data.teamfoul == null) {
+    _mark = _setting.notteamfoul;
+  } else {
+    _mark = _data == null || _data.teamfoul < cnt
+        ? _setting.notteamfoul
+        : _setting.teamfoul;
+  }
   return Expanded(
     flex: 5,
     child: Container(
@@ -512,8 +528,8 @@ Widget memberSheetSubSet({
   @required int index,
   @required SettingDto setting,
 }) {
-  List<PlayerDto> _player = getHomeAway(data, side, ResultUtil.playerdata);
-  if (_player[index].role == ResultUtil.player) {
+  List<PlayerDto> _player = getHomeAway(data, side, ApplicationUtil.playerdata);
+  if (_player[index].role == ApplicationUtil.player) {
     return Row(
       children: <Widget>[
         _filler(2),
@@ -553,12 +569,12 @@ Widget memberSheetSubSet({
 }
 
 Widget _numberItem(PlayerDto _data, int _index) {
-  var _size = _data.role == ResultUtil.player ? 5 : 25;
+  var _size = _data.role == ApplicationUtil.player ? 5 : 25;
   String _number;
-  if (_data.role == ResultUtil.player) {
+  if (_data.role == ApplicationUtil.player) {
     _number = _data.number.toString();
   } else {
-    _number = _data.role == ResultUtil.coach ? 'コーチ' : 'A.コーチ';
+    _number = _data.role == ApplicationUtil.coach ? 'コーチ' : 'A.コーチ';
   }
   return Expanded(
     flex: _size,
@@ -577,14 +593,23 @@ Widget _numberItem(PlayerDto _data, int _index) {
 }
 
 Widget _periodItem(PlayerDto _data, int _index, int _num, SettingDto _setting) {
+  dynamic _mark1;
+  dynamic _mark2;
+  if (_data.quarter[_num] == null) {
+    _mark1 = Text('');
+    _mark2 = Text('');
+  } else {
+    _mark1 = _splitePlayItem(_data.quarter[_num], _setting);
+    _mark2 = _spliteChangeItem(_data.quarter[_num], _setting);
+  }
   return Expanded(
     flex: 5,
     child: Container(
       child: Stack(
         alignment: AlignmentDirectional.center,
         children: <Widget>[
-          _splitePlayItem(_data.quota[_num], _setting),
-          _spliteChangeItem(_data.quota[_num], _setting),
+          _mark1,
+          _mark2,
         ],
       ),
       height: 50,
@@ -599,7 +624,11 @@ Widget _periodItem(PlayerDto _data, int _index, int _num, SettingDto _setting) {
 }
 
 Widget _splitePlayItem(int _data, SettingDto _setting) {
-  var _mark = _data == ResultUtil.stay ? '' : _setting.play;
+  var _mark = _data == ApplicationUtil.play ||
+          _data == ApplicationUtil.play + 1 ||
+          _data == ApplicationUtil.reentry
+      ? _setting.play
+      : '';
   return Text(
     _mark,
     textAlign: TextAlign.center,
@@ -611,7 +640,11 @@ Widget _splitePlayItem(int _data, SettingDto _setting) {
 }
 
 Widget _spliteChangeItem(int _data, SettingDto _setting) {
-  var _mark = _data == ResultUtil.change ? _setting.change : '';
+  var _mark = _data == ApplicationUtil.route ||
+          _data == ApplicationUtil.route + 1 ||
+          _data == ApplicationUtil.reentry
+      ? _setting.change
+      : '';
   return Text(
     _mark,
     textAlign: TextAlign.center,
@@ -623,7 +656,12 @@ Widget _spliteChangeItem(int _data, SettingDto _setting) {
 }
 
 Widget _foulItem(PlayerDto _data, int _index, int _num, SettingDto _setting) {
-  var _mark = _data.foul[_num] == '' ? _setting.notfoul : _data.foul[_num];
+  String _mark;
+  if (_data.foul[_num] == null) {
+    _mark = '';
+  } else {
+    _mark = _data.foul[_num] == '' ? _setting.notfoul : _data.foul[_num];
+  }
   return Expanded(
     flex: 5,
     child: Container(

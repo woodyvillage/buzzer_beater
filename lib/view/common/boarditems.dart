@@ -2,8 +2,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 
 import 'package:buzzer_beater/dto/member.dart';
-import 'package:buzzer_beater/dto/result.dart';
 import 'package:buzzer_beater/dto/player.dart';
+import 'package:buzzer_beater/dto/result.dart';
 import 'package:buzzer_beater/dto/team.dart';
 
 Widget teamBoardSubSet({
@@ -129,8 +129,8 @@ Widget titleItem({
       ],
     );
   } else if (data is ResultDto) {
-    var _place = data.match.place == null
-        ? ''
+    var _place = data.match.coat == null || data.match.coat == ''
+        ? ' - ' + data.match.place
         : ' - ' + data.match.place + '(' + data.match.coat + ')';
     return SizedBox(
       height: 58,
