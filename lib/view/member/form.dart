@@ -12,6 +12,7 @@ import 'package:buzzer_beater/dto/form.dart';
 import 'package:buzzer_beater/dto/member.dart';
 import 'package:buzzer_beater/model/memberedit.dart';
 import 'package:buzzer_beater/model/teamedit.dart';
+import 'package:buzzer_beater/util/application.dart';
 import 'package:buzzer_beater/util/form.dart';
 import 'package:buzzer_beater/util/routeset.dart';
 
@@ -29,7 +30,6 @@ class _MemberFormState extends State<MemberForm> {
   List<FormDto> _form = <FormDto>[];
   List<S2Choice<String>> _teamList = <S2Choice<String>>[];
   final _picker = ImagePicker();
-  FormDto _next;
 
   @override
   void didChangeDependencies() {
@@ -58,33 +58,9 @@ class _MemberFormState extends State<MemberForm> {
     );
   }
 
-  void levelingForm() {
-    if (_form[2].controller.text == null ||
-        _form[2].controller.text == 'null' ||
-        _form[2].controller.text == '0') {
-      _form[2].controller.text = '';
-    }
-    if (_form[3].controller.text == null ||
-        _form[3].controller.text == 'null' ||
-        _form[3].controller.text == '0') {
-      _form[3].controller.text = '';
-    }
-    if (_form[4].controller.text == null ||
-        _form[4].controller.text == 'null' ||
-        _form[4].controller.text == '-1' ||
-        _form[4].controller.text == '0') {
-      _form[4].controller.text = '';
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
-    levelingForm();
-    if (_form[5].boolvalue) {
-      _next = _form[4];
-    } else {
-      _next = _form[1];
-    }
+    FormDto _next = levelingForm(_form);
     return Scaffold(
       resizeToAvoidBottomPadding: false,
       appBar: AppBar(
@@ -102,11 +78,13 @@ class _MemberFormState extends State<MemberForm> {
               children: <Widget>[
                 Expanded(
                   flex: 70,
-                  child: textFormField(_form[1], _form[2], 7),
+                  child: textFormField(
+                      _form[1], _form[2], ApplicationUtil.memberNameLength),
                 ),
                 Expanded(
                   flex: 30,
-                  child: numberFormField(_form[2], _form[3], 2, true),
+                  child: numberFormField(_form[2], _form[3],
+                      ApplicationUtil.memberAgeLength, true),
                 ),
               ],
             ),
@@ -114,12 +92,13 @@ class _MemberFormState extends State<MemberForm> {
               children: <Widget>[
                 Expanded(
                   flex: 60,
-                  child: numberFormField(_form[3], _form[4], 9, true),
+                  child: numberFormField(_form[3], _next,
+                      ApplicationUtil.memberRegistLength, true),
                 ),
                 Expanded(
                   flex: 40,
-                  child: numberFormField(
-                      _form[4], _form[1], 2, _form[5].boolvalue),
+                  child: numberFormField(_form[4], _form[1],
+                      ApplicationUtil.memberNumberLength, _form[5].boolvalue),
                 ),
               ],
             ),

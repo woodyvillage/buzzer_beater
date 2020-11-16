@@ -44,6 +44,8 @@ Future<List<FormDto>> buildRosterFormValue(PlayerDto _member) async {
     _form[1].controller.text = _roster[0].name;
     _form[2].controller.text = _member.member.toString();
     _form[2].hint = _member.member.toString();
+    _form[2].boolvalue =
+        _member.captain == ApplicationUtil.captain ? true : false;
     _form[3].boolvalue = _member.role == ApplicationUtil.player ? true : false;
     if (_member.role == ApplicationUtil.player) {
       _form[3].controller.text = _member.number.toString();
@@ -173,10 +175,14 @@ Future confirmRosterValue(
               ? _rdto.number = null
               : _rdto.number = int.parse(_form[i + 1].controller.text);
           _rdto.role = _member[0].role;
+          _rdto.captain = _form[2].boolvalue == true
+              ? ApplicationUtil.captain
+              : ApplicationUtil.player;
           _rdto.sort = _member[0].role == ApplicationUtil.player
               ? ApplicationUtil.player
               : ApplicationUtil.coach;
           _rdto.ball = null;
+          _rdto.foul = null;
         }
 
         if (_rdto.member != null) {
@@ -192,6 +198,9 @@ Future confirmRosterValue(
 
     _record[0].member = int.parse(_form[2].controller.text);
     _record[0].number = int.parse(_form[3].controller.text);
+    _record[0].captain = _form[2].boolvalue == true
+        ? ApplicationUtil.captain
+        : ApplicationUtil.player;
     if (_record[0].member != null) {
       await _rdao.update(_record[0]);
     }
@@ -229,13 +238,14 @@ Future firstRosterSupport(List<TeamDto> _team) async {
     } else {
       _rdto.number = null;
     }
-    if (i == 12) {
+    if (i == 19) {
       _rdto.role = ApplicationUtil.coach;
-    } else if (i == 13) {
+    } else if (i == 20) {
       _rdto.role = ApplicationUtil.assistant;
     } else {
       _rdto.role = ApplicationUtil.player;
     }
+    _rdto.captain = i == 4 ? 1 : null;
     _rdto.sort = _member.role;
     await _rdao.insert(_rdto);
     i++;

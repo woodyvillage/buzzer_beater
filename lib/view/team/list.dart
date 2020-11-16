@@ -22,10 +22,6 @@ class _TeamsListState extends State<TeamsList> {
   @override
   void initState() {
     super.initState();
-    _flush();
-  }
-
-  _flush() async {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _bloc.trigger.add(true);
     });

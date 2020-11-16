@@ -73,6 +73,30 @@ Future<List<S2Choice<String>>> buildMemberListValueByTeamId(int _team) async {
   return _list;
 }
 
+FormDto levelingForm(List<FormDto> _form) {
+  if (_form[2].controller.text == null ||
+      _form[2].controller.text == 'null' ||
+      _form[2].controller.text == '0') {
+    _form[2].controller.text = '';
+  }
+  if (_form[3].controller.text == null ||
+      _form[3].controller.text == 'null' ||
+      _form[3].controller.text == '0') {
+    _form[3].controller.text = '';
+  }
+  if (_form[4].controller.text == null ||
+      _form[4].controller.text == 'null' ||
+      _form[4].controller.text == '-1' ||
+      _form[4].controller.text == '0') {
+    _form[4].controller.text = '';
+  }
+  if (_form[5].boolvalue) {
+    return _form[4];
+  } else {
+    return _form[1];
+  }
+}
+
 Future confirmMemberValue(
     ApplicationBloc _bloc, MemberDto _selected, List<FormDto> _form) async {
   MemberDao _dao = MemberDao();
@@ -137,7 +161,7 @@ Future firstMemberSupport(List<TeamDto> _team) async {
 
   _dto.team = _team[0].id;
 
-  for (int i = 4; i < 12; i++) {
+  for (int i = 4; i <= 18; i++) {
     _dto.role = ApplicationUtil.player;
     _dto.name = i.toString() + '番';
     _dto.age = 12;

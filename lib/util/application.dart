@@ -7,13 +7,26 @@ class ApplicationUtil {
   static const progressdata = 15;
   static const quarterdata = 16;
 
+  // 入力文字数
+  static final teamNameLength = 20;
+  static final memberNameLength = 7;
+  static final memberAgeLength = 2;
+  static final memberRegistLength = 9;
+  static final memberageLength = 2;
+  static final memberNumberLength = 2;
+  static final matchDateLength = 20;
+
   // ベンチ入りメンバー数
   static final benchmember = 7;
 
+  // ファール数
+  static final foullimit = 5;
+
   // メンバーロール
   static final player = 0;
-  static final assistant = 1;
-  static final coach = 2;
+  static final captain = 1;
+  static final assistant = 2;
+  static final coach = 3;
 
   // メンバー出場状態
   static const stay = 0;
@@ -42,21 +55,24 @@ class ApplicationUtil {
   // ゴールポイント
   static const fieldgoal = 2;
   static const freethrow = 1;
-  static const owngoal = 2;
 
   // Match種別
   static final typeTimeout = 0;
-  static final typeMember = 1;
-  static final typeFieldgoal = 2;
-  static final typeFreethrow = 3;
-  static final typeOwngoal = 4;
-  static final typepersonal = 6;
-  static final typeTschnical = 7;
-  static final typeUnsportsman = 8;
-  static final typeDisqualifying = 9;
-  static final typeTeamfoul = 10;
-  static final typePause = 11;
-  static final typeFinish = 12;
+  static final typeMemberchange = 1;
+  static const typeFieldgoal = 2;
+  static const typeFreethrow = 3;
+  static const typeOwngoal = 4;
+  static const typePersonal = 5;
+  static const typeTechnical = 6;
+  static const typeUnsportsman = 7;
+  static const typeDisqualifying = 8;
+  static const typeMantoman = 9;
+  static const typeNotgain = 10;
+  static const typeGain = 11;
+  static const typeCoach = 12;
+  static const typeBench = 13;
+  static final typePause = 14;
+  static final typeFinish = 15;
 
   // Match配列
   static final formTitle = 0;

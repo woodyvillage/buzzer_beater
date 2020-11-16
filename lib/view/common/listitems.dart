@@ -12,15 +12,15 @@ Widget _filler(int _flex) {
   );
 }
 
-Widget resultPanelTeamSubSet({
+Widget resultTeamListSubSet({
   @required ResultDto data,
-  @required bool score,
+  @required bool displayScore,
 }) {
   var _hometeam =
       getHomeAway(data, ApplicationUtil.home, ApplicationUtil.teamdata);
   var _awayteam =
       getHomeAway(data, ApplicationUtil.away, ApplicationUtil.teamdata);
-  if (score) {
+  if (displayScore) {
     return Row(
       children: <Widget>[
         _filler(2),
@@ -56,10 +56,10 @@ Widget resultPanelTeamSubSet({
   }
 }
 
-Widget _teamColorItem(TeamDto _team, int _ware) {
+Widget _teamColorItem(TeamDto _team, int _warechoice) {
   Color _mainColor;
   Color _edgeColor;
-  if (_ware == ApplicationUtil.homeColor) {
+  if (_warechoice == ApplicationUtil.homeColor) {
     _mainColor = Color(_team.homeMain);
     _edgeColor = Color(_team.homeEdge);
   } else {
@@ -96,7 +96,7 @@ Widget _teamNameItem(TeamDto _team, Alignment _align) {
   );
 }
 
-Widget resultPanelScoreSubSet({
+Widget resultScoreListSubSet({
   @required ResultDto data,
 }) {
   return Row(

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 
 // import 'package:buzzer_beater/view/analysis/body.dart';
 import 'package:buzzer_beater/view/match/body.dart';
@@ -34,11 +33,11 @@ final routesetText = [
 ];
 
 final routesetClass = [
-  TeamBoard(),
-  MemberBoard(),
-  RosterBoard(),
-  MatchBook(),
-  ResultBook(),
+  TeamBody(),
+  MemberBody(),
+  RosterBody(),
+  MatchBody(),
+  ResultBody(),
   // AnalysisList(),
 ];
 

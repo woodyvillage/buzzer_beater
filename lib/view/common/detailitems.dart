@@ -180,16 +180,34 @@ Widget _pointedItem(List<PeriodDto> _period, List<ScoreProgressDto> _progress,
 
 Widget _nameItem(dynamic _data, Alignment _alignment) {
   var _name = _data.name == null ? '' : _data.name;
-  return Expanded(
-    flex: 20,
-    child: Container(
-      alignment: _alignment,
-      child: Text(
-        _name,
-        textAlign: TextAlign.end,
+  if (_data is PlayerDto && _data.captain != null) {
+    var _cap = _data.captain == ApplicationUtil.captain ? '(CAP)' : null;
+    return Expanded(
+      flex: 18,
+      child: Row(
+        children: <Widget>[
+          Flexible(
+            child: Text(
+              _name + _cap,
+              softWrap: true,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+        ],
       ),
-    ),
-  );
+    );
+  } else {
+    return Expanded(
+      flex: 18,
+      child: Container(
+        alignment: _alignment,
+        child: Text(
+          _name,
+        ),
+      ),
+    );
+  }
 }
 
 Widget _imageItem(dynamic _data, double _size) {
@@ -517,6 +535,10 @@ Widget memberIndexSubSet() {
           ),
         ),
       ),
+      Expanded(
+        flex: 5,
+        child: Container(),
+      ),
       _filler(2),
     ],
   );
@@ -546,6 +568,7 @@ Widget memberSheetSubSet({
         _foulItem(_player[index], index, 2, setting),
         _foulItem(_player[index], index, 3, setting),
         _foulItem(_player[index], index, 4, setting),
+        _statusItem(_player[index], index),
         _filler(2),
       ],
     );
@@ -562,6 +585,7 @@ Widget memberSheetSubSet({
         _foulItem(_player[index], index, 2, setting),
         _foulItem(_player[index], index, 3, setting),
         _foulItem(_player[index], index, 4, setting),
+        _statusItem(_player[index], index),
         _filler(2),
       ],
     );
@@ -658,9 +682,19 @@ Widget _spliteChangeItem(int _data, SettingDto _setting) {
 Widget _foulItem(PlayerDto _data, int _index, int _num, SettingDto _setting) {
   String _mark;
   if (_data.foul[_num] == null) {
-    _mark = '';
+    _mark = _setting.notfoul;
+    if (_data.dead == true &&
+        _data.foul[_num - 1] != null &&
+        _data.foul[_num - 1] != 'GD') {
+      _mark = 'GD';
+    }
   } else {
-    _mark = _data.foul[_num] == '' ? _setting.notfoul : _data.foul[_num];
+    _mark = _data.foul[_num] == ''
+        ? _data.dead == true &&
+                (_data.foul[_num - 1] != null && _data.foul[_num - 1] != '')
+            ? _mark = 'GD'
+            : _setting.notfoul
+        : _data.foul[_num];
   }
   return Expanded(
     flex: 5,
@@ -669,6 +703,9 @@ Widget _foulItem(PlayerDto _data, int _index, int _num, SettingDto _setting) {
       child: Text(
         _mark,
         textAlign: TextAlign.center,
+        style: TextStyle(
+          fontSize: 12,
+        ),
       ),
       height: 50,
       decoration: BoxDecoration(
@@ -677,6 +714,29 @@ Widget _foulItem(PlayerDto _data, int _index, int _num, SettingDto _setting) {
           width: 0,
         ),
       ),
+    ),
+  );
+}
+
+Widget _statusItem(PlayerDto _data, int _index) {
+  String _mark;
+  if (_data.dead == true) {
+    _mark = _data.foul[4] != '' ? 'GD' : '';
+  } else {
+    _mark = '';
+  }
+  return Expanded(
+    flex: 5,
+    child: Container(
+      alignment: Alignment.center,
+      child: Text(
+        _mark,
+        textAlign: TextAlign.center,
+        style: TextStyle(
+          fontSize: 12,
+        ),
+      ),
+      height: 50,
     ),
   );
 }

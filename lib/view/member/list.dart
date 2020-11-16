@@ -24,10 +24,6 @@ class _MembersListState extends State<MembersList> {
   @override
   void initState() {
     super.initState();
-    _getEnroll();
-  }
-
-  _getEnroll() async {
     setState(() {
       context.read<EnrollNotifier>().getEnroll();
     });
@@ -62,7 +58,7 @@ class _MembersListState extends State<MembersList> {
                             .members[itemIndex]
                             .jbaid
                             .toString()
-                            .padLeft(9, "0"),
+                            .padLeft(9, '0'),
                   ),
                   trailing: roundNumberItem(
                     context: context,

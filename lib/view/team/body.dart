@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:buzzer_beater/view/team/list.dart';
 
-class TeamBoard extends StatelessWidget {
+class TeamBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SafeArea(

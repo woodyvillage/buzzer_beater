@@ -24,10 +24,6 @@ class _RosterListState extends State<RosterList> {
   @override
   void initState() {
     super.initState();
-    _getOrder();
-  }
-
-  _getOrder() async {
     setState(() {
       context.read<OrderNotifier>().getOrder();
     });
@@ -56,12 +52,13 @@ class _RosterListState extends State<RosterList> {
                     data: _orderList[sectionIndex].players[itemIndex],
                   ),
                   subtitle: Text(
-                      _orderList[sectionIndex].players[itemIndex].jbaid == 0
-                          ? '不明'
-                          : _orderList[sectionIndex]
-                              .players[itemIndex]
-                              .jbaid
-                              .toString()),
+                    _orderList[sectionIndex].players[itemIndex].jbaid == 0
+                        ? '不明'
+                        : _orderList[sectionIndex]
+                            .players[itemIndex]
+                            .jbaid
+                            .toString(),
+                  ),
                   trailing: roundNumberItem(
                     context: context,
                     team: _orderList[sectionIndex].team,

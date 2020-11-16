@@ -24,10 +24,11 @@ class TeamForm extends StatefulWidget {
 
 class _TeamFormState extends State<TeamForm> {
   ApplicationBloc _bloc;
-  List<FormDto> _form = <FormDto>[];
   Color _tempMainColor;
-  Color _tempShadeColor;
+  Color _tempEdgeColor;
   final _picker = ImagePicker();
+
+  List<FormDto> _form = <FormDto>[];
   var _hasSupport = false;
 
   @override
@@ -60,7 +61,7 @@ class _TeamFormState extends State<TeamForm> {
               onPressed: () {
                 Navigator.of(context).pop();
                 setState(() => _dto.mainColor = _tempMainColor);
-                setState(() => _dto.edgeColor = _tempShadeColor);
+                setState(() => _dto.edgeColor = _tempEdgeColor);
               },
             ),
           ],
@@ -80,8 +81,8 @@ class _TeamFormState extends State<TeamForm> {
         selectedColor: _dto.mainColor,
         onColorChange: (color) => setState(() =>
             _color == ApplicationUtil.mainColor
-                ? _tempMainColor = _tempShadeColor = color
-                : _tempShadeColor = color),
+                ? _tempMainColor = _tempEdgeColor = color
+                : _tempEdgeColor = color),
       ),
     );
   }
@@ -129,7 +130,7 @@ class _TeamFormState extends State<TeamForm> {
         controller: _form[0].controller,
         keyboardType: TextInputType.text,
         maxLines: 1,
-        maxLength: 20,
+        maxLength: ApplicationUtil.teamNameLength,
         maxLengthEnforced: false,
         textAlignVertical: TextAlignVertical.center,
         obscureText: false,

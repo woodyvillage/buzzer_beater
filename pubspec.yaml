@@ -70,6 +70,13 @@ flutter:
   assets:
     - images/1443522.png
     - images/noimage.png
+    - images/captain.png
+    - images/license-a.png
+    - images/license-b.png
+    - images/license-c.png
+    - images/license-d.png
+    - images/license-e.png
+    - images/license-s.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

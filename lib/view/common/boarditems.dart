@@ -5,6 +5,7 @@ import 'package:buzzer_beater/dto/member.dart';
 import 'package:buzzer_beater/dto/player.dart';
 import 'package:buzzer_beater/dto/result.dart';
 import 'package:buzzer_beater/dto/team.dart';
+import 'package:buzzer_beater/util/application.dart';
 
 Widget teamBoardSubSet({
   @required TeamDto data,
@@ -55,20 +56,42 @@ Widget imageItem({
   @required dynamic data,
   @required double size,
 }) {
-  // imageプロパティ
-  if (data.image != null) {
-    return Image.file(
-      File(data.image),
+  Widget _cap = Text('');
+  if (data is PlayerDto && data.captain == ApplicationUtil.captain) {
+    _cap = Image.asset(
+      'images/captain.png',
       width: size,
       height: size,
       fit: BoxFit.cover,
     );
+  }
+
+  // imageプロパティ
+  if (data.image != null) {
+    return Stack(
+      alignment: AlignmentDirectional.center,
+      children: <Widget>[
+        Image.file(
+          File(data.image),
+          width: size,
+          height: size,
+          fit: BoxFit.cover,
+        ),
+        _cap,
+      ],
+    );
   } else {
-    return Image.asset(
-      'images/noimage.png',
-      width: size,
-      height: size,
-      fit: BoxFit.cover,
+    return Stack(
+      alignment: AlignmentDirectional.center,
+      children: <Widget>[
+        Image.asset(
+          'images/noimage.png',
+          width: size,
+          height: size,
+          fit: BoxFit.cover,
+        ),
+        _cap,
+      ],
     );
   }
 }
@@ -76,7 +99,6 @@ Widget imageItem({
 Widget titleItem({
   @required dynamic data,
 }) {
-  String _age;
   if (data is TeamDto) {
     double _size = data.name.length > 10 ? 22 : 24;
     return Column(
@@ -88,8 +110,8 @@ Widget titleItem({
         ),
       ],
     );
-  } else if (data is MemberDto) {
-    _age = data.age == 0 ? '不明' : data.age.toString();
+  } else if (data is MemberDto || data is PlayerDto) {
+    String _age = data.age == 0 ? '  (不明)' : '  (' + data.age.toString() + ')';
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -101,27 +123,7 @@ Widget titleItem({
               style: TextStyle(fontSize: 20),
             ),
             Text(
-              '  (' + _age + ')',
-              style: TextStyle(fontSize: 15),
-            ),
-          ],
-        ),
-      ],
-    );
-  } else if (data is PlayerDto) {
-    _age = data.age == 0 ? '不明' : data.age.toString();
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: <Widget>[
-            Text(
-              data.name,
-              style: TextStyle(fontSize: 20),
-            ),
-            Text(
-              '  (' + _age + ')',
+              _age,
               style: TextStyle(fontSize: 15),
             ),
           ],
@@ -194,13 +196,40 @@ Widget roundNumberItem({
     }
   }
 
-  return CircleAvatar(
-    backgroundColor: _edgeColor,
-    radius: 30,
-    child: CircleAvatar(
-      backgroundColor: _mainColor,
-      radius: 24,
-      child: _child,
-    ),
-  );
+  if (member is PlayerDto && member.captain == ApplicationUtil.captain) {
+    Text _cap = Text(
+      '　',
+      style: TextStyle(
+        color: _fontColor,
+        fontSize: 28,
+        decoration: TextDecoration.underline,
+        decorationThickness: 2,
+      ),
+    );
+    return Stack(
+      alignment: AlignmentDirectional.center,
+      children: <Widget>[
+        CircleAvatar(
+          backgroundColor: _edgeColor,
+          radius: 30,
+          child: CircleAvatar(
+            backgroundColor: _mainColor,
+            radius: 24,
+            child: _child,
+          ),
+        ),
+        _cap,
+      ],
+    );
+  } else {
+    return CircleAvatar(
+      backgroundColor: _edgeColor,
+      radius: 30,
+      child: CircleAvatar(
+        backgroundColor: _mainColor,
+        radius: 24,
+        child: _child,
+      ),
+    );
+  }
 }

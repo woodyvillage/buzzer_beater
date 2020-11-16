@@ -27,8 +27,10 @@ class TableUtil {
   static final rosterTable = 'roster';
 
   static final registTable = 'regist';
+  static final cCaptain = 'captain';
   static final cSort = 'sort';
   static final cBall = 'ball';
+  static final cFoul = 'foul';
 
   static final matchTable = 'match';
   static final cPlace = 'place';
@@ -110,8 +112,10 @@ class TableUtil {
             $cMember INTEGER NOT NULL,
             $cNumber INTEGER,
             $cRole INTEGER NOT NULL,
+            $cCaptain INTEGER,
             $cSort INTEGER NOT NULL,
-            $cBall INTEGER
+            $cBall INTEGER,
+            $cFoul INTEGER
           );
           '''
     ],

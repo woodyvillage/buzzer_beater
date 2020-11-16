@@ -6,12 +6,12 @@ import 'package:buzzer_beater/view/common/boarditems.dart';
 import 'package:buzzer_beater/view/common/listitems.dart';
 import 'package:buzzer_beater/view/result/detail.dart';
 
-class ResultsList extends StatefulWidget {
+class MatchList extends StatefulWidget {
   @override
-  _ResultsListState createState() => _ResultsListState();
+  _MatchListState createState() => _MatchListState();
 }
 
-class _ResultsListState extends State<ResultsList> {
+class _MatchListState extends State<MatchList> {
   ApplicationBloc _bloc;
 
   @override
@@ -24,14 +24,14 @@ class _ResultsListState extends State<ResultsList> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      _bloc.definitetrigger.add(true);
+      _bloc.progresstrigger.add(true);
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-      stream: _bloc.definiteresults,
+      stream: _bloc.progressresults,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           return ListView.builder(

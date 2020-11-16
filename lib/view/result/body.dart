@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:buzzer_beater/view/result/list.dart';
 
-class ResultBook extends StatelessWidget {
+class ResultBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SafeArea(

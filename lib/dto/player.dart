@@ -4,6 +4,7 @@ class PlayerDto {
   int member;
   int number;
   int role;
+  int captain;
   int sort;
   String name;
   int age;
@@ -11,6 +12,7 @@ class PlayerDto {
   String image;
   List<int> quarter;
   List<String> foul;
+  bool dead;
 
   PlayerDto({
     this.team,
@@ -18,6 +20,7 @@ class PlayerDto {
     this.member,
     this.number,
     this.role,
+    this.captain,
     this.sort,
     this.name,
     this.age,
@@ -25,5 +28,6 @@ class PlayerDto {
     this.image,
     this.quarter,
     this.foul,
+    this.dead,
   });
 }

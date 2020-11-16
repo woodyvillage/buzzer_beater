@@ -68,15 +68,15 @@ class _ResultDetailState extends State<ResultDetail>
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: resultDetailIcon[0],
-            title: Text(widget.dto.home.name),
+            label: widget.dto.home.name,
           ),
           BottomNavigationBarItem(
             icon: resultDetailIcon[1],
-            title: resultDetailText,
+            label: resultDetailText,
           ),
           BottomNavigationBarItem(
             icon: resultDetailIcon[2],
-            title: Text(widget.dto.away.name),
+            label: widget.dto.away.name,
           ),
         ],
       ),

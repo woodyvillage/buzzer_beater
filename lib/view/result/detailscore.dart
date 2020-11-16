@@ -32,7 +32,7 @@ class ResultScore extends StatelessWidget {
           Container(
             height: 50,
             margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-            child: resultPanelTeamSubSet(data: dto, score: false),
+            child: resultTeamListSubSet(data: dto, displayScore: false),
           ),
           _controller,
           Container(

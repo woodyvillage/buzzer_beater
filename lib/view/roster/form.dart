@@ -89,6 +89,7 @@ class _RosterFormState extends State<RosterForm> {
             selectFormField(widget.edit),
             textFormField(_form[1], 20, widget.edit),
             memberFormField(_form[2], _form[3], false),
+            roleFormField(_form[2].boolvalue),
             commandField(),
           ],
         ),
@@ -202,7 +203,7 @@ class _RosterFormState extends State<RosterForm> {
       return Row(
         children: <Widget>[
           Expanded(
-            flex: 75,
+            flex: 55,
             child: memberSelect(_form),
           ),
           Expanded(
@@ -261,6 +262,23 @@ class _RosterFormState extends State<RosterForm> {
           FocusScope.of(context).requestFocus(_next.node);
         },
       ),
+    );
+  }
+
+  Widget roleFormField(bool _isCaptain) {
+    return SwitchListTile(
+      value: _isCaptain,
+      title: Text(
+        'キャプテン',
+        style: TextStyle(
+          color: Colors.grey[600],
+        ),
+      ),
+      onChanged: (bool value) {
+        setState(() {
+          _form[2].boolvalue = value;
+        });
+      },
     );
   }
 

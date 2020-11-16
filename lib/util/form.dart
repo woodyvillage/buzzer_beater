@@ -28,7 +28,12 @@ final formStart = 5;
 
 // Team
 final teams = [
-  ['チーム名称', Icon(MaterialCommunityIcons.basketball), '', ''],
+  [
+    'チーム名称',
+    null,
+    null,
+    null,
+  ],
   [
     'ホームウェア（淡）',
     Icon(MaterialCommunityIcons.tshirt_crew_outline),
@@ -148,10 +153,11 @@ final actions = [
   ['テクニカル', null, Colors.purple, Colors.white],
   ['アンスポーツマンライク', null, Colors.purple, Colors.white],
   ['ディスクォリファイング', null, Colors.purple, Colors.white],
-  ['チームファール', null, Colors.purple, Colors.white],
-  ['０', null, Colors.amber, Colors.black],
-  ['１', null, Colors.amber, Colors.black],
-  ['２', null, Colors.amber, Colors.black],
+  ['マンツーマン', null, Colors.purple, Colors.white],
+  ['なし', null, Colors.amber, Colors.black],
+  ['あり', null, Colors.amber, Colors.black],
+  ['コーチ', null, Colors.amber, Colors.black],
+  ['ベンチ', null, Colors.amber, Colors.black],
   ['記録中断', Icon(Icons.pause_circle_outline), Colors.green, Colors.white],
   ['試合終了', Icon(Icons.stop_circle_outlined), Colors.green, Colors.white],
 ];
@@ -163,4 +169,4 @@ final resultDetailIcon = [
   Icon(Icons.group),
 ];
 
-final resultDetailText = Text('ランニングスコア');
+String resultDetailText = 'ランニングスコア';

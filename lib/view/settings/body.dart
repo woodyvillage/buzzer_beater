@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:buzzer_beater/view/contents/header.dart';
 import 'package:buzzer_beater/view/settings/list.dart';
 
-class Settings extends StatelessWidget {
+class SettingBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

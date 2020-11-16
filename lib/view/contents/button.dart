@@ -5,7 +5,6 @@ import 'package:buzzer_beater/view/match/form.dart';
 import 'package:buzzer_beater/view/member/form.dart';
 import 'package:buzzer_beater/view/roster/form.dart';
 import 'package:buzzer_beater/view/team/form.dart';
-import 'package:buzzer_beater/model/test.dart';
 
 class ApplicationFloat extends StatelessWidget {
   ApplicationFloat({Key key, this.index}) : super(key: key);
@@ -48,10 +47,6 @@ class ApplicationFloat extends StatelessWidget {
           context,
           rosterPageMatch,
         );
-        break;
-      case routesetResult:
-        test();
-        test2();
         break;
     }
   }
