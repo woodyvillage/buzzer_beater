@@ -6,9 +6,9 @@ class PeriodDao extends BaseDao {
   Future<int> sumByMatchTeam(int _match, int _team) async {
     return await sumBy(
       TableUtil.periodTable,
+      TableUtil.cScore,
       [TableUtil.cMatch, TableUtil.cTeam],
       [_match, _team],
-      TableUtil.cScore,
     );
   }
 

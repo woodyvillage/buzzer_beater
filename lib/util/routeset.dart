@@ -46,7 +46,7 @@ final routesetFloatIcon = [
   Icon(Icons.person_add),
   Icon(Icons.playlist_add),
   Icon(Icons.post_add),
-  Icon(Icons.add),
+  null,
   null,
 ];
 
@@ -55,6 +55,6 @@ final routesetFloatText = [
   Text('メンバー追加'),
   Text('メンバー登録'),
   Text('試合開始'),
-  Text('試合開始'),
+  null,
   null,
 ];

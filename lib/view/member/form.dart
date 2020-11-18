@@ -218,7 +218,7 @@ class _MemberFormState extends State<MemberForm> {
           labelText: _form.value,
         ),
         inputFormatters: <TextInputFormatter>[
-          WhitelistingTextInputFormatter.digitsOnly,
+          FilteringTextInputFormatter.digitsOnly,
         ],
         onFieldSubmitted: (v) {
           FocusScope.of(context).requestFocus(_next.node);

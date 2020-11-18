@@ -15,7 +15,7 @@ class BaseDao {
   static final ApplicationDatabase instance =
       ApplicationDatabase.privateConstructor();
 
-  Future<int> duplicateCount(
+  Future<int> cntBy(
     dynamic _dto,
     List<String> _key,
     List<dynamic> _value,
@@ -24,14 +24,7 @@ class BaseDao {
     if (_key.length != _value.length) {
       return null;
     }
-    var _where = '';
-    for (int i = 0; i < _key.length; i++) {
-      if (i == 0) {
-        _where = _key[i] + ' = ?';
-      } else {
-        _where = _where + ' and ' + _key[i] + ' = ?';
-      }
-    }
+    var _where = _buildWhere(_key, _value);
     return Sqflite.firstIntValue(await _db.query(
       _decision(_dto),
       columns: ['count(*)'],
@@ -42,28 +35,30 @@ class BaseDao {
 
   Future<int> sumBy(
     String _table,
+    String _column,
     List<String> _key,
     List<dynamic> _value,
-    String _column,
   ) async {
     Database _db = await instance.database;
     if (_key.length != _value.length) {
       return null;
     }
-    var _where = '';
-    for (int i = 0; i < _key.length; i++) {
-      if (i == 0) {
-        _where = _key[i] + ' = ?';
-      } else {
-        _where = _where + ' and ' + _key[i] + ' = ?';
-      }
-    }
+    var _where = _buildWhere(_key, _value);
     return Sqflite.firstIntValue(await _db.query(
       _table,
       columns: ['sum(${_column})'],
       where: _where,
       whereArgs: _value,
     ));
+  }
+
+  Future<List<Map<String, dynamic>>> selectQuery(
+    String _query,
+  ) async {
+    Database _db = await instance.database;
+    return await _db.rawQuery(
+      _query,
+    );
   }
 
   Future<List<Map<String, dynamic>>> selectOrder(
@@ -78,15 +73,6 @@ class BaseDao {
     );
   }
 
-  Future<List<Map<String, dynamic>>> selectQuery(
-    String _query,
-  ) async {
-    Database _db = await instance.database;
-    return await _db.rawQuery(
-      _query,
-    );
-  }
-
   Future<List<Map<String, dynamic>>> selectBy(
     String _table,
     List<String> _key,
@@ -95,28 +81,11 @@ class BaseDao {
     List<String> _direction,
   ) async {
     Database _db = await instance.database;
-    if (_key.length != _value.length) {
+    if (_key.length != _value.length || _column.length != _direction.length) {
       return null;
     }
-    var _where = '';
-    for (int i = 0; i < _key.length; i++) {
-      if (i == 0) {
-        _where = _key[i] + ' = ?';
-      } else {
-        _where = _where + ' and ' + _key[i] + ' = ?';
-      }
-    }
-    if (_column.length != _direction.length) {
-      return null;
-    }
-    var _order = '';
-    for (int i = 0; i < _column.length; i++) {
-      if (i == 0) {
-        _order = _column[i] + _direction[i];
-      } else {
-        _order = _order + ', ' + _column[i] + _direction[i];
-      }
-    }
+    var _where = _buildWhere(_key, _value);
+    var _order = _buildOrder(_column, _direction);
     return await _db.query(
       _table,
       where: _where,
@@ -133,10 +102,33 @@ class BaseDao {
     List<String> _direction,
   ) async {
     Database _db = await instance.database;
-    if (_key.length != _value.length) {
+    if (_key.length != _value.length || _column.length != _direction.length) {
       return null;
     }
-    var _where = '';
+    var _where = _buildWhereNot(_key, _value);
+    var _order = _buildOrder(_column, _direction);
+    return await _db.query(
+      _table,
+      where: _where,
+      whereArgs: _value,
+      orderBy: _order,
+    );
+  }
+
+  String _buildWhere(List<String> _key, List<dynamic> _value) {
+    String _where;
+    for (int i = 0; i < _key.length; i++) {
+      if (i == 0) {
+        _where = _key[i] + ' = ?';
+      } else {
+        _where = _where + ' and ' + _key[i] + ' = ?';
+      }
+    }
+    return _where;
+  }
+
+  String _buildWhereNot(List<String> _key, List<dynamic> _value) {
+    String _where;
     for (int i = 0; i < _key.length; i++) {
       if (i == 0) {
         _where = _key[i] + ' <> ?';
@@ -144,23 +136,19 @@ class BaseDao {
         _where = _where + ' and ' + _key[i] + ' <> ?';
       }
     }
-    if (_column.length != _direction.length) {
-      return null;
-    }
-    var _order = '';
-    for (int i = 0; i < _column.length; i++) {
+    return _where;
+  }
+
+  String _buildOrder(List<String> _key, List<dynamic> _direction) {
+    String _order;
+    for (int i = 0; i < _key.length; i++) {
       if (i == 0) {
-        _order = _column[i] + _direction[i];
+        _order = _key[i] + _direction[i];
       } else {
-        _order = _order + ', ' + _column[i] + _direction[i];
+        _order = _order + ', ' + _key[i] + _direction[i];
       }
     }
-    return await _db.query(
-      _table,
-      where: _where,
-      whereArgs: _value,
-      orderBy: _order,
-    );
+    return _order;
   }
 
   Future<int> insert(dynamic _dto) async {

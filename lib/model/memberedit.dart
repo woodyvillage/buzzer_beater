@@ -135,7 +135,7 @@ Future confirmMemberValue(
   }
 
   if (_dto.id == null &&
-      await _dao.duplicateCount(_dto, [TableUtil.cJbaId], [_dto.jbaid]) > 0) {
+      await _dao.cntBy(_dto, [TableUtil.cJbaId], [_dto.jbaid]) > 0) {
     // 重複あり
     return 1;
   }

@@ -89,7 +89,7 @@ class _RosterFormState extends State<RosterForm> {
             selectFormField(widget.edit),
             textFormField(_form[1], 20, widget.edit),
             memberFormField(_form[2], _form[3], false),
-            roleFormField(_form[2].boolvalue),
+            roleFormField(_form[2].boolvalue, _form[3].boolvalue),
             commandField(),
           ],
         ),
@@ -256,7 +256,7 @@ class _RosterFormState extends State<RosterForm> {
           labelText: _form.value,
         ),
         inputFormatters: <TextInputFormatter>[
-          WhitelistingTextInputFormatter.digitsOnly,
+          FilteringTextInputFormatter.digitsOnly,
         ],
         onFieldSubmitted: (v) {
           FocusScope.of(context).requestFocus(_next.node);
@@ -265,7 +265,7 @@ class _RosterFormState extends State<RosterForm> {
     );
   }
 
-  Widget roleFormField(bool _isCaptain) {
+  Widget roleFormField(bool _isCaptain, bool _switch) {
     return SwitchListTile(
       value: _isCaptain,
       title: Text(
@@ -275,9 +275,11 @@ class _RosterFormState extends State<RosterForm> {
         ),
       ),
       onChanged: (bool value) {
-        setState(() {
-          _form[2].boolvalue = value;
-        });
+        if (_switch) {
+          setState(() {
+            _form[2].boolvalue = value;
+          });
+        }
       },
     );
   }

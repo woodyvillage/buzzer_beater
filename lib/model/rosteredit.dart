@@ -135,7 +135,7 @@ Future confirmRosterValue(
       }
     }
 
-    int _rosterCount = await _dao.duplicateCount(
+    int _rosterCount = await _dao.cntBy(
       _dto,
       [TableUtil.cTeam, TableUtil.cName],
       [int.parse(_form[0].controller.text), _form[1].controller.text],

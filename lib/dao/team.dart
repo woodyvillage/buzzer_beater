@@ -3,6 +3,10 @@ import 'package:buzzer_beater/dto/team.dart';
 import 'package:buzzer_beater/util/table.dart';
 
 class TeamDao extends BaseDao {
+  Future<int> countUnique(String _key, dynamic _value) async {
+    return await cntBy(TeamDto(), [_key], [_value]);
+  }
+
   Future<List<TeamDto>> select(String _column) async {
     List<Map<String, dynamic>> _result = await selectOrder(
       TableUtil.teamTable,

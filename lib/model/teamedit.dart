@@ -106,7 +106,7 @@ Future confirmTeamValue(ApplicationBloc _bloc, TeamDto _selected,
   }
 
   if (_dto.id == null &&
-      await _dao.duplicateCount(_dto, [TableUtil.cName], [_dto.name]) > 0) {
+      await _dao.countUnique(TableUtil.cName, _dto.name) > 0) {
     // 重複あり
     return 1;
   }

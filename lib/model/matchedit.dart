@@ -137,7 +137,7 @@ Future confirmMatchValue(List<FormDto> _form) async {
   }
 
   List<MatchDto> _match;
-  int _count = await _dao.duplicateCount(_dto, [
+  int _count = await _dao.cntBy(_dto, [
     TableUtil.cName,
     TableUtil.cPlace,
     TableUtil.cCoat,
