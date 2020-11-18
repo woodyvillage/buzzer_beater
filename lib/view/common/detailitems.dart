@@ -183,7 +183,7 @@ Widget _nameItem(dynamic _data, Alignment _alignment) {
   if (_data is PlayerDto && _data.captain != null) {
     var _cap = _data.captain == ApplicationUtil.captain ? '(CAP)' : null;
     return Expanded(
-      flex: 18,
+      flex: 20,
       child: Row(
         children: <Widget>[
           Flexible(
@@ -199,7 +199,7 @@ Widget _nameItem(dynamic _data, Alignment _alignment) {
     );
   } else {
     return Expanded(
-      flex: 18,
+      flex: 20,
       child: Container(
         alignment: _alignment,
         child: Text(
