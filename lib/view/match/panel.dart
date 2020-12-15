@@ -7,6 +7,7 @@ import 'package:buzzer_beater/dto/result.dart';
 import 'package:buzzer_beater/model/matchedit.dart';
 import 'package:buzzer_beater/util/application.dart';
 import 'package:buzzer_beater/view/common/panelitems.dart';
+import 'package:buzzer_beater/view/match/help.dart';
 
 class MatchPanel extends StatefulWidget {
   MatchPanel({Key key, this.match}) : super(key: key);
@@ -56,6 +57,20 @@ class _MatchPanelState extends State<MatchPanel> {
           leading: Container(),
           centerTitle: true,
           title: Text(_result.match.name),
+          actions: <Widget>[
+            IconButton(
+              icon: Icon(Icons.help_outline),
+              onPressed: () {
+                MaterialPageRoute materialPageRoute = MaterialPageRoute(
+                  builder: (context) => MatchHelp(),
+                );
+                Navigator.push(
+                  context,
+                  materialPageRoute,
+                );
+              },
+            ),
+          ],
         ),
         body: Column(
           children: <Widget>[
