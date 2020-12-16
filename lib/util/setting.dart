@@ -44,4 +44,8 @@ class SettingUtil {
   static final notfoul = 12;
   static final play = 14;
   static final change = 15;
+
+  static final messageTeamDelete = 1;
+  static final messageMemberDelete = 3;
+  static final messageRosterDelete = 5;
 }

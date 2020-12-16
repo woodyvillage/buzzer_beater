@@ -64,7 +64,9 @@ class _MatchPanelState extends State<MatchPanel> {
               onPressed: () {
                 MaterialPageRoute materialPageRoute = MaterialPageRoute(
                   builder: (context) => HelpPanel(
-                      questions: match_questions, answers: match_answers),
+                    questions: match_questions,
+                    answers: match_answers,
+                  ),
                 );
                 Navigator.push(
                   context,

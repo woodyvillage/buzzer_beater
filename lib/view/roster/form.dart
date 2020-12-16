@@ -13,6 +13,7 @@ import 'package:buzzer_beater/model/teamedit.dart';
 import 'package:buzzer_beater/model/rosteredit.dart';
 import 'package:buzzer_beater/util/form.dart';
 import 'package:buzzer_beater/util/routeset.dart';
+import 'package:buzzer_beater/view/help/help.dart';
 
 class RosterForm extends StatefulWidget {
   RosterForm({Key key, this.dto, this.edit}) : super(key: key);
@@ -79,6 +80,23 @@ class _RosterFormState extends State<RosterForm> {
       resizeToAvoidBottomPadding: false,
       appBar: AppBar(
         title: routesetFloatText[routesetRoster],
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.help_outline),
+            onPressed: () {
+              MaterialPageRoute materialPageRoute = MaterialPageRoute(
+                builder: (context) => HelpPanel(
+                  questions: roster_questions,
+                  answers: roster_answers,
+                ),
+              );
+              Navigator.push(
+                context,
+                materialPageRoute,
+              );
+            },
+          ),
+        ],
       ),
       body: GestureDetector(
         onTap: () {
