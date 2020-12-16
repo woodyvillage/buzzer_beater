@@ -4,16 +4,17 @@ import 'package:flutter_chat_bubble/bubble_type.dart';
 import 'package:flutter_chat_bubble/chat_bubble.dart';
 import 'package:flutter_chat_bubble/clippers/chat_bubble_clipper_8.dart';
 
-import 'package:buzzer_beater/util/form.dart';
 import 'package:buzzer_beater/view/settings/textitem.dart';
 
 class HelpItem extends StatelessWidget {
-  HelpItem({Key key, this.index}) : super(key: key);
+  HelpItem({Key key, this.index, this.left, this.right}) : super(key: key);
   final int index;
+  final List<String> left;
+  final List<String> right;
 
   @override
   Widget build(BuildContext context) {
-    if (questions[index][0] != null || questions[index][0] != '') {
+    if (left[index] != null || left[index] != '') {
       return Column(
         children: <Widget>[
           getSenderView(
@@ -40,7 +41,7 @@ class HelpItem extends StatelessWidget {
             maxWidth: MediaQuery.of(context).size.width * 0.7,
           ),
           child: Text(
-            questions[index][0],
+            left[index],
             style: TextStyle(color: Colors.white),
           ),
         ),
@@ -55,7 +56,7 @@ class HelpItem extends StatelessWidget {
             maxWidth: MediaQuery.of(context).size.width * 0.7,
           ),
           child: Text(
-            answers[index][0],
+            right[index],
             style: TextStyle(color: Colors.black),
           ),
         ),

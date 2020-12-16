@@ -6,8 +6,9 @@ import 'package:buzzer_beater/dto/regist.dart';
 import 'package:buzzer_beater/dto/result.dart';
 import 'package:buzzer_beater/model/matchedit.dart';
 import 'package:buzzer_beater/util/application.dart';
+import 'package:buzzer_beater/util/form.dart';
 import 'package:buzzer_beater/view/common/panelitems.dart';
-import 'package:buzzer_beater/view/match/help.dart';
+import 'package:buzzer_beater/view/help/help.dart';
 
 class MatchPanel extends StatefulWidget {
   MatchPanel({Key key, this.match}) : super(key: key);
@@ -62,7 +63,8 @@ class _MatchPanelState extends State<MatchPanel> {
               icon: Icon(Icons.help_outline),
               onPressed: () {
                 MaterialPageRoute materialPageRoute = MaterialPageRoute(
-                  builder: (context) => MatchHelp(),
+                  builder: (context) => HelpPanel(
+                      questions: match_questions, answers: match_answers),
                 );
                 Navigator.push(
                   context,

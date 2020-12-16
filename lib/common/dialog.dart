@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'package:buzzer_beater/view/dialog/messagedialog.dart';
 import 'package:buzzer_beater/view/dialog/selectdialog.dart';
 import 'package:buzzer_beater/view/dialog/textdialog.dart';
 
@@ -30,6 +31,24 @@ Future showSelectDialog({
 }) {
   Widget dialog;
   dialog = SelectDialog(title: title, value: value);
+  return showDialog(
+    context: context,
+    useRootNavigator: true,
+    builder: (BuildContext context) {
+      return builder == null ? dialog : builder(context, dialog);
+    },
+  );
+}
+
+// メッセージダイアログ表示
+Future showMessageDialog({
+  @required BuildContext context,
+  @required String title,
+  dynamic value,
+  TransitionBuilder builder,
+}) {
+  Widget dialog;
+  dialog = MessageDialog(title: title, value: value);
   return showDialog(
     context: context,
     useRootNavigator: true,
