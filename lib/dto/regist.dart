@@ -11,6 +11,7 @@ class RegistDto {
   int sort;
   int ball;
   int foul;
+  int delflg;
 
   RegistDto({
     this.id,
@@ -23,6 +24,7 @@ class RegistDto {
     this.sort,
     this.ball,
     this.foul,
+    this.delflg,
   });
 
   factory RegistDto.parse(Map<String, dynamic> _record) => RegistDto(
@@ -36,6 +38,7 @@ class RegistDto {
         sort: _record[TableUtil.cSort],
         ball: _record[TableUtil.cBall],
         foul: _record[TableUtil.cFoul],
+        delflg: _record[TableUtil.cDelFlg],
       );
 
   Map<String, dynamic> toMap() => {
@@ -49,5 +52,6 @@ class RegistDto {
         TableUtil.cSort: sort,
         TableUtil.cBall: ball,
         TableUtil.cFoul: foul,
+        TableUtil.cDelFlg: delflg,
       };
 }

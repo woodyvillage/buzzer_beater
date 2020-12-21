@@ -330,7 +330,8 @@ class _RosterFormState extends State<RosterForm> {
       icon: formIcon[_formIndex],
       label: formText[_formIndex],
       onPressed: () async {
-        var _result = await confirmRosterValue(_bloc, _form, widget.edit);
+        var _result =
+            await confirmRosterValue(_bloc, context, _form, widget.edit);
         if (_result == 0) {
           Navigator.pop(context);
           showInformation(context, '登録しました');
@@ -378,10 +379,14 @@ class _RosterFormState extends State<RosterForm> {
             icon: formIcon[formDelete],
             label: formText[formDelete],
             onPressed: () async {
-              var _result = await deleteRoster(_bloc, widget.dto);
+              var _result = await deleteRoster(_bloc, context, widget.dto);
               if (_result == 0) {
                 Navigator.pop(context);
                 showInformation(context, '削除しました');
+                context.read<OrderNotifier>().getOrder();
+              } else if (_result > 0) {
+                Navigator.pop(context);
+                showError(context, '記録中の試合があり削除できませんでした');
                 context.read<OrderNotifier>().getOrder();
               }
             },

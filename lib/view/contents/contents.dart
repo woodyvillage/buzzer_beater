@@ -24,7 +24,7 @@ class _ApplicationContentsState extends State<ApplicationContents> {
   BottomNavigationBarItem _buildNavigationItem(int index) {
     return BottomNavigationBarItem(
       icon: routesetIcon[index],
-      title: routesetText[index],
+      label: routesetText[index],
     );
   }
 

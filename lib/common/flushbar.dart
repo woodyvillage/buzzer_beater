@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flushbar/flushbar.dart';
 
-_showFlush(BuildContext context, String message, bool isError) {
-  if (isError) {
+_showFlush(BuildContext _context, String _message, bool _isError) {
+  if (_isError) {
     Flushbar(
       margin: EdgeInsets.all(8),
-      message: message,
+      message: _message,
       icon: Icon(
         Icons.error_outline,
         size: 28,
@@ -15,11 +15,11 @@ _showFlush(BuildContext context, String message, bool isError) {
       leftBarIndicatorColor: Colors.red,
       forwardAnimationCurve: Curves.easeOutExpo,
       reverseAnimationCurve: Curves.easeOutExpo,
-    )..show(context);
+    )..show(_context);
   } else {
     Flushbar(
       margin: EdgeInsets.all(8),
-      message: message,
+      message: _message,
       icon: Icon(
         Icons.info_outline,
         size: 28,
@@ -29,7 +29,7 @@ _showFlush(BuildContext context, String message, bool isError) {
       leftBarIndicatorColor: Colors.blue,
       forwardAnimationCurve: Curves.easeOutExpo,
       reverseAnimationCurve: Curves.easeOutExpo,
-    )..show(context);
+    )..show(_context);
   }
 }
 

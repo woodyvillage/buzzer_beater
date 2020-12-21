@@ -8,6 +8,7 @@ class TeamDto {
   int awayMain;
   int awayEdge;
   String image;
+  int delflg;
 
   TeamDto({
     this.id,
@@ -17,6 +18,7 @@ class TeamDto {
     this.awayMain,
     this.awayEdge,
     this.image,
+    this.delflg,
   });
 
   factory TeamDto.parse(Map<String, dynamic> _record) => TeamDto(
@@ -27,6 +29,7 @@ class TeamDto {
         awayMain: _record[TableUtil.cAwayMain],
         awayEdge: _record[TableUtil.cAwayEdge],
         image: _record[TableUtil.cImage],
+        delflg: _record[TableUtil.cDelFlg],
       );
 
   Map<String, dynamic> toMap() => {
@@ -37,6 +40,7 @@ class TeamDto {
         TableUtil.cAwayMain: awayMain,
         TableUtil.cAwayEdge: awayEdge,
         TableUtil.cImage: image,
+        TableUtil.cDelFlg: delflg,
       };
 
   bool isComplete() {

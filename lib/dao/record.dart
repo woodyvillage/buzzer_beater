@@ -15,6 +15,17 @@ class RecordDao extends BaseDao {
     return _toList(_result);
   }
 
+  Future<List<RecordDto>> selectByRosterMember(int _roster, int _member) async {
+    List<Map<String, dynamic>> _result = await selectBy(
+      TableUtil.recordTable,
+      [TableUtil.cRoster, TableUtil.cMember],
+      [_roster, _member],
+      [TableUtil.cId],
+      [TableUtil.asc],
+    );
+    return _toList(_result);
+  }
+
   Future<List<RecordDto>> selectByMatchTeamRosterMember(
       int _match, int _team, int _roster, int _member) async {
     List<Map<String, dynamic>> _result = await selectBy(

@@ -17,7 +17,11 @@ class HelpPanel extends StatelessWidget {
       body: ListView.builder(
         itemCount: questions.length,
         itemBuilder: (context, index) {
-          return HelpItem(index: index, left: questions, right: answers);
+          return HelpItem(
+            index: index,
+            left: questions,
+            right: answers,
+          );
         },
       ),
     );

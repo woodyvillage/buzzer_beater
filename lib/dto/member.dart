@@ -9,6 +9,7 @@ class MemberDto {
   int number;
   int role;
   String image;
+  int delflg;
 
   MemberDto({
     this.id,
@@ -19,6 +20,7 @@ class MemberDto {
     this.number,
     this.role,
     this.image,
+    this.delflg,
   });
 
   factory MemberDto.parse(Map<String, dynamic> _record) => MemberDto(
@@ -30,6 +32,7 @@ class MemberDto {
         number: _record[TableUtil.cNumber],
         role: _record[TableUtil.cRole],
         image: _record[TableUtil.cImage],
+        delflg: _record[TableUtil.cDelFlg],
       );
 
   Map<String, dynamic> toMap() => {
@@ -41,6 +44,7 @@ class MemberDto {
         TableUtil.cNumber: number,
         TableUtil.cRole: role,
         TableUtil.cImage: image,
+        TableUtil.cDelFlg: delflg,
       };
 
   bool isComplete() {

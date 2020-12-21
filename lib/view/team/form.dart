@@ -296,10 +296,13 @@ class _TeamFormState extends State<TeamForm> {
             icon: formIcon[formDelete],
             label: formText[formDelete],
             onPressed: () async {
-              var _result = await deleteTeam(_bloc, widget.dto);
+              var _result = await deleteTeam(_bloc, context, widget.dto);
               if (_result == 0) {
                 Navigator.pop(context);
                 showInformation(context, '削除しました');
+              } else if (_result > 0) {
+                Navigator.pop(context);
+                showError(context, '記録中の試合があり削除できませんでした');
               }
             },
           ),

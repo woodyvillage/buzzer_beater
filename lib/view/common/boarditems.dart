@@ -66,7 +66,6 @@ Widget imageItem({
     );
   }
 
-  // imageプロパティ
   if (data.image != null) {
     return Stack(
       alignment: AlignmentDirectional.center,

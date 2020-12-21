@@ -24,7 +24,7 @@ class BaseDao {
     if (_key.length != _value.length) {
       return null;
     }
-    var _where = _buildWhere(_key, _value);
+    var _where = _buildWhere(_key);
     return Sqflite.firstIntValue(await _db.query(
       _decision(_dto),
       columns: ['count(*)'],
@@ -43,10 +43,10 @@ class BaseDao {
     if (_key.length != _value.length) {
       return null;
     }
-    var _where = _buildWhere(_key, _value);
+    var _where = _buildWhere(_key);
     return Sqflite.firstIntValue(await _db.query(
       _table,
-      columns: ['sum(${_column})'],
+      columns: ['sum($_column)'],
       where: _where,
       whereArgs: _value,
     ));
@@ -67,9 +67,13 @@ class BaseDao {
     String _direction,
   ) async {
     Database _db = await instance.database;
+    var _where = _buildWhere([TableUtil.cDelFlg]);
+    var _order = _buildOrder([_column], [_direction]);
     return await _db.query(
       _table,
-      orderBy: _column + _direction,
+      where: _where,
+      whereArgs: [TableUtil.exist],
+      orderBy: _order,
     );
   }
 
@@ -84,7 +88,28 @@ class BaseDao {
     if (_key.length != _value.length || _column.length != _direction.length) {
       return null;
     }
-    var _where = _buildWhere(_key, _value);
+    var _where = _buildWhere(_key);
+    var _order = _buildOrder(_column, _direction);
+    return await _db.query(
+      _table,
+      where: _where,
+      whereArgs: _value,
+      orderBy: _order,
+    );
+  }
+
+  Future<List<Map<String, dynamic>>> selectByOr(
+    String _table,
+    List<String> _key,
+    List<dynamic> _value,
+    List<String> _column,
+    List<String> _direction,
+  ) async {
+    Database _db = await instance.database;
+    if (_key.length != _value.length || _column.length != _direction.length) {
+      return null;
+    }
+    var _where = _buildWhereOr(_key);
     var _order = _buildOrder(_column, _direction);
     return await _db.query(
       _table,
@@ -105,7 +130,7 @@ class BaseDao {
     if (_key.length != _value.length || _column.length != _direction.length) {
       return null;
     }
-    var _where = _buildWhereNot(_key, _value);
+    var _where = _buildWhereNot(_key);
     var _order = _buildOrder(_column, _direction);
     return await _db.query(
       _table,
@@ -115,7 +140,7 @@ class BaseDao {
     );
   }
 
-  String _buildWhere(List<String> _key, List<dynamic> _value) {
+  String _buildWhere(List<String> _key) {
     String _where;
     for (int i = 0; i < _key.length; i++) {
       if (i == 0) {
@@ -127,7 +152,19 @@ class BaseDao {
     return _where;
   }
 
-  String _buildWhereNot(List<String> _key, List<dynamic> _value) {
+  String _buildWhereOr(List<String> _key) {
+    String _where;
+    for (int i = 0; i < _key.length; i++) {
+      if (i == 0) {
+        _where = _key[i] + ' = ?';
+      } else {
+        _where = _where + ' or ' + _key[i] + ' = ?';
+      }
+    }
+    return _where;
+  }
+
+  String _buildWhereNot(List<String> _key) {
     String _where;
     for (int i = 0; i < _key.length; i++) {
       if (i == 0) {

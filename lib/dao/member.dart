@@ -27,8 +27,8 @@ class MemberDao extends BaseDao {
       int _value, String _column, String _direction) async {
     List<Map<String, dynamic>> _result = await selectBy(
       TableUtil.memberTable,
-      [TableUtil.cTeam],
-      [_value],
+      [TableUtil.cTeam, TableUtil.cDelFlg],
+      [_value, TableUtil.exist],
       [_column],
       [_direction],
     );

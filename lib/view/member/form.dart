@@ -272,7 +272,8 @@ class _MemberFormState extends State<MemberForm> {
       icon: formIcon[_formIndex],
       label: formText[_formIndex],
       onPressed: () async {
-        var _result = await confirmMemberValue(_bloc, widget.dto, _form);
+        var _result =
+            await confirmMemberValue(_bloc, context, widget.dto, _form);
         context.read<EnrollNotifier>().getEnroll();
         if (_result == 0) {
           Navigator.pop(context);
@@ -307,11 +308,14 @@ class _MemberFormState extends State<MemberForm> {
             icon: formIcon[formDelete],
             label: formText[formDelete],
             onPressed: () async {
-              var _result = await deleteMember(_bloc, widget.dto);
+              var _result = await deleteMember(_bloc, context, widget.dto);
               context.read<EnrollNotifier>().getEnroll();
               if (_result == 0) {
                 Navigator.pop(context);
                 showInformation(context, '削除しました');
+              } else if (_result > 0) {
+                Navigator.pop(context);
+                showError(context, '記録中の試合があり削除できませんでした');
               }
             },
           ),

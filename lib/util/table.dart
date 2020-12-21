@@ -2,6 +2,9 @@ class TableUtil {
   static final databaseName = 'buzzer_beater._db';
   static final databaseVersion = 8;
 
+  static final exist = 0;
+  static final deleted = 1;
+
   static final asc = ' asc';
   static final desc = ' desc';
 
@@ -11,6 +14,7 @@ class TableUtil {
   static final cMember = 'member';
   static final cNumber = 'number';
   static final cRoster = 'roster';
+  static final cDelFlg = 'delflg';
 
   static final teamTable = 'team';
   static final cHomeMain = 'homeMain';
@@ -76,7 +80,8 @@ class TableUtil {
             $cHomeEdge INTEGER NOT NULL,
             $cAwayMain INTEGER NOT NULL,
             $cAwayEdge INTEGER NOT NULL,
-            $cImage TEXT
+            $cImage TEXT,
+            $cDelFlg INTEGER
           );
           '''
     ],
@@ -90,7 +95,8 @@ class TableUtil {
             $cJbaId INTEGER NOT NULL,
             $cNumber INTEGER,
             $cRole INTEGER NOT NULL,
-            $cImage TEXT
+            $cImage TEXT,
+            $cDelFlg INTEGER
           );
           '''
     ],
@@ -99,7 +105,8 @@ class TableUtil {
           CREATE TABLE $rosterTable (
             $cId INTEGER PRIMARY KEY,
             $cTeam INTEGER NOT NULL,
-            $cName TEXT NOT NULL
+            $cName TEXT NOT NULL,
+            $cDelFlg INTEGER
           );
           '''
     ],
@@ -115,7 +122,8 @@ class TableUtil {
             $cCaptain INTEGER,
             $cSort INTEGER NOT NULL,
             $cBall INTEGER,
-            $cFoul INTEGER
+            $cFoul INTEGER,
+            $cDelFlg INTEGER
           );
           '''
     ],

@@ -24,11 +24,11 @@ final routesetIcon = [
 ];
 
 final routesetText = [
-  Text('チーム'),
-  Text('メンバー'),
-  Text('ロースター'),
-  Text('試合'),
-  Text('履歴'),
+  'チーム',
+  'メンバー',
+  'ロースター',
+  '試合',
+  '履歴',
   // Text('分析'),
 ];
 

@@ -36,6 +36,17 @@ class MatchDao extends BaseDao {
     return _toList(_result);
   }
 
+  Future<List<MatchDto>> selectByRosterId(int _value) async {
+    List<Map<String, dynamic>> _result = await selectByOr(
+      TableUtil.matchTable,
+      [TableUtil.cHomeroster, TableUtil.cAwayroster],
+      [_value, _value],
+      [TableUtil.cId],
+      [TableUtil.asc],
+    );
+    return _toList(_result);
+  }
+
   Future<List<MatchDto>> selectByNamePlaceTeamRoster(
     String _name,
     String _place,

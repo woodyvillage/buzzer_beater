@@ -24,6 +24,7 @@ class SettingUtil {
     [true, '', 'チームメンバー', null, null, null],
     [false, String, '出場', '出場時限に上書きで表示します', 'play', '／'],
     [false, String, '途中出場', '交代で出場した時限に上書きで表示します', 'change', '＼'],
+    [true, '', 'バージョン', 'バージョン', null, null],
   ];
 
   static final settingCaption = 0;
@@ -45,7 +46,7 @@ class SettingUtil {
   static final play = 14;
   static final change = 15;
 
-  static final messageTeamDelete = 1;
-  static final messageMemberDelete = 3;
-  static final messageRosterDelete = 5;
+  static final messageTeamDelete = 0;
+  static final messageMemberDelete = 1;
+  static final messageRosterDelete = 2;
 }

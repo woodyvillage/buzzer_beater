@@ -7,10 +7,21 @@ class RegistDao extends BaseDao {
       int _value, List<String> _column, List<String> _direction) async {
     List<Map<String, dynamic>> _result = await selectBy(
       TableUtil.registTable,
-      [TableUtil.cRoster],
-      [_value],
+      [TableUtil.cRoster, TableUtil.cDelFlg],
+      [_value, TableUtil.exist],
       _column,
       _direction,
+    );
+    return _toList(_result);
+  }
+
+  Future<List<RegistDto>> selectByMemberId(int _member) async {
+    List<Map<String, dynamic>> _result = await selectBy(
+      TableUtil.registTable,
+      [TableUtil.cMember, TableUtil.cDelFlg],
+      [_member, TableUtil.exist],
+      [TableUtil.cId],
+      [TableUtil.asc],
     );
     return _toList(_result);
   }

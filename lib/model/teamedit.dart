@@ -3,13 +3,23 @@ import 'package:flutter/material.dart';
 import 'package:smart_select/smart_select.dart';
 
 import 'package:buzzer_beater/common/bloc.dart';
+import 'package:buzzer_beater/common/dialog.dart';
+import 'package:buzzer_beater/dao/match.dart';
+import 'package:buzzer_beater/dao/member.dart';
+import 'package:buzzer_beater/dao/regist.dart';
+import 'package:buzzer_beater/dao/roster.dart';
 import 'package:buzzer_beater/dao/team.dart';
 import 'package:buzzer_beater/dto/form.dart';
+import 'package:buzzer_beater/dto/match.dart';
+import 'package:buzzer_beater/dto/member.dart';
+import 'package:buzzer_beater/dto/regist.dart';
+import 'package:buzzer_beater/dto/roster.dart';
 import 'package:buzzer_beater/dto/team.dart';
 import 'package:buzzer_beater/model/memberedit.dart';
 import 'package:buzzer_beater/model/rosteredit.dart';
 import 'package:buzzer_beater/util/application.dart';
 import 'package:buzzer_beater/util/form.dart';
+import 'package:buzzer_beater/util/setting.dart';
 import 'package:buzzer_beater/util/table.dart';
 
 List<FormDto> buildTeamFormValue(TeamDto _team) {
@@ -30,7 +40,6 @@ List<FormDto> buildTeamFormValue(TeamDto _team) {
         ..node = FocusNode()
         ..controller = TextEditingController()
         ..icon = teams[i][ApplicationUtil.functionIcon]
-        // ..hint = teams[i][TeamUtil.teamHint]
         ..value = teams[i][ApplicationUtil.functionTitle];
       _form.add(_dto);
     }
@@ -99,6 +108,7 @@ Future confirmTeamValue(ApplicationBloc _bloc, TeamDto _selected,
   _form[2].edgeColor == null
       ? _dto.awayEdge = null
       : _dto.awayEdge = _form[2].edgeColor.value;
+  _dto.delflg = TableUtil.exist;
 
   if (!_dto.isComplete()) {
     // 必須項目未入力
@@ -129,10 +139,60 @@ Future confirmTeamValue(ApplicationBloc _bloc, TeamDto _selected,
   return 0;
 }
 
-Future deleteTeam(ApplicationBloc _bloc, TeamDto _dto) async {
-  TeamDao _dao = TeamDao();
-  await _dao.delete(_dto);
-  _bloc.trigger.add(true);
+Future deleteTeam(
+    ApplicationBloc _bloc, BuildContext _context, TeamDto _dto) async {
+  int _state = 0;
+  RosterDao _rosdao = RosterDao();
+  List<RosterDto> _rosters =
+      await _rosdao.selectByTeamId(_dto.id, [TableUtil.cName], [TableUtil.asc]);
+  for (RosterDto _roster in _rosters) {
+    MatchDao _mdao = MatchDao();
+    List<MatchDto> _matchs = await _mdao.selectByRosterId(_roster.id);
+    for (MatchDto _match in _matchs) {
+      _state += _match.status;
+    }
+    if (_state != _matchs.length * ApplicationUtil.definite) {
+      return 1;
+    }
+  }
 
+  TeamDao _dao = TeamDao();
+  MemberDao _mdao = MemberDao();
+  List<MemberDto> _members =
+      await _mdao.selectByTeamId(_dto.id, TableUtil.cAge, TableUtil.desc);
+
+  bool _result = await showMessageDialog(
+    context: _context,
+    title: messages[SettingUtil.messageTeamDelete][0],
+    value: messages[SettingUtil.messageTeamDelete][1],
+  );
+
+  if (_result) {
+    _dto.delflg = TableUtil.deleted;
+    await _dao.update(_dto);
+
+    for (MemberDto _member in _members) {
+      _member.delflg = TableUtil.deleted;
+      await _mdao.update(_member);
+
+      RegistDao _regdao = RegistDao();
+      List<RegistDto> _regists = await _regdao.selectByMemberId(_member.id);
+      for (RegistDto _regist in _regists) {
+        _regist.delflg = TableUtil.deleted;
+        await _regdao.update(_regist);
+
+        List<RegistDto> _exists = await _regdao
+            .selectByRosterId(_regist.roster, [TableUtil.cId], [TableUtil.asc]);
+        if (_exists.isEmpty) {
+          RosterDao _rosdao = RosterDao();
+          List<RosterDto> _rosters = await _rosdao.selectById(_regist.roster);
+          _rosters[0].delflg = TableUtil.deleted;
+          await _rosdao.update(_rosters[0]);
+        }
+      }
+    }
+  }
+
+  _bloc.trigger.add(true);
   return 0;
 }

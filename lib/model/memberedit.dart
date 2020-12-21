@@ -3,12 +3,20 @@ import 'package:flutter/material.dart';
 import 'package:smart_select/smart_select.dart';
 
 import 'package:buzzer_beater/common/bloc.dart';
+import 'package:buzzer_beater/common/dialog.dart';
+import 'package:buzzer_beater/dao/match.dart';
 import 'package:buzzer_beater/dao/member.dart';
+import 'package:buzzer_beater/dao/regist.dart';
+import 'package:buzzer_beater/dao/roster.dart';
 import 'package:buzzer_beater/dto/form.dart';
+import 'package:buzzer_beater/dto/match.dart';
 import 'package:buzzer_beater/dto/member.dart';
+import 'package:buzzer_beater/dto/regist.dart';
+import 'package:buzzer_beater/dto/roster.dart';
 import 'package:buzzer_beater/dto/team.dart';
 import 'package:buzzer_beater/util/application.dart';
 import 'package:buzzer_beater/util/form.dart';
+import 'package:buzzer_beater/util/setting.dart';
 import 'package:buzzer_beater/util/table.dart';
 
 List<FormDto> buildMemberFormValue(MemberDto _member) {
@@ -97,8 +105,8 @@ FormDto levelingForm(List<FormDto> _form) {
   }
 }
 
-Future confirmMemberValue(
-    ApplicationBloc _bloc, MemberDto _selected, List<FormDto> _form) async {
+Future confirmMemberValue(ApplicationBloc _bloc, BuildContext _context,
+    MemberDto _selected, List<FormDto> _form) async {
   MemberDao _dao = MemberDao();
   MemberDto _dto = MemberDto();
 
@@ -135,7 +143,9 @@ Future confirmMemberValue(
   }
 
   if (_dto.id == null &&
-      await _dao.cntBy(_dto, [TableUtil.cJbaId], [_dto.jbaid]) > 0) {
+      await _dao.cntBy(_dto, [TableUtil.cJbaId, TableUtil.cDelFlg],
+              [_dto.jbaid, TableUtil.exist]) >
+          0) {
     // 重複あり
     return 1;
   }
@@ -143,16 +153,40 @@ Future confirmMemberValue(
   if (_dto.id == null) {
     // 新規登録
     await _dao.insert(_dto);
-    _bloc.trigger.add(true);
-
-    return 0;
   } else {
     // 更新登録
-    await _dao.update(_dto);
-    _bloc.trigger.add(true);
+    List<MemberDto> _old_member = await _dao.selectById(_dto.id);
+    if (_old_member[0].jbaid == _dto.jbaid) {
+      await _dao.update(_dto);
+    } else {
+      _old_member[0].delflg = TableUtil.deleted;
+      await _dao.update(_old_member[0]);
 
-    return 0;
+      RegistDao _regdao = RegistDao();
+      List<RegistDto> _regists =
+          await _regdao.selectByMemberId(_old_member[0].id);
+      for (RegistDto _regist in _regists) {
+        _regist.delflg = TableUtil.deleted;
+        await _regdao.update(_regist);
+
+        List<RegistDto> _exists = await _regdao
+            .selectByRosterId(_regist.roster, [TableUtil.cId], [TableUtil.asc]);
+        if (_exists.isEmpty) {
+          RosterDao _rosdao = RosterDao();
+          List<RosterDto> _rosters = await _rosdao.selectById(_regist.roster);
+          _rosters[0].delflg = TableUtil.deleted;
+          await _rosdao.update(_rosters[0]);
+        }
+      }
+
+      _dto.id = null;
+      _dto.delflg = TableUtil.exist;
+      await _dao.insert(_dto);
+    }
   }
+  _bloc.trigger.add(true);
+
+  return 0;
 }
 
 Future firstMemberSupport(List<TeamDto> _team) async {
@@ -167,6 +201,7 @@ Future firstMemberSupport(List<TeamDto> _team) async {
     _dto.age = 12;
     _dto.jbaid = i + (i * 1234) + (i * 12345678);
     _dto.number = i + 20;
+    _dto.delflg = TableUtil.exist;
     await _dao.insert(_dto);
   }
 
@@ -175,6 +210,7 @@ Future firstMemberSupport(List<TeamDto> _team) async {
   _dto.age = 40;
   _dto.jbaid = 13 + (13 * 1234) + (13 * 12345678);
   _dto.number = null;
+  _dto.delflg = TableUtil.exist;
   await _dao.insert(_dto);
 
   _dto.role = ApplicationUtil.coach;
@@ -182,13 +218,51 @@ Future firstMemberSupport(List<TeamDto> _team) async {
   _dto.age = 30;
   _dto.jbaid = 14 + (14 * 1234) + (14 * 12345678);
   _dto.number = null;
+  _dto.delflg = TableUtil.exist;
   await _dao.insert(_dto);
 }
 
-Future deleteMember(ApplicationBloc _bloc, MemberDto _dto) async {
-  MemberDao _dao = MemberDao();
-  await _dao.delete(_dto);
-  _bloc.trigger.add(true);
+Future deleteMember(
+    ApplicationBloc _bloc, BuildContext _context, MemberDto _dto) async {
+  int _state = 0;
+  RegistDao _regdao = RegistDao();
+  List<RegistDto> _regists = await _regdao.selectByMemberId(_dto.id);
+  for (RegistDto _regist in _regists) {
+    MatchDao _mdao = MatchDao();
+    List<MatchDto> _matchs = await _mdao.selectByRosterId(_regist.roster);
+    for (MatchDto _match in _matchs) {
+      _state += _match.status;
+    }
+    if (_state != _matchs.length * ApplicationUtil.definite) {
+      return 1;
+    }
+  }
 
+  bool _result = await showMessageDialog(
+    context: _context,
+    title: messages[SettingUtil.messageMemberDelete][0],
+    value: messages[SettingUtil.messageMemberDelete][1],
+  );
+  if (_result) {
+    MemberDao _mdao = MemberDao();
+    _dto.delflg = TableUtil.deleted;
+    await _mdao.update(_dto);
+
+    for (RegistDto _regist in _regists) {
+      _regist.delflg = TableUtil.deleted;
+      await _regdao.update(_regist);
+
+      List<RegistDto> _exists = await _regdao
+          .selectByRosterId(_regist.roster, [TableUtil.cId], [TableUtil.asc]);
+      if (_exists.isEmpty) {
+        RosterDao _rosdao = RosterDao();
+        List<RosterDto> _rosters = await _rosdao.selectById(_regist.roster);
+        _rosters[0].delflg = TableUtil.deleted;
+        await _rosdao.update(_rosters[0]);
+      }
+    }
+  }
+
+  _bloc.trigger.add(true);
   return 0;
 }

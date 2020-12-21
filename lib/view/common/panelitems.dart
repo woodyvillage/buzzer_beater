@@ -352,13 +352,18 @@ Widget matchPanelActionSubSet(ResultDto _data, List<RegistDto> _select) {
 Widget _actionButton(ResultDto _data, List<RegistDto> _select, int _function) {
   int _side;
   int _selectid;
-  for (int i = 0; i < _select.length; i++) {
-    if (_select[i].ball == ApplicationUtil.play) {
-      _selectid = i;
-      _side = i < ApplicationUtil.benchmember
-          ? ApplicationUtil.home
-          : ApplicationUtil.away;
-      break;
+  if (_select == null || _select.isEmpty) {
+    _selectid = 0;
+    _side = 0;
+  } else {
+    for (int i = 0; i < _select.length; i++) {
+      if (_select[i].ball == ApplicationUtil.play) {
+        _selectid = i;
+        _side = i < ApplicationUtil.benchmember
+            ? ApplicationUtil.home
+            : ApplicationUtil.away;
+        break;
+      }
     }
   }
   dynamic _buttoncolor = _data.match.status == ApplicationUtil.progress
