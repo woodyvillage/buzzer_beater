@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:admob_flutter/admob_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:sticky_and_expandable_list/sticky_and_expandable_list.dart';
 
+import 'package:buzzer_beater/common/advertisement.dart';
 import 'package:buzzer_beater/common/notifier.dart';
 import 'package:buzzer_beater/dto/enroll.dart';
 import 'package:buzzer_beater/dto/member.dart';
@@ -15,6 +17,7 @@ class MembersList extends StatefulWidget {
 
 class _MembersListState extends State<MembersList> {
   List<EnrollDto> _enrollList;
+  Widget _ad;
 
   @override
   void didChangeDependencies() {
@@ -41,42 +44,57 @@ class _MembersListState extends State<MembersList> {
               headerBuilder: _buildHeader,
               addAutomaticKeepAlives: true,
               itemBuilder: (context, sectionIndex, itemIndex, index) {
-                return ListTile(
-                  leading: Container(
-                    child: imageItem(
-                      data: _enrollList[sectionIndex].members[itemIndex],
-                      size: 50,
+                if (index % 5 == 0) {
+                  _ad = AdmobBanner(
+                    adUnitId: ApplicationAdvertisement().getBannerAdUnitId(),
+                    adSize: AdmobBannerSize.ADAPTIVE_BANNER(
+                      width: MediaQuery.of(context).size.width.toInt(),
                     ),
-                  ),
-                  title: titleItem(
-                    data: _enrollList[sectionIndex].members[itemIndex],
-                  ),
-                  subtitle: Text(
-                    _enrollList[sectionIndex].members[itemIndex].jbaid == 0
-                        ? '不明'
-                        : _enrollList[sectionIndex]
-                            .members[itemIndex]
-                            .jbaid
-                            .toString()
-                            .padLeft(9, '0'),
-                  ),
-                  trailing: roundNumberItem(
-                    context: context,
-                    team: _enrollList[sectionIndex].team,
-                    member: _enrollList[sectionIndex].members[itemIndex],
-                  ),
-                  onTap: () {
-                    MaterialPageRoute materialPageRoute = MaterialPageRoute(
-                      builder: (context) => MemberForm(
-                        dto: _enrollList[sectionIndex].members[itemIndex],
-                        edit: true,
+                  );
+                } else {
+                  _ad = Container();
+                }
+                return Column(
+                  children: [
+                    _ad,
+                    ListTile(
+                      leading: Container(
+                        child: imageItem(
+                          data: _enrollList[sectionIndex].members[itemIndex],
+                          size: 50,
+                        ),
                       ),
-                    );
-                    Navigator.push(
-                      context,
-                      materialPageRoute,
-                    );
-                  },
+                      title: titleItem(
+                        data: _enrollList[sectionIndex].members[itemIndex],
+                      ),
+                      subtitle: Text(
+                        _enrollList[sectionIndex].members[itemIndex].jbaid == 0
+                            ? '不明'
+                            : _enrollList[sectionIndex]
+                                .members[itemIndex]
+                                .jbaid
+                                .toString()
+                                .padLeft(9, '0'),
+                      ),
+                      trailing: roundNumberItem(
+                        context: context,
+                        team: _enrollList[sectionIndex].team,
+                        member: _enrollList[sectionIndex].members[itemIndex],
+                      ),
+                      onTap: () {
+                        MaterialPageRoute materialPageRoute = MaterialPageRoute(
+                          builder: (context) => MemberForm(
+                            dto: _enrollList[sectionIndex].members[itemIndex],
+                            edit: true,
+                          ),
+                        );
+                        Navigator.push(
+                          context,
+                          materialPageRoute,
+                        );
+                      },
+                    ),
+                  ],
                 );
               },
             ),

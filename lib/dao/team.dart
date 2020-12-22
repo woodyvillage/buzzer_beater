@@ -4,7 +4,8 @@ import 'package:buzzer_beater/util/table.dart';
 
 class TeamDao extends BaseDao {
   Future<int> countUnique(String _key, dynamic _value) async {
-    return await cntBy(TeamDto(), [_key], [_value]);
+    return await cntBy(
+        TeamDto(), [_key, TableUtil.cDelFlg], [_value, TableUtil.exist]);
   }
 
   Future<List<TeamDto>> select(String _column) async {
@@ -30,8 +31,8 @@ class TeamDao extends BaseDao {
   Future<List<TeamDto>> selectByName(String _value) async {
     List<Map<String, dynamic>> _result = await selectBy(
       TableUtil.teamTable,
-      [TableUtil.cName],
-      [_value],
+      [TableUtil.cName, TableUtil.cDelFlg],
+      [_value, TableUtil.exist],
       [TableUtil.cId],
       [TableUtil.asc],
     );

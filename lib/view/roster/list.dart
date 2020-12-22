@@ -1,20 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:admob_flutter/admob_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:sticky_and_expandable_list/sticky_and_expandable_list.dart';
 
+import 'package:buzzer_beater/common/advertisement.dart';
 import 'package:buzzer_beater/common/notifier.dart';
 import 'package:buzzer_beater/dto/order.dart';
 import 'package:buzzer_beater/dto/player.dart';
 import 'package:buzzer_beater/view/common/boarditems.dart';
 import 'package:buzzer_beater/view/roster/form.dart';
 
-class RosterList extends StatefulWidget {
+class RostersList extends StatefulWidget {
   @override
-  _RosterListState createState() => _RosterListState();
+  _RostersListState createState() => _RostersListState();
 }
 
-class _RosterListState extends State<RosterList> {
+class _RostersListState extends State<RostersList> {
   List<OrderDto> _orderList;
+  Widget _ad;
 
   @override
   void didChangeDependencies() {
@@ -41,41 +44,56 @@ class _RosterListState extends State<RosterList> {
               headerBuilder: _buildHeader,
               addAutomaticKeepAlives: true,
               itemBuilder: (context, sectionIndex, itemIndex, index) {
-                return ListTile(
-                  leading: Container(
-                    child: imageItem(
-                      data: _orderList[sectionIndex].players[itemIndex],
-                      size: 50,
+                if (index % 5 == 0) {
+                  _ad = AdmobBanner(
+                    adUnitId: ApplicationAdvertisement().getBannerAdUnitId(),
+                    adSize: AdmobBannerSize.ADAPTIVE_BANNER(
+                      width: MediaQuery.of(context).size.width.toInt(),
                     ),
-                  ),
-                  title: titleItem(
-                    data: _orderList[sectionIndex].players[itemIndex],
-                  ),
-                  subtitle: Text(
-                    _orderList[sectionIndex].players[itemIndex].jbaid == 0
-                        ? '不明'
-                        : _orderList[sectionIndex]
-                            .players[itemIndex]
-                            .jbaid
-                            .toString(),
-                  ),
-                  trailing: roundNumberItem(
-                    context: context,
-                    team: _orderList[sectionIndex].team,
-                    member: _orderList[sectionIndex].players[itemIndex],
-                  ),
-                  onTap: () {
-                    MaterialPageRoute materialPageRoute = MaterialPageRoute(
-                      builder: (context) => RosterForm(
-                        dto: _orderList[sectionIndex].players[itemIndex],
-                        edit: true,
+                  );
+                } else {
+                  _ad = Container();
+                }
+                return Column(
+                  children: [
+                    _ad,
+                    ListTile(
+                      leading: Container(
+                        child: imageItem(
+                          data: _orderList[sectionIndex].players[itemIndex],
+                          size: 50,
+                        ),
                       ),
-                    );
-                    Navigator.push(
-                      context,
-                      materialPageRoute,
-                    );
-                  },
+                      title: titleItem(
+                        data: _orderList[sectionIndex].players[itemIndex],
+                      ),
+                      subtitle: Text(
+                        _orderList[sectionIndex].players[itemIndex].jbaid == 0
+                            ? '不明'
+                            : _orderList[sectionIndex]
+                                .players[itemIndex]
+                                .jbaid
+                                .toString(),
+                      ),
+                      trailing: roundNumberItem(
+                        context: context,
+                        team: _orderList[sectionIndex].team,
+                        member: _orderList[sectionIndex].players[itemIndex],
+                      ),
+                      onTap: () {
+                        MaterialPageRoute materialPageRoute = MaterialPageRoute(
+                          builder: (context) => RosterForm(
+                            dto: _orderList[sectionIndex].players[itemIndex],
+                            edit: true,
+                          ),
+                        );
+                        Navigator.push(
+                          context,
+                          materialPageRoute,
+                        );
+                      },
+                    ),
+                  ],
                 );
               },
             ),

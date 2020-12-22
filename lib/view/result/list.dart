@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:admob_flutter/admob_flutter.dart';
 import 'package:provider/provider.dart';
 
+import 'package:buzzer_beater/common/advertisement.dart';
 import 'package:buzzer_beater/common/bloc.dart';
 import 'package:buzzer_beater/view/common/boarditems.dart';
 import 'package:buzzer_beater/view/common/listitems.dart';
@@ -13,6 +15,7 @@ class ResultsList extends StatefulWidget {
 
 class _ResultsListState extends State<ResultsList> {
   ApplicationBloc _bloc;
+  Widget _ad;
 
   @override
   void didChangeDependencies() {
@@ -37,44 +40,60 @@ class _ResultsListState extends State<ResultsList> {
           return ListView.builder(
             itemCount: snapshot.data.length,
             itemBuilder: (context, index) {
-              return GestureDetector(
-                onTap: () {
-                  MaterialPageRoute materialPageRoute = MaterialPageRoute(
-                    builder: (context) =>
-                        ResultDetail(dto: snapshot.data[index]),
-                  );
-                  Navigator.push(
-                    context,
-                    materialPageRoute,
-                  );
-                },
-                child: Card(
-                  elevation: 8,
-                  color: Theme.of(context).cardColor,
-                  margin: EdgeInsets.fromLTRB(10, 15, 10, 0),
-                  child: SizedBox(
-                    height: 240,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        titleItem(data: snapshot.data[index]),
-                        Center(
-                          child: Container(
-                            width: MediaQuery.of(context).size.width - 30,
-                            height: 3,
-                            decoration: BoxDecoration(
-                              color: Theme.of(context).primaryColorDark,
+              if (index % 2 == 0) {
+                _ad = AdmobBanner(
+                  adUnitId: ApplicationAdvertisement().getBannerAdUnitId(),
+                  adSize: AdmobBannerSize.ADAPTIVE_BANNER(
+                    width: MediaQuery.of(context).size.width.toInt(),
+                  ),
+                );
+              } else {
+                _ad = Container();
+              }
+              return Column(
+                children: [
+                  _ad,
+                  GestureDetector(
+                    onTap: () {
+                      MaterialPageRoute materialPageRoute = MaterialPageRoute(
+                        builder: (context) =>
+                            ResultDetail(dto: snapshot.data[index]),
+                      );
+                      Navigator.push(
+                        context,
+                        materialPageRoute,
+                      );
+                    },
+                    child: Card(
+                      elevation: 8,
+                      color: Theme.of(context).cardColor,
+                      margin: EdgeInsets.fromLTRB(10, 15, 10, 0),
+                      child: SizedBox(
+                        height: 240,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            titleItem(data: snapshot.data[index]),
+                            Center(
+                              child: Container(
+                                width: MediaQuery.of(context).size.width - 30,
+                                height: 3,
+                                decoration: BoxDecoration(
+                                  color: Theme.of(context).primaryColorDark,
+                                ),
+                              ),
                             ),
-                          ),
+                            Padding(padding: EdgeInsets.symmetric(vertical: 2)),
+                            resultTeamListSubSet(
+                                data: snapshot.data[index],
+                                displayScore: false),
+                            resultScoreListSubSet(data: snapshot.data[index]),
+                          ],
                         ),
-                        Padding(padding: EdgeInsets.symmetric(vertical: 2)),
-                        resultTeamListSubSet(
-                            data: snapshot.data[index], displayScore: false),
-                        resultScoreListSubSet(data: snapshot.data[index]),
-                      ],
+                      ),
                     ),
                   ),
-                ),
+                ],
               );
             },
           );

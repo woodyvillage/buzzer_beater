@@ -11,6 +11,14 @@ Widget teamBoardSubSet({
   @required TeamDto data,
   @required BuildContext context,
 }) {
+  Widget _owner = Text('');
+  if (data is TeamDto && data.owner == ApplicationUtil.owner) {
+    _owner = Icon(
+      Icons.grade,
+      color: Color(data.awayEdge),
+    );
+  }
+
   return Card(
     elevation: 8,
     color: Theme.of(context).cardColor,
@@ -18,7 +26,7 @@ Widget teamBoardSubSet({
     child: Container(
       height: 110,
       child: Padding(
-        padding: EdgeInsets.fromLTRB(15, 15, 15, 0),
+        padding: EdgeInsets.fromLTRB(15, 15, 5, 15),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -35,12 +43,16 @@ Widget teamBoardSubSet({
                 ),
               ),
             ),
+            Container(
+              alignment: AlignmentDirectional.topCenter,
+              child: _owner,
+            ),
           ],
         ),
       ),
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          stops: [0.96, 0.96],
+          stops: [0.9, 0.9],
           colors: [
             Theme.of(context).canvasColor,
             Color(data.awayMain),
