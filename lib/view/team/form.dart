@@ -29,6 +29,7 @@ class _TeamFormState extends State<TeamForm> {
   final _picker = ImagePicker();
 
   List<FormDto> _form = <FormDto>[];
+  var _isOwner = false;
   var _hasSupport = false;
 
   @override
@@ -41,6 +42,8 @@ class _TeamFormState extends State<TeamForm> {
   void initState() {
     super.initState();
     _form = buildTeamFormValue(widget.dto);
+    _isOwner = _form[3].boolvalue;
+    _hasSupport = _form[4].boolvalue;
   }
 
   void _openDialog(String title, FormDto _dto, Widget content) {
@@ -109,9 +112,10 @@ class _TeamFormState extends State<TeamForm> {
           children: <Widget>[
             Padding(padding: const EdgeInsets.symmetric(vertical: 15)),
             teamImageField(),
-            formField(_form[1]),
-            formField(_form[2]),
-            firstMemberSupoport(),
+            teamColorField(_form[1]),
+            teamColorField(_form[2]),
+            teamOwnerField(_form[3]),
+            teamSupportField(_form[4]),
             Padding(padding: const EdgeInsets.symmetric(vertical: 10)),
             commandField(),
           ],
@@ -168,11 +172,11 @@ class _TeamFormState extends State<TeamForm> {
     );
   }
 
-  Widget formField(FormDto _form) {
+  Widget teamColorField(FormDto _form) {
     return Container(
       margin: const EdgeInsets.fromLTRB(80, 15, 15, 0),
       child: Row(
-        children: [
+        children: <Widget>[
           _form.icon,
           Padding(padding: const EdgeInsets.symmetric(horizontal: 10)),
           Expanded(
@@ -201,19 +205,47 @@ class _TeamFormState extends State<TeamForm> {
     );
   }
 
-  Widget firstMemberSupoport() {
+  Widget teamOwnerField(FormDto _form) {
+    return Container(
+      margin: const EdgeInsets.fromLTRB(80, 5, 0, 0),
+      child: Row(
+        children: <Widget>[
+          _form.icon,
+          Padding(padding: const EdgeInsets.symmetric(horizontal: 1)),
+          Expanded(
+            child: SwitchListTile(
+              value: _isOwner,
+              title: Text(
+                _form.value,
+                style: TextStyle(
+                  fontSize: 15,
+                ),
+              ),
+              onChanged: (bool value) {
+                setState(() {
+                  _isOwner = value;
+                });
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget teamSupportField(FormDto _form) {
     if (!widget.edit) {
       return Container(
         margin: const EdgeInsets.fromLTRB(80, 5, 0, 0),
         child: Row(
           children: <Widget>[
-            Icon(Icons.supervisor_account),
+            _form.icon,
             Padding(padding: const EdgeInsets.symmetric(horizontal: 1)),
             Expanded(
               child: SwitchListTile(
                 value: _hasSupport,
                 title: Text(
-                  'とりあえずのメンバーで初期登録を済ませる',
+                  _form.value,
                   style: TextStyle(
                     fontSize: 15,
                   ),
@@ -238,7 +270,7 @@ class _TeamFormState extends State<TeamForm> {
       margin: const EdgeInsets.only(right: 15),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
-        children: [
+        children: <Widget>[
           submitButton(),
           Padding(padding: const EdgeInsets.symmetric(horizontal: 5)),
           cancelButton(),
@@ -261,8 +293,9 @@ class _TeamFormState extends State<TeamForm> {
       icon: formIcon[_formIndex],
       label: formText[_formIndex],
       onPressed: () async {
-        var _result =
-            await confirmTeamValue(_bloc, widget.dto, _form, _hasSupport);
+        _form[3].boolvalue = _isOwner;
+        _form[4].boolvalue = _hasSupport;
+        var _result = await confirmTeamValue(_bloc, widget.dto, _form);
         if (_result == 0) {
           Navigator.pop(context);
           showInformation(context, '登録しました');

@@ -232,11 +232,11 @@ Future confirmMatchValue(List<FormDto> _form) async {
 
 Future deleteMatchValue(ApplicationBloc _bloc, ResultDto _result) async {
   PeriodDao _period = PeriodDao();
-  await _period.deleteByMatch(_result.match.id);
+  _period.deleteByMatch(_result.match.id);
   RecordDao _record = RecordDao();
-  await _record.deleteByMatch(_result.match.id);
+  _record.deleteByMatch(_result.match.id);
   MatchDao _match = MatchDao();
-  await _match.deleteByMatch(_result.match.id);
+  _match.deleteByMatch(_result.match.id);
 }
 
 Future<int> matchQuarterEdit(
@@ -361,11 +361,13 @@ Future<int> matchQuarterEdit(
 
 Future<RegistDto> matchMemberEntry(ResultDto _data, int _side) async {
   TeamDto _team = getHomeAway(_data, _side, ApplicationUtil.teamdata);
+  List<PlayerDto> _player =
+      getHomeAway(_data, _side, ApplicationUtil.playerdata);
 
   String _result = await showSelectDialog(
     context: _data.context,
     title: _team.name,
-    value: _team.id,
+    value: _player[0].roster,
   );
 
   int _roster;

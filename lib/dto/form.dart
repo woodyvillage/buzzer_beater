@@ -12,14 +12,15 @@ class FormDto {
   Color edgeColor;
   File image;
 
-  FormDto(
-      {this.node,
-      this.controller,
-      this.icon,
-      this.hint,
-      this.value,
-      this.boolvalue,
-      this.image});
+  FormDto({
+    this.node,
+    this.controller,
+    this.icon,
+    this.hint,
+    this.value,
+    this.boolvalue,
+    this.image,
+  });
 
   bool isPrepare() {
     if (node == null || controller == null) {

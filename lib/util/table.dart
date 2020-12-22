@@ -21,6 +21,7 @@ class TableUtil {
   static final cHomeEdge = 'homeEdge';
   static final cAwayMain = 'awayMain';
   static final cAwayEdge = 'awayEdge';
+  static final cOwner = 'owner';
 
   static final memberTable = 'member';
   static final cRole = 'role';
@@ -81,6 +82,7 @@ class TableUtil {
             $cAwayMain INTEGER NOT NULL,
             $cAwayEdge INTEGER NOT NULL,
             $cImage TEXT,
+            $cOwner INTEGER,
             $cDelFlg INTEGER
           );
           '''

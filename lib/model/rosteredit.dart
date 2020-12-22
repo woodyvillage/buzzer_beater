@@ -253,6 +253,7 @@ Future firstRosterSupport(List<TeamDto> _team) async {
 
   _dto.team = _team[0].id;
   _dto.name = '暫定ロースター';
+  _dto.delflg = TableUtil.exist;
   await _dao.insert(_dto);
 
   List<RosterDto> _roster =

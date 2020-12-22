@@ -2,10 +2,8 @@ import 'package:intl/intl.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:provider/provider.dart';
 import 'package:smart_select/smart_select.dart';
 
-import 'package:buzzer_beater/common/bloc.dart';
 import 'package:buzzer_beater/common/flushbar.dart';
 import 'package:buzzer_beater/dto/form.dart';
 import 'package:buzzer_beater/dto/match.dart';
@@ -27,7 +25,6 @@ class MatchForm extends StatefulWidget {
 }
 
 class _MatchFormState extends State<MatchForm> {
-  ApplicationBloc _bloc;
   List<FormDto> _form = <FormDto>[];
   List<S2Choice<String>> _teamList = <S2Choice<String>>[];
   List<S2Choice<String>> _homeRosterList = <S2Choice<String>>[];
@@ -36,7 +33,6 @@ class _MatchFormState extends State<MatchForm> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _bloc = Provider.of<ApplicationBloc>(context);
   }
 
   @override

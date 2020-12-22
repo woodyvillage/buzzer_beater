@@ -35,26 +35,32 @@ List<FormDto> buildTeamFormValue(TeamDto _team) {
         ..mainColor = teams[i][ApplicationUtil.functionColor]
         ..edgeColor = teams[i][ApplicationUtil.functionEdge];
       _form.add(_dto);
+    } else if (teams[i][ApplicationUtil.functionBool] is bool) {
+      var _dto = FormDto()
+        ..node = FocusNode()
+        ..controller = TextEditingController()
+        ..icon = teams[i][ApplicationUtil.functionIcon]
+        ..value = teams[i][ApplicationUtil.functionTitle]
+        ..boolvalue = teams[i][ApplicationUtil.functionBool];
+      _form.add(_dto);
     } else {
       var _dto = FormDto()
         ..node = FocusNode()
         ..controller = TextEditingController()
         ..icon = teams[i][ApplicationUtil.functionIcon]
-        ..value = teams[i][ApplicationUtil.functionTitle];
+        ..value = teams[i][ApplicationUtil.functionTitle]
+        ..boolvalue = teams[i][ApplicationUtil.functionBool];
       _form.add(_dto);
     }
   }
   if (_team != null) {
     _form[0].controller.text = _team.name;
-    if (_team.image == null) {
-      _form[0].image = null;
-    } else {
-      _form[0].image = File(_team.image);
-    }
+    _form[0].image = _team.image == null ? null : File(_team.image);
     _form[1].mainColor = Color(_team.homeMain);
     _form[1].edgeColor = Color(_team.homeEdge);
     _form[2].mainColor = Color(_team.awayMain);
     _form[2].edgeColor = Color(_team.awayEdge);
+    _form[3].boolvalue = _team.owner == ApplicationUtil.owner ? true : false;
   }
 
   return _form;
@@ -84,30 +90,23 @@ Future<List<S2Choice<String>>> buildTeamListValueById(int _index) async {
   return _list;
 }
 
-Future confirmTeamValue(ApplicationBloc _bloc, TeamDto _selected,
-    List<FormDto> _form, bool _isSupport) async {
+Future confirmTeamValue(
+    ApplicationBloc _bloc, TeamDto _selected, List<FormDto> _form) async {
   TeamDao _dao = TeamDao();
   TeamDto _dto = TeamDto();
 
   if (_selected != null) {
     _selected.id == null ? _dto.id = null : _dto.id = _selected.id;
   }
-  _form[0].controller.text == ''
-      ? _dto.name = null
-      : _dto.name = _form[0].controller.text;
-  _form[0].image == null ? _dto.image = null : _dto.image = _form[0].image.path;
-  _form[1].mainColor == null
-      ? _dto.homeMain = null
-      : _dto.homeMain = _form[1].mainColor.value;
-  _form[1].edgeColor == null
-      ? _dto.homeEdge = null
-      : _dto.homeEdge = _form[1].edgeColor.value;
-  _form[2].mainColor == null
-      ? _dto.awayMain = null
-      : _dto.awayMain = _form[2].mainColor.value;
-  _form[2].edgeColor == null
-      ? _dto.awayEdge = null
-      : _dto.awayEdge = _form[2].edgeColor.value;
+  _dto.name = _form[0].controller.text == '' ? null : _form[0].controller.text;
+  _dto.image = _form[0].image == null ? null : _form[0].image.path;
+  _dto.homeMain = _form[1].mainColor == null ? null : _form[1].mainColor.value;
+  _dto.homeEdge = _form[1].edgeColor == null ? null : _form[1].edgeColor.value;
+  _dto.awayMain = _form[2].mainColor == null ? null : _form[2].mainColor.value;
+  _dto.awayEdge = _form[2].edgeColor == null ? null : _form[2].edgeColor.value;
+  _dto.owner = _form[3].boolvalue == true
+      ? ApplicationUtil.owner
+      : ApplicationUtil.other;
   _dto.delflg = TableUtil.exist;
 
   if (!_dto.isComplete()) {
@@ -130,7 +129,7 @@ Future confirmTeamValue(ApplicationBloc _bloc, TeamDto _selected,
   }
   _bloc.trigger.add(true);
 
-  if (_isSupport) {
+  if (_form[4].boolvalue) {
     List<TeamDto> _team = await _dao.selectByName(_dto.name);
     await firstMemberSupport(_team);
     await firstRosterSupport(_team);

@@ -33,18 +33,35 @@ final teams = [
     null,
     null,
     null,
+    null,
   ],
   [
     'ホームウェア（淡）',
     Icon(MaterialCommunityIcons.tshirt_crew_outline),
     Colors.white,
     Colors.grey,
+    null,
   ],
   [
     'ビジターウェア（濃）',
     Icon(MaterialCommunityIcons.tshirt_crew),
     Colors.blue,
     Colors.lightBlue[100],
+    null,
+  ],
+  [
+    'オーナー',
+    Icon(Icons.bookmarks),
+    null,
+    null,
+    false,
+  ],
+  [
+    'とりあえずのメンバーで初期登録を済ませる',
+    Icon(Icons.group_add),
+    null,
+    null,
+    false,
   ],
 ];
 

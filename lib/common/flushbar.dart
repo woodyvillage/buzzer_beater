@@ -7,7 +7,7 @@ _showFlush(BuildContext _context, String _message, bool _isError) {
       margin: EdgeInsets.all(8),
       message: _message,
       icon: Icon(
-        Icons.error_outline,
+        Icons.info_outline,
         size: 28,
         color: Colors.red[300],
       ),
@@ -21,7 +21,7 @@ _showFlush(BuildContext _context, String _message, bool _isError) {
       margin: EdgeInsets.all(8),
       message: _message,
       icon: Icon(
-        Icons.info_outline,
+        Icons.check_circle_outline,
         size: 28,
         color: Colors.blue[300],
       ),
@@ -29,7 +29,7 @@ _showFlush(BuildContext _context, String _message, bool _isError) {
       leftBarIndicatorColor: Colors.blue,
       forwardAnimationCurve: Curves.easeOutExpo,
       reverseAnimationCurve: Curves.easeOutExpo,
-    )..show(_context);
+    ).show(_context);
   }
 }
 

@@ -130,6 +130,7 @@ Future confirmMemberValue(ApplicationBloc _bloc, BuildContext _context,
     _form[4].controller.text == ''
         ? _dto.number = null
         : _dto.number = int.parse(_form[4].controller.text);
+    _dto.delflg = TableUtil.exist;
   } else {
     _dto.number = null;
   }

@@ -8,6 +8,7 @@ class TeamDto {
   int awayMain;
   int awayEdge;
   String image;
+  int owner;
   int delflg;
 
   TeamDto({
@@ -18,6 +19,7 @@ class TeamDto {
     this.awayMain,
     this.awayEdge,
     this.image,
+    this.owner,
     this.delflg,
   });
 
@@ -29,6 +31,7 @@ class TeamDto {
         awayMain: _record[TableUtil.cAwayMain],
         awayEdge: _record[TableUtil.cAwayEdge],
         image: _record[TableUtil.cImage],
+        owner: _record[TableUtil.cOwner],
         delflg: _record[TableUtil.cDelFlg],
       );
 
@@ -40,6 +43,7 @@ class TeamDto {
         TableUtil.cAwayMain: awayMain,
         TableUtil.cAwayEdge: awayEdge,
         TableUtil.cImage: image,
+        TableUtil.cOwner: owner,
         TableUtil.cDelFlg: delflg,
       };
 

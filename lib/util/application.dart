@@ -1,4 +1,8 @@
 class ApplicationUtil {
+  // 広告関連
+  static const testCode = 'ca-app-pub-3940256099942544/6300978111';
+  static const liveCode = 'ca-app-pub-2248232694488898/8390769950';
+
   // HomeAway切り分け用
   static const teamdata = 11;
   static const totaldata = 12;
@@ -15,6 +19,10 @@ class ApplicationUtil {
   static final memberageLength = 2;
   static final memberNumberLength = 2;
   static final matchDateLength = 20;
+
+  // オーナー
+  static final owner = 1;
+  static final other = 0;
 
   // ベンチ入りメンバー数
   static final benchmember = 7;
@@ -84,4 +92,5 @@ class ApplicationUtil {
   static final functionIcon = 1;
   static final functionColor = 2;
   static final functionEdge = 3;
+  static final functionBool = 4;
 }
