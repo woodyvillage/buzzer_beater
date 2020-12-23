@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:admob_flutter/admob_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:sticky_and_expandable_list/sticky_and_expandable_list.dart';
 
@@ -17,7 +16,6 @@ class MembersList extends StatefulWidget {
 
 class _MembersListState extends State<MembersList> {
   List<EnrollDto> _enrollList;
-  Widget _ad;
 
   @override
   void didChangeDependencies() {
@@ -44,19 +42,13 @@ class _MembersListState extends State<MembersList> {
               headerBuilder: _buildHeader,
               addAutomaticKeepAlives: true,
               itemBuilder: (context, sectionIndex, itemIndex, index) {
-                if (index % 5 == 0) {
-                  _ad = AdmobBanner(
-                    adUnitId: ApplicationAdvertisement().getBannerAdUnitId(),
-                    adSize: AdmobBannerSize.ADAPTIVE_BANNER(
-                      width: MediaQuery.of(context).size.width.toInt(),
-                    ),
-                  );
-                } else {
-                  _ad = Container();
-                }
                 return Column(
                   children: [
-                    _ad,
+                    ApplicationAdvertisement().getBanner(
+                      width: MediaQuery.of(context).size.width,
+                      index: index,
+                      interval: 5,
+                    ),
                     ListTile(
                       leading: Container(
                         child: imageItem(

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:admob_flutter/admob_flutter.dart';
 
 import 'package:buzzer_beater/common/advertisement.dart';
 import 'package:buzzer_beater/view/roster/list.dart';
@@ -10,11 +9,8 @@ class RosterBody extends StatelessWidget {
     return SafeArea(
       child: Column(
         children: [
-          AdmobBanner(
-            adUnitId: ApplicationAdvertisement().getBannerAdUnitId(),
-            adSize: AdmobBannerSize.ADAPTIVE_BANNER(
-              width: MediaQuery.of(context).size.width.toInt(),
-            ),
+          ApplicationAdvertisement().getBanner(
+            width: MediaQuery.of(context).size.width,
           ),
           Expanded(
             child: Container(

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:admob_flutter/admob_flutter.dart';
 import 'package:provider/provider.dart';
 
 import 'package:buzzer_beater/common/advertisement.dart';
@@ -15,7 +14,6 @@ class ResultsList extends StatefulWidget {
 
 class _ResultsListState extends State<ResultsList> {
   ApplicationBloc _bloc;
-  Widget _ad;
 
   @override
   void didChangeDependencies() {
@@ -40,19 +38,13 @@ class _ResultsListState extends State<ResultsList> {
           return ListView.builder(
             itemCount: snapshot.data.length,
             itemBuilder: (context, index) {
-              if (index % 2 == 0) {
-                _ad = AdmobBanner(
-                  adUnitId: ApplicationAdvertisement().getBannerAdUnitId(),
-                  adSize: AdmobBannerSize.ADAPTIVE_BANNER(
-                    width: MediaQuery.of(context).size.width.toInt(),
-                  ),
-                );
-              } else {
-                _ad = Container();
-              }
               return Column(
                 children: [
-                  _ad,
+                  ApplicationAdvertisement().getBanner(
+                    width: MediaQuery.of(context).size.width,
+                    index: index,
+                    interval: 2,
+                  ),
                   GestureDetector(
                     onTap: () {
                       MaterialPageRoute materialPageRoute = MaterialPageRoute(
@@ -85,8 +77,9 @@ class _ResultsListState extends State<ResultsList> {
                             ),
                             Padding(padding: EdgeInsets.symmetric(vertical: 2)),
                             resultTeamListSubSet(
-                                data: snapshot.data[index],
-                                displayScore: false),
+                              data: snapshot.data[index],
+                              displayScore: false,
+                            ),
                             resultScoreListSubSet(data: snapshot.data[index]),
                           ],
                         ),
