@@ -1,12 +1,13 @@
 import 'dart:io';
-import 'package:flutter/material.dart';
 import 'package:admob_flutter/admob_flutter.dart';
+import 'package:flutter/material.dart';
 
 import 'package:buzzer_beater/util/application.dart';
 
 class ApplicationAdvertisement {
   String _getBannerAdUnitId() {
     if (Platform.isAndroid) {
+      // return ApplicationUtil.testCode;
       return ApplicationUtil.liveCode;
     } else if (Platform.isIOS) {
       return null;
@@ -15,15 +16,15 @@ class ApplicationAdvertisement {
   }
 
   bool _isVisible(int _index, int _interval) {
-    if (_index == null || _interval == null) {
-      return true;
-    } else {
-      if (_index % _interval == 0) {
-        return true;
-      } else {
-        return false;
-      }
+    if (_getBannerAdUnitId() != ApplicationUtil.liveCode) {
+      return false;
     }
+
+    return _index == null && _interval == null
+        ? true
+        : _index % _interval == 0
+            ? true
+            : false;
   }
 
   Widget getBanner({
