@@ -1,38 +1,35 @@
 class SettingUtil {
   static final indexchar = ['①', '②', '③', '④', 'OT', 'Q', '1', '2', '3', '4'];
   static final settings = [
-    [true, '', 'ランニングスコアシート', null, null, null],
-    [false, String, 'フィールドゴール', '得点時にランニングスコアに上書きで表示します', 'fieldgoal', '／'],
-    [false, String, 'フリースロー', '得点時にランニングスコアに上書きで表示します', 'freethrow', '●'],
-    [false, String, 'オウンゴール', '得点時にランニングスコアに上書きで表示します', 'owngoal', '▲'],
-    [
-      false,
-      String,
-      'クォータ・延長・ゲーム終了',
-      '各クォータ・各延長・ゲームの終了時点の最後の得点に上書きで表示します',
-      'periodend',
-      '〇'
-    ],
-    [true, '', 'タイムアウト', null, null, null],
-    [false, String, 'タイムアウト', 'タイムアウトを取得した時限に上書きで表示します', 'timeout', 'Ｘ'],
-    [false, String, 'タイムアウト', 'タイムアウトを取得しなかった時限に上書きで表示します', 'nottimeout', '－'],
-    [true, '', 'チームファウル', null, null, null],
-    [false, String, 'チームファウル', 'ファウルがあった回数に上書きで表示します', 'teamfoul', 'Ｘ'],
-    [false, String, 'チームファウル', 'ファウルしなかった回数に上書きで表示します', 'notteamfoul', '－'],
-    [true, '', 'ファウル', null, null, null],
-    [false, String, 'ファウル', 'ファウルしなかった回数に上書きで表示します', 'foul', '－'],
-    [true, '', 'チームメンバー', null, null, null],
-    [false, String, '出場', '出場時限に上書きで表示します', 'play', '／'],
-    [false, String, '途中出場', '交代で出場した時限に上書きで表示します', 'change', '＼'],
-    [true, '', 'バージョン', 'バージョン', null, null],
+    ['CAP', 'ランニングスコアシート', null, null, null],
+    ['INP', 'フィールドゴール', 'fieldgoal', '／'],
+    ['INP', 'フリースロー', 'freethrow', '●'],
+    ['INP', 'オウンゴール', 'owngoal', '▲'],
+    ['INP', '各クォータ・各延長・ゲームの終了時点の最後の得点', 'periodend', '〇'],
+    ['CAP', 'タイムアウト', null, null, null],
+    ['INP', 'タイムアウトを取得した時限', 'timeout', 'Ｘ'],
+    ['INP', 'タイムアウトを取得しなかった時限', 'nottimeout', '－'],
+    ['CAP', 'チームファウル', null, null, null],
+    ['INP', 'ファウルがあった', 'teamfoul', 'Ｘ'],
+    ['INP', 'ファウルしなかった', 'notteamfoul', '－'],
+    ['CAP', 'ファウル', null, null, null],
+    ['INP', 'ファウルしなかった', 'foul', '－'],
+    ['CAP', 'チームメンバー', null, null, null],
+    ['INP', '出場', 'play', '／'],
+    ['INP', '交代出場', 'change', '＼'],
+    ['CAP', '初期化', null, null, null],
+    ['DLG', '設定値を初期状態に戻す', '初期化', '設定内容を初期状態に戻しますか'],
+    ['CAP', '有料オプション', null, null, null],
+    ['BTN', '広告を非表示にする', '購入', null],
+    ['CAP', 'アプリ情報', null, null],
+    ['APL', 'アプリ名称', null, null],
+    ['VER', 'ビルドバージョン', null, null],
   ];
 
-  static final settingCaption = 0;
-  static final settingType = 1;
-  static final settingTitle = 2;
-  static final settingNote = 3;
-  static final settingName = 4;
-  static final settingDefault = 5;
+  static final settingType = 0;
+  static final settingTitle = 1;
+  static final settingName = 2;
+  static final settingDefault = 3;
 
   static final fieldgoal = 1;
   static final freethrow = 2;
