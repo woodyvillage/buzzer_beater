@@ -543,8 +543,6 @@ void _foulAction(ResultDto _data, TeamDto _team, List<RegistDto> _select,
       break;
   }
   await _record.update(_records[0]);
-
-  // 失格退場
 }
 
 int _getFoulCount(RecordDto _record) {

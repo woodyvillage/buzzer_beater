@@ -84,7 +84,7 @@ class _RosterFormState extends State<RosterForm> {
           IconButton(
             icon: Icon(Icons.help_outline),
             onPressed: () {
-              MaterialPageRoute materialPageRoute = MaterialPageRoute(
+              MaterialPageRoute helpPageRoute = MaterialPageRoute(
                 builder: (context) => HelpPanel(
                   questions: roster_questions,
                   answers: roster_answers,
@@ -92,7 +92,7 @@ class _RosterFormState extends State<RosterForm> {
               );
               Navigator.push(
                 context,
-                materialPageRoute,
+                helpPageRoute,
               );
             },
           ),
