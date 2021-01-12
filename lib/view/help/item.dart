@@ -4,8 +4,6 @@ import 'package:flutter_chat_bubble/bubble_type.dart';
 import 'package:flutter_chat_bubble/chat_bubble.dart';
 import 'package:flutter_chat_bubble/clippers/chat_bubble_clipper_8.dart';
 
-import 'package:buzzer_beater/view/settings/textitem.dart';
-
 class HelpItem extends StatelessWidget {
   HelpItem({Key key, this.index, this.left, this.right}) : super(key: key);
   final int index;
@@ -14,21 +12,21 @@ class HelpItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (left[index] != null || left[index] != '') {
-      return Column(
-        children: <Widget>[
-          getSenderView(
-              ChatBubbleClipper8(type: BubbleType.sendBubble), context),
-          getReceiverView(
-              ChatBubbleClipper8(type: BubbleType.receiverBubble), context),
-          SizedBox(
-            height: 30,
-          ),
-        ],
-      );
-    } else {
-      return TextConfig(index: index);
-    }
+    return Column(
+      children: <Widget>[
+        getSenderView(
+          ChatBubbleClipper8(type: BubbleType.sendBubble),
+          context,
+        ),
+        getReceiverView(
+          ChatBubbleClipper8(type: BubbleType.receiverBubble),
+          context,
+        ),
+        SizedBox(
+          height: 30,
+        ),
+      ],
+    );
   }
 
   getSenderView(CustomClipper clipper, BuildContext context) => ChatBubble(
