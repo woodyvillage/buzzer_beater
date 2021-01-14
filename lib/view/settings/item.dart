@@ -5,7 +5,6 @@ import 'package:buzzer_beater/util/setting.dart';
 import 'package:buzzer_beater/view/settings/captionitem.dart';
 import 'package:buzzer_beater/view/settings/dialogitem.dart';
 import 'package:buzzer_beater/view/settings/inputitem.dart';
-import 'package:buzzer_beater/view/settings/buttonitem.dart';
 
 class SettingItem extends StatefulWidget {
   SettingItem({Key key, this.index}) : super(key: key);
@@ -45,9 +44,6 @@ class _SettingItemState extends State<SettingItem> {
         break;
       case 'INP':
         _item = InputItem(index: widget.index);
-        break;
-      case 'BTN':
-        _item = ButtonItem(index: widget.index);
         break;
       case 'DLG':
         _item = DialogItem(index: widget.index);

@@ -7,8 +7,10 @@ import 'package:buzzer_beater/common/notifier.dart';
 import 'package:buzzer_beater/view/frame.dart';
 
 void main() {
+  // 広告初期化
   WidgetsFlutterBinding.ensureInitialized();
   Admob.initialize();
+
   runApp(
     MultiProvider(
       providers: [

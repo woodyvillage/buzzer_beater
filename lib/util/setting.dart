@@ -18,9 +18,9 @@ class SettingUtil {
     ['INP', '出場', 'play', '／'],
     ['INP', '交代出場', 'change', '＼'],
     ['CAP', '初期化', null, null, null],
-    ['DLG', '設定値を初期状態に戻す', '初期化', '設定内容を初期状態に戻しますか'],
+    ['DLG', '設定値を初期状態に戻す', '初期化', '設定内容を初期状態に戻しますか？'],
     ['CAP', '有料オプション', null, null, null],
-    ['BTN', '広告を非表示にする', '購入', null],
+    ['DLG', '広告を非表示にする', '購入', '広告を非表示にする有料オプションを購入しますか？'],
     ['CAP', 'アプリ情報', null, null],
     ['APL', 'アプリ名称', null, null],
     ['VER', 'ビルドバージョン', null, null],
@@ -42,6 +42,9 @@ class SettingUtil {
   static final notfoul = 12;
   static final play = 14;
   static final change = 15;
+
+  static final initialize = 17;
+  static final charges = 19;
 
   static final messageTeamDelete = 0;
   static final messageMemberDelete = 1;

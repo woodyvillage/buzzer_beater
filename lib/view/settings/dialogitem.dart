@@ -17,7 +17,11 @@ class DialogItem extends StatelessWidget {
       trailing: RaisedButton(
         child: Text(SettingUtil.settings[index][SettingUtil.settingName]),
         onPressed: () {
-          settingmessage(context, _bloc, SettingUtil.settings[index]);
+          if (index == SettingUtil.initialize) {
+            settingmessage(context, _bloc, SettingUtil.settings[index]);
+          } else if (index == SettingUtil.charges) {
+            settingapproval(context, _bloc, SettingUtil.settings[index]);
+          }
         },
         highlightElevation: 16,
         highlightColor: Colors.blue,

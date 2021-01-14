@@ -3,6 +3,9 @@ class ApplicationUtil {
   static const testCode = 'ca-app-pub-3940256099942544/6300978111';
   static const liveCode = 'ca-app-pub-2248232694488898/8390769950';
 
+  // 課金関連
+  static const purchaseCode = 'XwXebGgGdWXZNLnNvawQbuZyNbygSEXg';
+
   // HomeAway切り分け用
   static const teamdata = 11;
   static const totaldata = 12;
