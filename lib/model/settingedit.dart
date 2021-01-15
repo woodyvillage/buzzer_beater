@@ -4,7 +4,6 @@ import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:buzzer_beater/common/bloc.dart';
 import 'package:buzzer_beater/common/dialog.dart';
 import 'package:buzzer_beater/common/preference.dart';
-import 'package:buzzer_beater/util/application.dart';
 import 'package:buzzer_beater/util/setting.dart';
 
 Future<String> getSettingString(List<Object> _data) async {
@@ -49,12 +48,10 @@ void settingmessage(
   }
 }
 
-void settingapproval(
-    BuildContext _context, ApplicationBloc _bloc, List<Object> _data) async {
+Future<void> settingapproval(BuildContext _context, ApplicationBloc _bloc,
+    List<Object> _data, dynamic _purchase) async {
   String _setting = await getSettingString(_data);
-  await Purchases.setup(ApplicationUtil.purchaseCode);
-  Offerings _offerings = await Purchases.getOfferings();
-  _setting += '\n\n' + _offerings.current.lifetime.product.priceString;
+  _setting += '\n\n金額：' + _purchase.price;
 
   bool _result = await showMessageDialog(
     context: _context,
@@ -63,8 +60,12 @@ void settingapproval(
   );
 
   if (_result != null && _result) {
-    settinginitialize();
+    settingpurchase(_purchase);
   }
+}
+
+void settingpurchase(dynamic _purchase) async {
+  await Purchases.purchasePackage(_purchase.package);
 }
 
 void settinginitialize() async {

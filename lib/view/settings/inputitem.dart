@@ -12,6 +12,7 @@ class InputItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     ApplicationBloc _bloc = Provider.of<ApplicationBloc>(context);
+
     return ListTile(
       title: Text(SettingUtil.settings[index][SettingUtil.settingTitle]),
       trailing: Row(

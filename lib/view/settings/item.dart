@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:package_info/package_info.dart';
+import 'package:provider/provider.dart';
 
+import 'package:buzzer_beater/common/notifier.dart';
 import 'package:buzzer_beater/util/setting.dart';
+import 'package:buzzer_beater/view/settings/buttonitem.dart';
 import 'package:buzzer_beater/view/settings/captionitem.dart';
 import 'package:buzzer_beater/view/settings/dialogitem.dart';
 import 'package:buzzer_beater/view/settings/inputitem.dart';
@@ -26,6 +29,9 @@ class _SettingItemState extends State<SettingItem> {
   void initState() {
     super.initState();
     _initPackageInfo();
+    setState(() {
+      context.read<PurchaseNotifier>().getPurchase();
+    });
   }
 
   Future<void> _initPackageInfo() async {
@@ -44,6 +50,9 @@ class _SettingItemState extends State<SettingItem> {
         break;
       case 'INP':
         _item = InputItem(index: widget.index);
+        break;
+      case 'BTN':
+        _item = ButtonItem(index: widget.index);
         break;
       case 'DLG':
         _item = DialogItem(index: widget.index);

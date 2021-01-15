@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import 'package:buzzer_beater/common/notifier.dart';
 import 'package:buzzer_beater/util/routeset.dart';
 import 'package:buzzer_beater/view/contents/button.dart';
 import 'package:buzzer_beater/view/contents/header.dart';
@@ -16,16 +18,19 @@ class _ApplicationContentsState extends State<ApplicationContents> {
   @override
   void initState() {
     super.initState();
-    for (var i = 0; i < routesetText.length; i++) {
-      _bottomNavigationBarItems.add(_buildNavigationItem(i));
-    }
+    _buildNavigationItem();
+    setState(() {
+      context.read<PurchaseNotifier>().getPurchase();
+    });
   }
 
-  BottomNavigationBarItem _buildNavigationItem(int index) {
-    return BottomNavigationBarItem(
-      icon: routesetIcon[index],
-      label: routesetText[index],
-    );
+  void _buildNavigationItem() {
+    for (var i = 0; i < routesetText.length; i++) {
+      _bottomNavigationBarItems.add(BottomNavigationBarItem(
+        icon: routesetIcon[i],
+        label: routesetText[i],
+      ));
+    }
   }
 
   void _onItemTapped(int index) {
@@ -36,39 +41,26 @@ class _ApplicationContentsState extends State<ApplicationContents> {
 
   @override
   Widget build(BuildContext context) {
-    if (routesetFloatIcon[_selectedIndex] == null) {
-      return Scaffold(
-        resizeToAvoidBottomPadding: false,
-        appBar: ApplicationHeader(
-          isView: true,
-        ),
-        body: routesetClass.elementAt(
-          _selectedIndex,
-        ),
-        bottomNavigationBar: BottomNavigationBar(
-          type: BottomNavigationBarType.fixed,
-          items: _bottomNavigationBarItems,
-          currentIndex: _selectedIndex,
-          onTap: _onItemTapped,
-        ),
-      );
-    } else {
-      return Scaffold(
-        resizeToAvoidBottomPadding: false,
-        appBar: ApplicationHeader(isView: true),
-        body: routesetClass.elementAt(
-          _selectedIndex,
-        ),
-        floatingActionButton: ApplicationFloat(
-          index: _selectedIndex,
-        ),
-        bottomNavigationBar: BottomNavigationBar(
-          type: BottomNavigationBarType.fixed,
-          items: _bottomNavigationBarItems,
-          currentIndex: _selectedIndex,
-          onTap: _onItemTapped,
-        ),
+    Widget float = Container();
+    if (routesetFloatIcon[_selectedIndex] != null) {
+      float = ApplicationFloat(
+        index: _selectedIndex,
       );
     }
+
+    return Scaffold(
+      resizeToAvoidBottomPadding: false,
+      appBar: ApplicationHeader(isView: true),
+      body: routesetClass.elementAt(
+        _selectedIndex,
+      ),
+      floatingActionButton: float,
+      bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
+        items: _bottomNavigationBarItems,
+        currentIndex: _selectedIndex,
+        onTap: _onItemTapped,
+      ),
+    );
   }
 }
