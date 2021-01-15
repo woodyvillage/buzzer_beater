@@ -33,6 +33,9 @@ class _RostersListState extends State<RostersList> {
   @override
   Widget build(BuildContext context) {
     _orderList = context.select((OrderNotifier order) => order.orderList);
+    bool _isInvalidAds = context.select(
+        (PurchaseNotifier purchaseNotifier) => purchaseNotifier.isInvalidAds);
+
     if (_orderList != null) {
       return CustomScrollView(
         slivers: <Widget>[
@@ -46,6 +49,7 @@ class _RostersListState extends State<RostersList> {
                   children: [
                     ApplicationAdvertisement().getBanner(
                       width: MediaQuery.of(context).size.width,
+                      purchase: _isInvalidAds,
                       index: index,
                       interval: 5,
                     ),

@@ -23,6 +23,9 @@ void main() {
         ChangeNotifierProvider<OrderNotifier>(
           create: (_) => OrderNotifier(),
         ),
+        ChangeNotifierProvider<PurchaseNotifier>(
+          create: (_) => PurchaseNotifier(),
+        ),
       ],
       child: ApplicationFrame(),
     ),

@@ -29,16 +29,21 @@ class ApplicationAdvertisement {
 
   Widget getBanner({
     @required double width,
+    @required bool purchase,
     int index,
     int interval,
   }) {
     if (_isVisible(index, interval)) {
-      return AdmobBanner(
-        adUnitId: _getBannerAdUnitId(),
-        adSize: AdmobBannerSize.ADAPTIVE_BANNER(
-          width: width.toInt(),
-        ),
-      );
+      if (!purchase) {
+        return AdmobBanner(
+          adUnitId: _getBannerAdUnitId(),
+          adSize: AdmobBannerSize.ADAPTIVE_BANNER(
+            width: width.toInt(),
+          ),
+        );
+      } else {
+        return Container();
+      }
     } else {
       return Container();
     }

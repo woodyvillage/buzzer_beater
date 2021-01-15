@@ -33,6 +33,9 @@ class _MembersListState extends State<MembersList> {
   @override
   Widget build(BuildContext context) {
     _enrollList = context.select((EnrollNotifier enroll) => enroll.enrollList);
+    bool _isInvalidAds = context.select(
+        (PurchaseNotifier purchaseNotifier) => purchaseNotifier.isInvalidAds);
+
     if (_enrollList != null) {
       return CustomScrollView(
         slivers: <Widget>[
@@ -46,6 +49,7 @@ class _MembersListState extends State<MembersList> {
                   children: [
                     ApplicationAdvertisement().getBanner(
                       width: MediaQuery.of(context).size.width,
+                      purchase: _isInvalidAds,
                       index: index,
                       interval: 5,
                     ),

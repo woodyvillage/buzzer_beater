@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import 'package:buzzer_beater/common/advertisement.dart';
 import 'package:buzzer_beater/common/bloc.dart';
+import 'package:buzzer_beater/common/notifier.dart';
 import 'package:buzzer_beater/view/common/boarditems.dart';
 import 'package:buzzer_beater/view/common/listitems.dart';
 import 'package:buzzer_beater/view/result/detail.dart';
@@ -31,6 +32,9 @@ class _ResultsListState extends State<ResultsList> {
 
   @override
   Widget build(BuildContext context) {
+    bool _isInvalidAds = context.select(
+        (PurchaseNotifier purchaseNotifier) => purchaseNotifier.isInvalidAds);
+
     return StreamBuilder(
       stream: _bloc.definiteresults,
       builder: (context, snapshot) {
@@ -42,6 +46,7 @@ class _ResultsListState extends State<ResultsList> {
                 children: [
                   ApplicationAdvertisement().getBanner(
                     width: MediaQuery.of(context).size.width,
+                    purchase: _isInvalidAds,
                     index: index,
                     interval: 2,
                   ),
