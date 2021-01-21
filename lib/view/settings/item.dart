@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:package_info/package_info.dart';
-import 'package:provider/provider.dart';
 
-import 'package:buzzer_beater/common/notifier.dart';
 import 'package:buzzer_beater/util/setting.dart';
 import 'package:buzzer_beater/view/settings/buttonitem.dart';
 import 'package:buzzer_beater/view/settings/captionitem.dart';
@@ -29,9 +27,6 @@ class _SettingItemState extends State<SettingItem> {
   void initState() {
     super.initState();
     _initPackageInfo();
-    setState(() {
-      context.read<PurchaseNotifier>().getPurchase();
-    });
   }
 
   Future<void> _initPackageInfo() async {

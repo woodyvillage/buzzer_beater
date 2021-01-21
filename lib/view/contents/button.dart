@@ -20,7 +20,7 @@ class ApplicationFloat extends StatelessWidget {
     MaterialPageRoute rosterPageRoute = MaterialPageRoute(
       builder: (context) => RosterForm(edit: false),
     );
-    MaterialPageRoute rosterPageMatch = MaterialPageRoute(
+    MaterialPageRoute matchPageRoute = MaterialPageRoute(
       builder: (context) => MatchForm(edit: false),
     );
     switch (index) {
@@ -45,7 +45,7 @@ class ApplicationFloat extends StatelessWidget {
       case routesetMatch:
         Navigator.push(
           context,
-          rosterPageMatch,
+          matchPageRoute,
         );
         break;
     }

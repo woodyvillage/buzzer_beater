@@ -12,7 +12,7 @@ const int routesetMember = 1;
 const int routesetRoster = 2;
 const int routesetMatch = 3;
 const int routesetResult = 4;
-// const int routesetAnalysis = 4;
+// const int routesetAnalysis = 5;
 
 final routesetIcon = [
   Icon(Icons.home),
@@ -29,7 +29,7 @@ final routesetText = [
   'ロースター',
   '試合',
   '履歴',
-  // Text('分析'),
+  // '分析',
 ];
 
 final routesetClass = [
@@ -47,7 +47,7 @@ final routesetFloatIcon = [
   Icon(Icons.playlist_add),
   Icon(Icons.post_add),
   null,
-  null,
+  // null,
 ];
 
 final routesetFloatText = [
@@ -56,5 +56,5 @@ final routesetFloatText = [
   Text('メンバー登録'),
   Text('試合開始'),
   null,
-  null,
+  // null,
 ];
