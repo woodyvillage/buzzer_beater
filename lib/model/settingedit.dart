@@ -50,8 +50,9 @@ void settingmessage(
 
 Future<void> settingapproval(BuildContext _context, ApplicationBloc _bloc,
     List<Object> _data, dynamic _purchase) async {
+  List<String> _name = _purchase.title.split('(');
   String _setting = await getSettingString(_data);
-  _setting += '\n\n金額：' + _purchase.price;
+  _setting += '\n\n商品：' + _name[0] + '\n金額：' + _purchase.price;
 
   bool _result = await showMessageDialog(
     context: _context,
@@ -60,12 +61,8 @@ Future<void> settingapproval(BuildContext _context, ApplicationBloc _bloc,
   );
 
   if (_result != null && _result) {
-    settingpurchase(_purchase);
+    await Purchases.purchasePackage(_purchase.package);
   }
-}
-
-void settingpurchase(dynamic _purchase) async {
-  await Purchases.purchasePackage(_purchase.package);
 }
 
 void settinginitialize() async {
